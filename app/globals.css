@@ -1,6 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400&family=El+Messiri:wght@400&family=IBM+Plex+Sans+Arabic:wght@400&family=JetBrains+Mono:wght@400&family=Kawkab+Mono:wght@400&family=Manrope:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap');
 
 @import "tailwindcss";
+
+/* Kawkab Mono is self-hosted / CDN loaded as it is not on Google Fonts */
+@font-face {
+  font-family: "Kawkab Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/braver/fonts/resources/kawkab-mono/kawkab-mono-regular.woff2") format("woff2");
+}
 
 @font-face {
   font-family: "Instrument Serif";
@@ -17,16 +26,20 @@
 }
 
 :root {
+  /* Colors */
   --background: #ffffff;
   --foreground: #171717;
-  --font-sans: "Manrope", "Segoe UI", sans-serif;
-  --font-sans-ar: "IBM Plex Sans Arabic", "Segoe UI", sans-serif;
-  --font-serif: "Instrument Serif", "Times New Roman", serif;
-  --font-serif-ar: "El Messiri", "Times New Roman", serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
-  --font-mono-ar: "IBM Plex Sans Arabic", "Segoe UI", sans-serif;
-  --font-typewriter: "JetBrains Mono", "SFMono-Regular", monospace;
-  --font-typewriter-ar: "Kawkab Mono", monospace;
+
+  /* Latin Font Stack Tokens */
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-sans: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Arabic Font Stack Tokens */
+  --font-arabic-display: "El Messiri", serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Tajawal", system-ui, sans-serif;
+  --font-arabic-voice: "Aref Ruqaa", serif;
+  --font-arabic-typewriter: "Kawkab Mono", monospace;
 }
 
 @theme inline {
@@ -35,6 +48,10 @@
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
   --font-mono: var(--font-mono);
+  --font-arabic: var(--font-arabic);
+  --font-arabic-display: var(--font-arabic-display);
+  --font-arabic-voice: var(--font-arabic-voice);
+  --font-arabic-typewriter: var(--font-arabic-typewriter);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -44,48 +61,107 @@
   }
 }
 
-[dir="rtl"] {
-  --font-sans: var(--font-sans-ar);
-  --font-serif: var(--font-serif-ar);
-  --font-mono: var(--font-mono-ar);
-}
+/* ==========================================
+   GLOBAL TYPOGRAPHY RULES
+   ========================================== */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
   font-weight: 400;
   font-style: normal;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* Latin Serif Default: Italic display */
 .serif,
 .font-serif,
 .vogue-hero-head {
   font-family: var(--font-serif);
   font-weight: 400;
   font-style: italic;
+  letter-spacing: -0.02em;
 }
 
-[dir="rtl"] .serif,
-[dir="rtl"] .font-serif,
-[dir="rtl"] .vogue-hero-head {
-  font-family: var(--font-serif-ar);
-  font-weight: 400;
-  font-style: normal;
-}
-
+/* Latin Mono Default: Uppercase with wide tracking & ss01 */
 .mono,
 .font-mono {
   font-family: var(--font-mono);
   font-weight: 400;
   font-style: normal;
+  letter-spacing: 0.14em;
+  font-feature-settings: "ss01";
 }
 
+/* ==========================================
+   RTL & ARABIC OVERRIDES
+   ========================================== */
+
+[dir="rtl"] {
+  --font-sans: var(--font-arabic);
+  --font-serif: var(--font-arabic-display);
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-arabic);
+  line-height: 1.7;
+}
+
+/* Headings & Serif text in RTL: El Messiri Roman (No Italics, zero tracking, expanded line-height) */
+[dir="rtl"] .serif,
+[dir="rtl"] .font-serif,
+[dir="rtl"] .vogue-hero-head,
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  font-family: var(--font-arabic-display);
+  font-style: normal !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2;
+}
+
+/* Mono Utility in RTL falls back to IBM Plex Sans Arabic unless explicitly typewriter */
 [dir="rtl"] .mono,
 [dir="rtl"] .font-mono {
-  font-family: var(--font-mono-ar);
-  font-weight: 400;
+  font-family: var(--font-arabic);
   font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  font-feature-settings: normal;
+}
+
+/* Typewriter Voice Exceptions (Status bar, Ticker, Filter Pills) */
+.typewriter,
+.font-typewriter,
+[dir="rtl"] .typewriter,
+[dir="rtl"] .font-typewriter {
+  font-family: var(--font-arabic-typewriter) !important;
+  letter-spacing: 0.14em !important;
+  font-style: normal !important;
+}
+
+/* Chapter numerals (01-15) always stay Latin Serif Italic */
+.chapter-numeral,
+[dir="rtl"] .chapter-numeral {
+  font-family: var(--font-serif) !important;
+  font-style: italic !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Directional Arrow Flip */
+[dir="rtl"] .arrow {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+/* Form Controls — Prevent iOS Safari Auto-Zoom */
+input,
+select,
+textarea {
+  font-size: 16px !important;
 }
 
 /* ==========================================
@@ -95,8 +171,8 @@ body {
 /* LIGHT GROUNDS */
 .muted-ground {
   position: relative;
-  box-shadow: inset 0 0 240px rgba(31, 32, 33, 0.055); /* soft edge vignette */
-  isolation: isolate;                                /* REQUIRED — prevents grain escaping stacking context */
+  box-shadow: inset 0 0 240px rgba(31, 32, 33, 0.055);
+  isolation: isolate;
 }
 .muted-ground::after {
   content: "";
@@ -114,7 +190,7 @@ body {
 /* DARK GROUNDS */
 .muted-ground-dark {
   position: relative;
-  isolation: isolate;                                /* REQUIRED — prevents grain escaping stacking context */
+  isolation: isolate;
 }
 .muted-ground-dark::after {
   content: "";
@@ -130,4 +206,91 @@ body {
   background-size: 3px 3px, 7px 7px, 100% 100%;
   background-position: 0 0, 1px 2px, center;
   background-repeat: repeat, repeat, no-repeat;
+}
+
+/* =========================================================
+   OCEAN WAVE — STORY PAGE DIVIDER
+   ========================================================= */
+
+@keyframes wave-flow-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes wave-flow-right {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes wave-breathe {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, 3px, 0);
+  }
+}
+
+.wave-divider {
+  position: relative;
+  overflow: hidden;
+  height: 120px;
+  width: 100%;
+  background: linear-gradient(180deg, #F2EBC8, #EFE6D2);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.wave-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: 50% 100%;
+  will-change: transform;
+}
+
+.wave-top {
+  animation: wave-flow-left 16s linear infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,52 C100,18 200,18 300,52 C400,86 500,86 600,52 C700,18 800,18 900,52 C1000,86 1100,86 1200,52 L1200,120 L0,120 Z' fill='%237F9333' fill-opacity='0.34'/%3E%3C/svg%3E");
+}
+
+.wave-echo {
+  animation: wave-flow-right 26s linear infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,74 C150,44 250,100 400,74 C550,45 650,101 800,74 C950,45 1050,100 1200,74 L1200,120 L0,120 Z' fill='%233B4519' fill-opacity='0.20'/%3E%3C/svg%3E");
+}
+
+.wave-echo-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  animation: wave-breathe 13s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-top,
+  .wave-echo,
+  .wave-echo-wrap {
+    animation: none !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
 }

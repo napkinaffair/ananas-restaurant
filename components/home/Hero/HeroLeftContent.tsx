@@ -24,11 +24,14 @@ export default function HeroLeftContent({
       {/* Title Line 1 */}
       <h1
         style={{
-          fontFamily: "var(--font-serif)",
+          fontFamily: isArabic
+            ? "var(--font-arabic-voice)"
+            : "var(--font-serif)",
           fontStyle: isArabic ? "normal" : "italic",
           fontWeight: 400,
-          letterSpacing: isArabic ? "0em" : "-0.015em",
-          lineHeight: 0.9,
+          letterSpacing: isArabic ? "0em" : "-0.025em",
+          lineHeight: isArabic ? 1.5 : 0.95,
+          textWrap: "balance",
         }}
         className="
           block
@@ -50,11 +53,14 @@ export default function HeroLeftContent({
       {/* Title Line 2 (Highlight) */}
       <h2
         style={{
-          fontFamily: "var(--font-serif)",
+          fontFamily: isArabic
+            ? "var(--font-arabic-voice)"
+            : "var(--font-serif)",
           fontStyle: isArabic ? "normal" : "italic",
           fontWeight: 400,
-          letterSpacing: isArabic ? "0em" : "-0.015em",
-          lineHeight: 0.9,
+          letterSpacing: isArabic ? "0em" : "-0.025em",
+          lineHeight: isArabic ? 1.5 : 0.95,
+          textWrap: "balance",
         }}
         className="
           block

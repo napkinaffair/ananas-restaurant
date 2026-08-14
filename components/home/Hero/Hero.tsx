@@ -13,7 +13,11 @@ export default function Hero({ data, locale }: Props) {
   const isArabic = locale === "ar";
 
   return (
-    <section className="relative min-h-[500px] overflow-hidden sm:min-h-[580px] lg:min-h-[680px]">
+    <section 
+      dir={isArabic ? "rtl" : "ltr"} 
+      lang={locale} 
+      className="relative min-h-[500px] overflow-hidden sm:min-h-[580px] lg:min-h-[680px]"
+    >
       <HeroBackground data={data} />
 
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />

@@ -18,10 +18,12 @@ export default function HeroRightContent({
       <div className="w-full max-w-full text-right lg:max-w-[380px]">
         <p
           style={{
-            fontFamily: "var(--font-sans)",
+            fontFamily: "var(--font-arabic)",
             fontWeight: 400,
             fontStyle: "normal",
-            lineHeight: 1.2,
+            letterSpacing: "0em",
+            lineHeight: 1.6,
+            textWrap: "pretty",
           }}
           className="
             text-right
@@ -30,7 +32,6 @@ export default function HeroRightContent({
             xs:text-base
             sm:text-lg
             lg:text-[1.25rem]
-            leading-snug
             drop-shadow-md
           "
         >
@@ -44,11 +45,12 @@ export default function HeroRightContent({
     <div className="w-full max-w-full lg:max-w-[360px]">
       <p
         style={{
-          fontFamily: "var(--font-serif)",
-          fontStyle: "italic",
+          fontFamily: "var(--font-sans)",
+          fontStyle: "normal",
           fontWeight: 400,
-          letterSpacing: "0.01em",
-          lineHeight: 1.2,
+          letterSpacing: "normal",
+          lineHeight: 1.6,
+          textWrap: "pretty",
         }}
         className="
           text-left
