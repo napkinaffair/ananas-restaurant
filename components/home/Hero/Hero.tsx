@@ -27,10 +27,10 @@ export default function Hero({ data, locale }: Props) {
           <HeroLeftContent data={data} locale={locale} />
 
           <div
-            className={`relative z-30 flex max-w-full flex-col gap-2.5 lg:absolute lg:bottom-6 ${
+            className={`relative z-30 flex max-w-full flex-col gap-1.5 lg:absolute lg:bottom-5 ${
               isArabic
                 ? "lg:left-6 xl:left-10 items-start lg:items-start"
-                : "lg:right-6 xl:right-10 items-start lg:items-end"
+                : "lg:right-6 xl:right-10 items-start lg:items-start"
             }`}
           >
             <HeroRightContent data={data} locale={locale} />

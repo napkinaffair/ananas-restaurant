@@ -28,9 +28,9 @@ export default function HeroLeftContent({
             ? "var(--font-arabic-voice)"
             : "var(--font-serif)",
           fontStyle: isArabic ? "normal" : "italic",
-          fontWeight: 400,
+          fontWeight: isArabic ? 700 : 400,
           letterSpacing: isArabic ? "0em" : "-0.025em",
-          lineHeight: isArabic ? 1.5 : 0.95,
+          lineHeight: isArabic ? 1.35 : 0.9,
           textWrap: "balance",
         }}
         className="
@@ -38,12 +38,12 @@ export default function HeroLeftContent({
           whitespace-normal
           sm:whitespace-nowrap
           text-white
-          text-[1.35rem]
-          xs:text-[1.65rem]
-          sm:text-[2.2rem]
-          md:text-[2.9rem]
-          lg:text-[3.5rem]
-          xl:text-[4rem]
+          text-[1.55rem]
+          xs:text-[1.9rem]
+          sm:text-[2.6rem]
+          md:text-[3.4rem]
+          lg:text-[4.2rem]
+          xl:text-[4.8rem]
           drop-shadow-md
         "
       >
@@ -57,9 +57,9 @@ export default function HeroLeftContent({
             ? "var(--font-arabic-voice)"
             : "var(--font-serif)",
           fontStyle: isArabic ? "normal" : "italic",
-          fontWeight: 400,
+          fontWeight: isArabic ? 700 : 400,
           letterSpacing: isArabic ? "0em" : "-0.025em",
-          lineHeight: isArabic ? 1.5 : 0.95,
+          lineHeight: isArabic ? 1.35 : 0.9,
           textWrap: "balance",
         }}
         className="
@@ -67,12 +67,12 @@ export default function HeroLeftContent({
           whitespace-normal
           sm:whitespace-nowrap
           text-[#DCE56C]
-          text-[1.35rem]
-          xs:text-[1.65rem]
-          sm:text-[2.2rem]
-          md:text-[2.9rem]
-          lg:text-[3.5rem]
-          xl:text-[4rem]
+          text-[1.55rem]
+          xs:text-[1.9rem]
+          sm:text-[2.6rem]
+          md:text-[3.4rem]
+          lg:text-[4.2rem]
+          xl:text-[4.8rem]
           drop-shadow-md
         "
       >

@@ -110,17 +110,17 @@ body {
   line-height: 1.7;
 }
 
-/* Headings & Serif text in RTL: El Messiri Roman (No Italics, zero tracking, expanded line-height) */
+/* Arabic display text should match the hero's Aref Ruqaa styling across the site */
 [dir="rtl"] .serif,
 [dir="rtl"] .font-serif,
 [dir="rtl"] .vogue-hero-head,
 [dir="rtl"] h1,
 [dir="rtl"] h2,
 [dir="rtl"] h3 {
-  font-family: var(--font-arabic-display);
+  font-family: var(--font-arabic-voice) !important;
   font-style: normal !important;
   letter-spacing: 0 !important;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 /* Mono Utility in RTL falls back to IBM Plex Sans Arabic unless explicitly typewriter */

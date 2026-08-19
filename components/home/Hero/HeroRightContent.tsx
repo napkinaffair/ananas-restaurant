@@ -42,14 +42,14 @@ export default function HeroRightContent({
   }
 
   return (
-    <div className="w-full max-w-full lg:max-w-[360px]">
+    <div className="w-full max-w-full lg:mb-1 lg:max-w-[420px] lg:pr-0">
       <p
         style={{
-          fontFamily: "var(--font-sans)",
-          fontStyle: "normal",
+          fontFamily: "var(--font-serif)",
+          fontStyle: "italic",
           fontWeight: 400,
-          letterSpacing: "normal",
-          lineHeight: 1.6,
+          letterSpacing: "-0.02em",
+          lineHeight: 1.55,
           textWrap: "pretty",
         }}
         className="
@@ -59,7 +59,7 @@ export default function HeroRightContent({
           xs:text-sm
           sm:text-base
           md:text-lg
-          lg:text-right
+          lg:text-left
           lg:text-[1.25rem]
           drop-shadow-md
         "

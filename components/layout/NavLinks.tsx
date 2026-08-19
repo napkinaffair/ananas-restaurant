@@ -26,7 +26,7 @@ export default function NavLinks({onClick}: Props) {
           key={link.href}
           href={link.href}
           onClick={onClick}
-          className={`relative pb-2 text-[9px] uppercase tracking-[3px] transition ${
+          className={`relative pb-2 text-[11px] font-bold uppercase tracking-[3px] transition md:text-[12px] ${
             pathname === link.href
               ? "text-black"
               : "text-black/70 hover:text-black"

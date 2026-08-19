@@ -15,56 +15,43 @@ export default function QuoteSection({ data }: Props) {
 
   return (
     <section
-      className="muted-ground relative overflow-hidden py-16 lg:py-24"
-      style={{ backgroundColor: "#F3ECD8" }}
+      className="muted-ground relative overflow-hidden py-20 sm:py-28 lg:py-36"
+      style={{ backgroundColor: "#F1EAC7" }}
       dir={isArabic ? "rtl" : "ltr"}
     >
-      <div className="relative z-10 mx-auto max-w-[1400px] px-8 lg:px-16">
-        <div className="grid items-start gap-12 lg:grid-cols-[180px_1fr]">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
+        <div className="grid items-start gap-10 lg:grid-cols-[170px_1fr] lg:gap-16 xl:grid-cols-[190px_1fr]">
 
-          {/* Side Notes */}
+          {/* Left Metadata Column */}
           <motion.div
             initial={{ opacity: 0, x: isArabic ? 20 : -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="pt-2 lg:pt-3"
+            className="pt-2 sm:pt-4"
           >
-            <p className="whitespace-pre-line text-[10px] uppercase leading-[1.8] tracking-[3px] text-[#505050]">
+            <p className="font-mono text-[11px] font-normal uppercase leading-[2.4] tracking-[0.24em] text-[#3F4B26]/85 sm:text-[12px]">
               {isArabic ? data.labelAr : data.labelEn}
             </p>
 
-            <p className="mt-2 text-[10px] uppercase tracking-[2px] text-[#DD9948]">
+            <p className="mt-1 font-mono text-[11px] font-normal uppercase tracking-[0.24em] text-[#DD9948] sm:text-[12px]">
               {isArabic ? data.dateAr : data.dateEn}
             </p>
           </motion.div>
 
-          {/* Quote Container */}
+          {/* Right Quote Body Column */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="w-full flex flex-col items-start"
+            className="flex w-full flex-col items-start"
           >
-            {/* Quote Text */}
-            <h2
-              className="
-                w-full
-                font-serif
-                italic
-                text-[#1F1F1F]
-                whitespace-pre-line
-                leading-[1.4]
-                tracking-[-0.01em]
-                text-[26px]
-                sm:text-[42px]
-                lg:text-[54px]
-              "
-            >
+            {/* Main Italic Display Serif Quote */}
+            <h2 className="w-full font-serif text-[42px] font-normal italic leading-[1.08] tracking-[-0.02em] text-[#1F2021] sm:text-[56px] md:text-[68px] lg:text-[80px] xl:text-[88px]">
               <span
-                className={`text-[#DD9948] font-serif inline-block select-none ${
-                  isArabic ? "ml-3" : "mr-2"
+                className={`font-serif text-[#DD9948] select-none ${
+                  isArabic ? "ml-2 sm:ml-4" : "mr-2 sm:mr-3"
                 }`}
               >
                 {isArabic ? "«" : "“"}
@@ -73,26 +60,17 @@ export default function QuoteSection({ data }: Props) {
               {isArabic ? data.quoteAr : data.quoteEn}
 
               <span
-                className={`text-[#DD9948] font-serif inline-block select-none ${
-                  isArabic ? "mr-3" : "ml-2"
+                className={`font-serif text-[#DD9948] select-none ${
+                  isArabic ? "mr-2 sm:mr-4" : "ml-2 sm:ml-3"
                 }`}
               >
                 {isArabic ? "»" : "”"}
               </span>
             </h2>
 
-            {/* Footer */}
-            <p
-              className="
-                mt-8
-                lg:mt-10
-                text-[10px]
-                uppercase
-                tracking-[3px]
-                text-[#666]
-                opacity-80
-              "
-            >
+            {/* Sub-attribution */}
+            <p className="mt-10 font-mono text-[11px] font-normal uppercase tracking-[0.24em] text-[#3F4B26]/75 sm:mt-14 sm:text-[12px]">
+              <span className="tracking-normal text-[#3F4B26]/50">---&nbsp;&nbsp;</span>
               {isArabic ? data.footerAr : data.footerEn}
             </p>
           </motion.div>
