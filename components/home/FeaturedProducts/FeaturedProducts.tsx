@@ -66,19 +66,24 @@ export default function FeaturedProducts({ data }: Props) {
             md:gap-8
           "
         >
-          {data.products.map((product) => (
-            <Link
-              href={product.href}
-              key={product.id}
-              className="group overflow-hidden"
-            >
-              <div className="relative h-[220px] sm:h-[340px] lg:h-[400px] w-full overflow-hidden">
-                <Image
-                  src={product.imageUrl}
-                  alt={isArabic ? product.titleAr : product.titleEn}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+          {data.products.map((product) => {
+            const targetTitle = isArabic
+              ? product.titleAr || product.titleEn
+              : product.titleEn || product.titleAr;
+
+            return (
+              <Link
+                href={`/menu?product=${encodeURIComponent(targetTitle)}`}
+                key={product.id}
+                className="group overflow-hidden"
+              >
+                <div className="relative h-[220px] sm:h-[340px] lg:h-[400px] w-full overflow-hidden">
+                  <Image
+                    src={product.imageUrl}
+                    alt={isArabic ? product.titleAr : product.titleEn}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -97,7 +102,8 @@ export default function FeaturedProducts({ data }: Props) {
                 </div>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
     </section>

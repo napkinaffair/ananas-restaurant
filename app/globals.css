@@ -111,12 +111,21 @@ body {
 }
 
 /* Arabic display text should match the hero's Aref Ruqaa styling across the site */
+[dir="rtl"] body,
+[dir="rtl"] p,
+[dir="rtl"] span,
+[dir="rtl"] li,
+[dir="rtl"] a,
+[dir="rtl"] button,
 [dir="rtl"] .serif,
 [dir="rtl"] .font-serif,
 [dir="rtl"] .vogue-hero-head,
 [dir="rtl"] h1,
 [dir="rtl"] h2,
-[dir="rtl"] h3 {
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
   font-family: var(--font-arabic-voice) !important;
   font-style: normal !important;
   letter-spacing: 0 !important;

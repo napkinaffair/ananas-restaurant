@@ -31,10 +31,10 @@ export default function ProductTicker({ data }: Props) {
   }, [controls, isArabic]);
 
   return (
-    <section className="overflow-hidden border-y border-black/10 bg-[#F8ECA3] py-5">
+    <section className="overflow-hidden border-y border-black/10 bg-[#E3E27F] py-5">
       <div className="flex w-max" dir={isArabic ? "rtl" : "ltr"}>
         <motion.div
-          className="flex gap-16 whitespace-nowrap px-8 text-[#222E18]"
+          className="flex items-center gap-8 whitespace-nowrap px-8 text-[#2F3B1C]"
           animate={controls}
           onHoverStart={() => controls.stop()}
           onHoverEnd={() =>
@@ -51,9 +51,9 @@ export default function ProductTicker({ data }: Props) {
           {[...items, ...items].map((item, index) => (
             <div
               key={index}
-              className="flex items-center gap-16 font-serif text-2xl italic tracking-wide"
+              className="flex items-center gap-4 font-serif text-[2.4rem] italic leading-none tracking-[-0.04em] text-[#2F3B1C]"
             >
-              <span>✦</span>
+              <span className="text-[1.1rem] leading-none text-[#7B7A62]">✦</span>
               <span>{item}</span>
             </div>
           ))}

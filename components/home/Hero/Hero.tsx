@@ -16,13 +16,13 @@ export default function Hero({ data, locale }: Props) {
     <section 
       dir={isArabic ? "rtl" : "ltr"} 
       lang={locale} 
-      className="relative min-h-[500px] overflow-hidden sm:min-h-[580px] lg:min-h-[680px]"
+      className="relative min-h-[470px] overflow-hidden sm:min-h-[540px] lg:min-h-[560px]"
     >
       <HeroBackground data={data} />
 
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
 
-      <div className="absolute inset-0 z-20 px-4 py-4 sm:px-8 sm:py-6 lg:px-12">
+      <div className="absolute inset-0 z-20 px-4 py-4 sm:px-8 sm:py-6 lg:px-10">
         <div className="relative flex h-full w-full flex-col justify-end lg:block">
           <HeroLeftContent data={data} locale={locale} />
 
