@@ -1,4 +1,3 @@
-
 "use client";
 
 import { El_Messiri, IBM_Plex_Sans_Arabic, Playfair_Display, Inter } from "next/font/google";
@@ -7,26 +6,22 @@ import Image from "next/image";
 
 import { MenuItem, MenuSectionData } from "./menuSection.types";
 
-// English display font
 const playfair = Playfair_Display({
   subsets: ["latin"],
   style: ["italic"],
   weight: ["400", "500", "600"],
 });
 
-// Arabic headline font — matches the reference's cleaner geometric display look
 const headingArabic = El_Messiri({
   subsets: ["arabic"],
   weight: ["400", "500", "600"],
 });
 
-// Arabic body font — lighter reading text in the reference
 const bodyArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["300", "400", "500", "600"],
 });
 
-// English body font
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400"],
@@ -34,22 +29,26 @@ const inter = Inter({
 
 type Props = {
   section: MenuSectionData & { isDark?: boolean };
+  index?: number;
   onSelectItem: (item: MenuItem, section: MenuSectionData) => void;
 };
 
-export default function MenuSection({ section, onSelectItem }: Props) {
+export default function MenuSection({ section, index, onSelectItem }: Props) {
   const locale = useLocale();
   const isArabic = locale === "ar";
 
-  const textureClass = section.isDark
-    ? "muted-ground-dark"
-    : "muted-ground";
+  // Parse section.number in case index is not passed
+  const parsedNumber = parseInt(String(section.number).replace(/\D/g, ""), 10);
+  
+  // Checks either index (0-based) OR parsed section.number (1-based)
+  const isEven = typeof index === "number" 
+    ? index % 2 === 1 
+    : !isNaN(parsedNumber) && parsedNumber % 2 === 0;
 
+  const textureClass = section.isDark ? "muted-ground-dark" : "muted-ground";
   const accentColor = section.accentColor || "#1B3622";
 
-  // Font selection based on locale
   const headingFont = isArabic ? headingArabic.className : playfair.className;
-
   const bodyFont = isArabic ? bodyArabic.className : inter.className;
   const bodyArabicFontFamily = '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif';
   const headingArabicFontFamily = '"El Messiri", serif';
@@ -73,7 +72,8 @@ export default function MenuSection({ section, onSelectItem }: Props) {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="grid items-start gap-14 lg:grid-cols-2">
 
-          <div className="order-2 lg:order-1">
+          {/* Image Container */}
+          <div className={isEven ? "order-2 lg:order-2" : "order-2 lg:order-1"}>
             <div className="relative aspect-square overflow-hidden rounded-3xl shadow-sm">
               <Image
                 src={section.image}
@@ -84,10 +84,9 @@ export default function MenuSection({ section, onSelectItem }: Props) {
             </div>
           </div>
 
-          <div className="order-1 space-y-8 lg:order-2">
-
+          {/* Content Container */}
+          <div className={`space-y-8 ${isEven ? "order-1 lg:order-1" : "order-1 lg:order-2"}`}>
             <div className="flex items-baseline gap-4 border-b border-current opacity-90 pb-6">
-
               <span
                 className={`${isArabic ? headingFont : playfair.className} text-4xl font-normal ${
                   isArabic ? "" : "italic"
@@ -130,23 +129,17 @@ export default function MenuSection({ section, onSelectItem }: Props) {
               >
                 {isArabic ? section.titleAr : section.titleEn}
               </h2>
-
             </div>
 
             <div className="space-y-8">
-
               {section.items.map((item) => (
-
                 <article
                   key={item.id}
                   onClick={() => onSelectItem(item, section)}
                   className="cursor-pointer border-b border-current/20 pb-6 transition-opacity hover:opacity-80"
                 >
-
                   <div className="flex items-start justify-between gap-6">
-
                     <div>
-
                       <h3
                         className={`${headingFont} text-xl font-normal ${
                           isArabic ? "" : "italic"
@@ -169,9 +162,7 @@ export default function MenuSection({ section, onSelectItem }: Props) {
                         className={`${bodyFont} mt-1 max-w-md text-xs font-normal opacity-75 md:text-sm`}
                         style={isArabic ? { fontFamily: bodyArabicFontFamily } : undefined}
                       >
-                        {isArabic
-                          ? item.descriptionAr
-                          : item.descriptionEn}
+                        {isArabic ? item.descriptionAr : item.descriptionEn}
                       </p>
 
                       <div
@@ -195,11 +186,9 @@ export default function MenuSection({ section, onSelectItem }: Props) {
                           {gramUnit}
                         </span>
                       </div>
-
                     </div>
 
                     <div className="text-right">
-
                       <span
                         className={`${
                           isArabic ? bodyFont : "font-mono"
@@ -208,18 +197,13 @@ export default function MenuSection({ section, onSelectItem }: Props) {
                       >
                         {item.kcal} {kcalLabel}
                       </span>
-
                     </div>
-
                   </div>
-
                 </article>
-
               ))}
-
             </div>
-
           </div>
+
         </div>
       </div>
     </section>
