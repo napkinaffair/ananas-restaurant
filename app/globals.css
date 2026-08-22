@@ -126,9 +126,9 @@ body {
 [dir="rtl"] h4,
 [dir="rtl"] h5,
 [dir="rtl"] h6 {
-  font-family: var(--font-arabic-voice) !important;
-  font-style: normal !important;
-  letter-spacing: 0 !important;
+  font-family: var(--font-arabic-voice);
+  font-style: normal;
+  letter-spacing: 0;
   line-height: 1.3;
 }
 
@@ -140,6 +140,14 @@ body {
   letter-spacing: 0;
   text-transform: none;
   font-feature-settings: normal;
+}
+
+/* Explicitly keep the global RTL fallback from overriding element-level next/font classes. */
+[dir="rtl"] .font-arabic,
+[dir="rtl"] .font-arabic-display,
+[dir="rtl"] .font-arabic-voice,
+[dir="rtl"] .font-arabic-typewriter {
+  font-family: inherit;
 }
 
 /* Typewriter Voice Exceptions (Status bar, Ticker, Filter Pills) */

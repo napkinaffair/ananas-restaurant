@@ -80,7 +80,7 @@ export default function CategoryNavigation({
   };
 
   return (
-    <section className="sticky top-0 z-40 bg-[#dbe868] py-3.5">
+    <section className="sticky top-0 z-30 bg-[#dbe868] py-3.5">
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6">
         <div
           className="

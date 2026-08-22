@@ -2,9 +2,20 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { useLocale } from "next-intl";
 
 import { MenuHeroData } from "./hero.types";
+
+const headingArabic = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600"],
+});
+
+const labelArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600"],
+});
 
 interface HeroProps {
   data: MenuHeroData;
@@ -76,6 +87,15 @@ export default function Hero({ data }: HeroProps) {
             className={`text-[10px] uppercase tracking-[5px] font-semibold ${
               isBackground ? "text-white/95" : "text-[#31451B]"
             } ${isArabic ? "text-right" : "text-left"}`}
+            style={
+              isArabic
+                ? {
+                    fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                    fontWeight: 400,
+                    letterSpacing: "0.08em",
+                  }
+                : undefined
+            }
           >
             {isArabic ? data.labelAr : data.labelEn}
           </motion.p>
@@ -103,11 +123,35 @@ export default function Hero({ data }: HeroProps) {
                 className={`block text-[48px] sm:text-[72px] md:text-[95px] lg:text-[120px] xl:text-[135px] ${
                   isBackground ? "text-white" : "text-[#31451B]"
                 }`}
+                style={
+                  isArabic
+                    ? {
+                        fontFamily: '"El Messiri", serif',
+                        fontWeight: 400,
+                        fontStyle: "normal",
+                        letterSpacing: "-0.04em",
+                      }
+                    : undefined
+                }
               >
                 {isArabic ? data.titleLine1Ar : data.titleLine1En}
               </span>
 
-              <span className="block italic text-[#ECE85D] text-[48px] sm:text-[72px] md:text-[95px] lg:text-[120px] xl:text-[135px]">
+              <span
+                className={`block text-[48px] sm:text-[72px] md:text-[95px] lg:text-[120px] xl:text-[135px] ${
+                  isArabic ? "text-[#ECE85D]" : "text-[#ECE85D]"
+                } ${isArabic ? "" : "italic"}`}
+                style={
+                  isArabic
+                    ? {
+                        fontFamily: '"El Messiri", serif',
+                        fontWeight: 400,
+                        fontStyle: "normal",
+                        letterSpacing: "-0.04em",
+                      }
+                    : undefined
+                }
+              >
                 {isArabic ? data.titleLine2Ar : data.titleLine2En}
               </span>
             </h1>

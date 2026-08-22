@@ -13,7 +13,7 @@ export default function Navbar() {
     <>
       {/* Top Announcement Bar (fixed) */}
       <div className="fixed top-0 left-0 w-full z-50 border-b border-black/5 bg-[#E5E56D]">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-1 px-6 py-2 lg:flex-row lg:items-center lg:justify-between xl:px-8">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-0 px-6 py-2 lg:flex-row lg:items-center lg:justify-between xl:px-8">
           {
             // Mobile: stacked. Desktop (lg+): row with space-between
           }
@@ -21,6 +21,19 @@ export default function Navbar() {
             className={`text-[10px] font-medium uppercase tracking-[3px] text-[#31451B] ${
               isArabic ? "text-right" : "text-left"
             } lg:text-left w-full lg:w-auto`}
+            style={
+              isArabic
+                ? {
+                    fontFamily: '"Kawkab Mono", monospace',
+                    fontWeight: 400,
+                    fontStyle: "normal",
+                    fontSize: "10px",
+                    lineHeight: "15px",
+                    letterSpacing: 0,
+                    color: "rgb(31, 32, 33)",
+                  }
+                : undefined
+            }
           >
             {t("announcementIndependent")}
           </p>
@@ -29,6 +42,19 @@ export default function Navbar() {
             className={`text-[10px] font-medium uppercase tracking-[3px] text-[#31451B] ${
               isArabic ? "text-right" : "text-left"
             } lg:text-right w-full lg:w-auto`}
+            style={
+              isArabic
+                ? {
+                    fontFamily: '"Kawkab Mono", monospace',
+                    fontWeight: 400,
+                    fontStyle: "normal",
+                    fontSize: "10px",
+                    lineHeight: "15px",
+                    letterSpacing: 0,
+                    color: "rgb(31, 32, 33)",
+                  }
+                : undefined
+            }
           >
             {t("announcementOpenDaily")}
           </p>
@@ -36,7 +62,9 @@ export default function Navbar() {
       </div>
 
       {/* Main Navbar (fixed below announcement) */}
-      <header className="fixed top-12 left-0 w-full z-40 border-b border-black/10 bg-[#EFE4D0] shadow-sm lg:top-8">
+      <header
+        className={`fixed ${isArabic ? "top-10" : "top-12"} left-0 w-full z-40 border-b border-black/10 bg-[#EFE4D0] shadow-sm lg:top-8`}
+      >
         <DesktopNavbar />
         <MobileNavbar />
       </header>

@@ -32,20 +32,41 @@ export default function FeaturedProducts({ data }: Props) {
             isArabic ? "text-right" : "text-left"
           }`}
         >
-          <p className="mb-2 sm:mb-4 text-[9px] sm:text-[10px] uppercase tracking-[4px] sm:tracking-[6px] text-[#C77C3E]">
+          <p
+            className="mb-2 sm:mb-4 uppercase tracking-[4px] sm:tracking-[6px] text-[#C77C3E]"
+            style={
+              isArabic
+                ? {
+                    fontFamily: '"IBM Plex Sans Arabic", sans-serif',
+                    fontWeight: 400,
+                    fontStyle: "normal",
+                    fontSize: "11px",
+                    lineHeight: "17px",
+                    letterSpacing: 0,
+                    color: "#C77C3E",
+                  }
+                : undefined
+            }
+          >
             {isArabic ? data.sectionLabelAr : data.sectionLabelEn}
           </p>
 
           <h2
-            className="
-              max-w-[720px]
-              font-serif
-              leading-[0.95]
-              text-[#202020]
-              text-3xl
-              sm:text-5xl
-              lg:text-7xl
-            "
+            className={
+              isArabic
+                ? "max-w-[720px] leading-[0.95] text-[#202020] text-3xl sm:text-5xl lg:text-7xl"
+                : "max-w-[720px] font-serif leading-[0.95] text-[#202020] text-3xl sm:text-5xl lg:text-7xl"
+            }
+            style={
+              isArabic
+                ? {
+                    fontFamily: '"El Messiri", serif',
+                    fontWeight: 400,
+                    fontStyle: "normal",
+                    letterSpacing: "-0.04em",
+                  }
+                : undefined
+            }
           >
             {isArabic ? data.headingAr : data.headingEn}
           </h2>
@@ -67,9 +88,9 @@ export default function FeaturedProducts({ data }: Props) {
           "
         >
           {data.products.map((product) => {
-            const targetTitle = isArabic
-              ? product.titleAr || product.titleEn
-              : product.titleEn || product.titleAr;
+            // Use the English title as the canonical product query value so
+            // the menu page can reliably match items across locales.
+            const targetTitle = product.titleEn || product.titleAr;
 
             return (
               <Link
@@ -92,13 +113,67 @@ export default function FeaturedProducts({ data }: Props) {
                     isArabic ? "text-right" : "text-left"
                   }`}
                 >
-                  <p className="mb-1 text-[8px] sm:text-[11px] uppercase tracking-[2px] sm:tracking-[4px] opacity-80 truncate">
-                    {isArabic ? product.categoryAr : product.categoryEn}
-                  </p>
+                  <div className="flex items-end justify-between gap-3">
+                    <div className="flex flex-col gap-1">
+                      <h3
+                        className={
+                          isArabic
+                            ? "text-2xl sm:text-3xl lg:text-[42px] leading-tight sm:leading-none"
+                            : "font-serif text-2xl sm:text-3xl lg:text-[42px] leading-tight sm:leading-none"
+                        }
+                        style={
+                          isArabic
+                            ? {
+                                fontFamily: '"Aref Ruqaa", serif',
+                                fontWeight: 400,
+                                fontStyle: "normal",
+                                letterSpacing: 0,
+                              }
+                            : undefined
+                        }
+                      >
+                        {isArabic ? product.titleAr : product.titleEn}
+                      </h3>
 
-                  <h3 className="font-serif text-2xl sm:text-3xl lg:text-[42px] leading-tight sm:leading-none">
-                    {isArabic ? product.titleAr : product.titleEn}
-                  </h3>
+                      <p
+                        className="truncate opacity-80"
+                        style={
+                          isArabic
+                            ? {
+                                fontFamily: '"IBM Plex Sans Arabic", sans-serif',
+                                fontWeight: 400,
+                                fontStyle: "normal",
+                                fontSize: "11px",
+                                lineHeight: "17px",
+                                letterSpacing: 0,
+                                color: "#FFFFFF",
+                              }
+                            : undefined
+                        }
+                      >
+                        {isArabic ? product.categoryAr : product.categoryEn}
+                      </p>
+                    </div>
+
+                    <p
+                      className="text-left whitespace-nowrap"
+                      style={
+                        isArabic
+                          ? {
+                              fontFamily: '"IBM Plex Sans Arabic", sans-serif',
+                              fontWeight: 400,
+                              fontStyle: "normal",
+                              fontSize: "11px",
+                              lineHeight: "17px",
+                              letterSpacing: 0,
+                              color: "rgb(227, 226, 126)",
+                            }
+                          : undefined
+                      }
+                    >
+                      {isArabic ? "VIEW →" : "VIEW →"}
+                    </p>
+                  </div>
                 </div>
               </div>
             </Link>

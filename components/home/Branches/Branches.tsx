@@ -5,6 +5,12 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
+import { El_Messiri } from "next/font/google";
+
+const headingArabic = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+});
 
 import { BranchesData } from "./branches.types";
 
@@ -134,10 +140,16 @@ export default function Branches({ data }: BranchesProps) {
               </span>
             </div>
 
-            <h2 className="font-serif text-[#1F1F1F] leading-[1.1] text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-[750px]">
+            <h2
+              className={`font-serif text-[#1F1F1F] leading-[1.1] text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-[750px] ${isArabic ? headingArabic.className : ""}`}
+              style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400 } : undefined}
+            >
               {isArabic ? data.headingLine1Ar : data.headingLine1En}
               {" "}
-              <span className="italic text-[#D99844] block sm:inline">
+              <span
+                className={`italic text-[#D99844] block ${isArabic ? headingArabic.className : ""}`}
+                style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400, display: 'block' } : undefined}
+              >
                 {isArabic ? data.headingLine2Ar : data.headingLine2En}
               </span>
             </h2>
@@ -243,11 +255,17 @@ export default function Branches({ data }: BranchesProps) {
 
                   {/* Absolute Card Content Footer Metadata Wrapper */}
                   <div className="absolute bottom-6 left-5 right-5 flex flex-col justify-end h-1/2">
-                    <h3 className="font-serif text-3xl text-white italic leading-tight tracking-wide transition-colors group-hover:text-[#F3ECD8]">
+                    <h3
+                      className={`font-serif text-3xl text-white italic leading-tight tracking-wide transition-colors group-hover:text-[#F3ECD8] ${isArabic ? headingArabic.className : ""}`}
+                      style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400 } : undefined}
+                    >
                       {isArabic ? branch.titleAr : branch.titleEn}
                     </h3>
 
-                    <p className="mt-2 text-[10px] uppercase tracking-[3px] text-white/70 font-sans line-clamp-1">
+                    <p
+                      className={`mt-2 text-[10px] uppercase tracking-[3px] text-white/70 ${isArabic ? headingArabic.className : ""} line-clamp-1`}
+                      style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400 } : undefined}
+                    >
                       {isArabic ? branch.locationAr : branch.locationEn}
                     </p>
 

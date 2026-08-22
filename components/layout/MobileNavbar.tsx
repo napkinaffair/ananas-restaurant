@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -23,16 +23,16 @@ export default function MobileNavbar() {
     };
   }, [open]);
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   return (
     <>
       {/* Mobile Header */}
-      <div className="flex h-20 items-center justify-between px-5 lg:hidden">
+      <div className="flex h-20 items-center justify-between px-5 lg:hidden" dir="ltr">
 
         <button
           onClick={() => setOpen(true)}

@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { El_Messiri } from "next/font/google";
+
+const headingArabic = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600"],
+});
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 
@@ -21,11 +27,18 @@ export default function MenuIntro({
   const [active, setActive] = useState(data.items[0]);
 
   return (
-    <section
-      className="muted-ground-dark relative overflow-hidden text-[#F8F4EC] py-12 lg:py-16"
-      style={{ backgroundColor: "#435334" }}
-      dir={isArabic ? "rtl" : "ltr"}
-    >
+    <>
+      {isArabic && (
+        <style>{`.menuintro-el-messiri, .menuintro-el-messiri * { font-family: "El Messiri", serif !important; }`}</style>
+      )}
+
+      <section
+        className={`muted-ground-dark relative overflow-hidden text-[#F8F4EC] py-12 lg:py-16 ${
+          isArabic ? "menuintro-el-messiri" : ""
+        }`}
+        style={{ backgroundColor: "#435334" }}
+        dir={isArabic ? "rtl" : "ltr"}
+      >
       <div className="relative z-10 mx-auto max-w-[1500px] px-6 sm:px-8 lg:px-16">
         <div className="flex flex-col lg:grid lg:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:h-[75vh] lg:max-h-[700px] items-stretch gap-8">
 
@@ -47,7 +60,8 @@ export default function MenuIntro({
             <h2
               className={`font-serif italic text-3xl sm:text-4xl leading-[1.15] tracking-[-0.01em] text-white ${
                 isArabic ? "text-right" : "text-left"
-              }`}
+              } ${isArabic ? headingArabic.className : ""}`}
+              style={isArabic ? { fontFamily: '"El Messiri", serif' } : undefined}
             >
               {isArabic ? data.headingLine1Ar : data.headingLine1En}
               <br />
@@ -117,7 +131,8 @@ export default function MenuIntro({
               <h2
                 className={`font-serif italic lg:text-[46px] leading-[1.15] tracking-[-0.01em] text-white ${
                   isArabic ? "text-right" : "text-left"
-                }`}
+                } ${isArabic ? headingArabic.className : ""}`}
+                style={isArabic ? { fontFamily: '"El Messiri", serif' } : undefined}
               >
                 {isArabic ? data.headingLine1Ar : data.headingLine1En}
                 <br />
@@ -209,5 +224,6 @@ export default function MenuIntro({
         </div>
       </div>
     </section>
+    </>
   );
 }

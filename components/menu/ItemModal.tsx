@@ -2,8 +2,19 @@
 
 import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { useLocale } from "next-intl";
 import { MenuItem, MenuSectionData } from "./MenuSection/menuSection.types";
+
+const headingArabic = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600"],
+});
+
+const bodyArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600"],
+});
 
 type ItemModalProps = {
   item: MenuItem | null;
@@ -126,27 +137,71 @@ export default function ItemModal({
               isArabic ? "text-right" : "text-left"
             }`}
           >
-            <p className="text-[11px] font-mono tracking-[0.2em] uppercase opacity-70">
+            <p
+              className="text-[11px] font-mono tracking-[0.2em] uppercase opacity-70"
+              style={
+                isArabic
+                  ? {
+                      fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                      fontWeight: 400,
+                      letterSpacing: "0.1em",
+                    }
+                  : undefined
+              }
+            >
               {categoryLabel}
             </p>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif italic leading-tight">
+            <h2
+              className="text-4xl sm:text-5xl lg:text-6xl font-serif italic leading-tight"
+              style={
+                isArabic
+                  ? {
+                      fontFamily: '"El Messiri", serif',
+                      fontWeight: 400,
+                      fontStyle: "normal",
+                      lineHeight: 1.1,
+                    }
+                  : undefined
+              }
+            >
               {itemTitle}
             </h2>
 
             {itemCaption && (
               <div
                 className="inline-flex rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em]"
-                style={{
-                  backgroundColor: section.accentColor,
-                  color: section.backgroundColor, // High contrast contrast using background
-                }}
+                style={
+                  isArabic
+                    ? {
+                        backgroundColor: section.accentColor,
+                        color: section.backgroundColor,
+                        fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                        fontWeight: 400,
+                        letterSpacing: "0.08em",
+                      }
+                    : {
+                        backgroundColor: section.accentColor,
+                        color: section.backgroundColor,
+                      }
+                }
               >
                 {itemCaption}
               </div>
             )}
 
-            <p className="text-sm sm:text-base leading-relaxed font-light opacity-90">
+            <p
+              className="text-sm sm:text-base leading-relaxed font-light opacity-90"
+              style={
+                isArabic
+                  ? {
+                      fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                      fontWeight: 400,
+                      lineHeight: 1.7,
+                    }
+                  : undefined
+              }
+            >
               {itemDesc}
             </p>
 
@@ -155,22 +210,64 @@ export default function ItemModal({
             {/* Nutrition */}
 
             <div>
-              <p className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-60 mb-3">
+              <p
+                className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-60 mb-3"
+                style={
+                  isArabic
+                    ? {
+                        fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                        fontWeight: 400,
+                        letterSpacing: "0.08em",
+                      }
+                    : undefined
+                }
+              >
                 {isArabic ? "لكل وجبة" : "PER SERVING"}
               </p>
 
               <div className="grid grid-cols-4 gap-2">
 
                 <div>
-                  <div className="text-2xl sm:text-3xl font-serif italic">
+                  <div
+                    className="text-2xl sm:text-3xl font-serif italic"
+                    style={
+                      isArabic
+                        ? {
+                            fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                            fontWeight: 400,
+                          }
+                        : undefined
+                    }
+                  >
                     {item.kcal}
-                    <span className="text-xs font-sans not-italic opacity-70">
+                    <span
+                      className="text-xs font-sans not-italic opacity-70"
+                      style={
+                        isArabic
+                          ? {
+                              fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                              fontWeight: 400,
+                            }
+                          : undefined
+                      }
+                    >
                       {" "}
                       {isArabic ? "سعرة" : "kcal"}
                     </span>
                   </div>
 
-                  <div className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1">
+                  <div
+                    className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1"
+                    style={
+                      isArabic
+                        ? {
+                            fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                            fontWeight: 400,
+                            letterSpacing: "0.08em",
+                          }
+                        : undefined
+                    }
+                  >
                     {isArabic ? "سعرات" : "CALORIES"}
                   </div>
                 </div>
@@ -216,18 +313,50 @@ export default function ItemModal({
 
               {itemOrigin && (
                 <div>
-                  <p className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-60 mb-1">
+                  <p
+                    className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-60 mb-1"
+                    style={
+                      isArabic
+                        ? {
+                            fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                            fontWeight: 400,
+                            letterSpacing: "0.08em",
+                          }
+                        : undefined
+                    }
+                  >
                     {isArabic ? "المصدر" : "ORIGIN"}
                   </p>
 
-                  <p className="text-lg font-serif italic">
+                  <p
+                    className="text-lg font-serif italic"
+                    style={
+                      isArabic
+                        ? {
+                            fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                            fontWeight: 400,
+                          }
+                        : undefined
+                    }
+                  >
                     {itemOrigin}
                   </p>
                 </div>
               )}
 
               <div>
-                <p className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-60 mb-2">
+                <p
+                  className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-60 mb-2"
+                  style={
+                    isArabic
+                      ? {
+                          fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                          fontWeight: 400,
+                          letterSpacing: "0.08em",
+                        }
+                      : undefined
+                  }
+                >
                   {isArabic ? "مسببات الحساسية" : "ALLERGENS"}
                 </p>
 
@@ -238,11 +367,31 @@ export default function ItemModal({
                         key={allergen.code}
                         className="flex items-center gap-1.5"
                       >
-                        <span className="text-[10px] font-mono px-2 py-0.5 border border-current opacity-80 rounded uppercase">
+                        <span
+                          className="text-[10px] font-mono px-2 py-0.5 border border-current opacity-80 rounded uppercase"
+                          style={
+                            isArabic
+                              ? {
+                                  fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                                  fontWeight: 400,
+                                }
+                              : undefined
+                          }
+                        >
                           {allergen.code}
                         </span>
 
-                        <span className="text-xs font-medium opacity-90">
+                        <span
+                          className="text-xs font-medium opacity-90"
+                          style={
+                            isArabic
+                              ? {
+                                  fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                                  fontWeight: 400,
+                                }
+                              : undefined
+                          }
+                        >
                           {isArabic
                             ? allergen.nameAr
                             : allergen.nameEn}
