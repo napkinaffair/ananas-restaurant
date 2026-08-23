@@ -156,7 +156,7 @@ export default function FeaturedProducts({ data }: Props) {
                     </div>
 
                     <p
-                      className="text-left whitespace-nowrap"
+                      className="relative inline-flex h-[17px] w-[72px] shrink-0 items-center justify-end overflow-hidden whitespace-nowrap"
                       style={
                         isArabic
                           ? {
@@ -166,12 +166,34 @@ export default function FeaturedProducts({ data }: Props) {
                               fontSize: "11px",
                               lineHeight: "17px",
                               letterSpacing: 0,
-                              color: "rgb(227, 226, 126)",
+                              color: "#E3E27E",
                             }
                           : undefined
                       }
                     >
-                      {isArabic ? "VIEW →" : "VIEW →"}
+                      <span
+                        className="block opacity-100 transition-opacity duration-300 group-hover:opacity-0"
+                        style={{
+                          color: "#E3E27E",
+                          fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+                          fontWeight: 400,
+                          fontStyle: "normal",
+                        }}
+                      >
+                        —
+                      </span>
+
+                      <span
+                        className="absolute inset-0 flex items-center justify-end opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        style={{
+                          color: "#E3E27E",
+                          fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+                          fontWeight: 400,
+                          fontStyle: "normal",
+                        }}
+                      >
+                        VIEW →
+                      </span>
                     </p>
                   </div>
                 </div>

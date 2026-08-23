@@ -77,7 +77,25 @@ export default function FooterTicker() {
             className="flex items-center gap-3 whitespace-nowrap text-[11px] font-medium uppercase tracking-[3px] text-[#2F3B1C] lg:text-xs"
           >
             <span className="text-[9px] leading-none text-[#7B7A62]">✦</span>
-            <span>{item}</span>
+            <span
+              style={
+                isRtl
+                  ? {
+                      fontFamily: '"Kawkab Mono", monospace',
+                      fontWeight: 400,
+                      fontSize: "14px",
+                      lineHeight: "21px",
+                    }
+                  : {
+                      fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+                      fontWeight: 400,
+                      fontSize: "11px",
+                      lineHeight: "17px",
+                    }
+              }
+            >
+              {item}
+            </span>
           </span>
         ))}
       </motion.div>

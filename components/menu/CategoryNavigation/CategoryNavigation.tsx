@@ -79,6 +79,10 @@ export default function CategoryNavigation({
     });
   };
 
+  const categoryButtonStyle = isArabic
+    ? { fontFamily: '"Kawkab Mono", monospace', fontWeight: 400, fontStyle: "normal" }
+    : { fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace', fontWeight: 400, fontStyle: "normal" };
+
   return (
     <section className="sticky top-0 z-30 bg-[#dbe868] py-3.5">
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6">
@@ -97,6 +101,7 @@ export default function CategoryNavigation({
                 type="button"
                 aria-current={isActive ? "true" : undefined}
                 onClick={() => scrollToSection(category.id)}
+                style={categoryButtonStyle}
                 className={`
                   snap-start whitespace-nowrap px-3.5 py-1 sm:px-4 sm:py-1.5
                   rounded-full text-[10px] sm:text-[11px] font-semibold tracking-[0.14em] sm:tracking-[0.18em] uppercase
@@ -118,6 +123,7 @@ export default function CategoryNavigation({
           <button
             type="button"
             onClick={scrollToIngredientOrigins}
+            style={categoryButtonStyle}
             className="
               snap-start whitespace-nowrap px-4 py-1 sm:px-5 sm:py-1.5
               rounded-full text-[10px] sm:text-[11px] font-semibold tracking-[0.14em] sm:tracking-[0.18em] uppercase

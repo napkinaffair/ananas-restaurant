@@ -37,7 +37,13 @@ export default function DesktopNavbar() {
 
         <Link
           href="/menu"
-          className="rounded-md bg-[#F69234] px-6 py-3 text-sm font-medium uppercase tracking-wider text-white transition hover:opacity-90"
+          style={{
+            fontFamily: '"Manrope", "Helvetica Neue", Arial, sans-serif',
+            fontWeight: 500,
+            backgroundColor: '#F69234',
+            color: '#FFFFFF',
+          }}
+          className="view-menu-button rounded-md bg-[#F69234] px-6 py-3 text-sm uppercase tracking-wider text-white transition-colors"
         >
           {t("viewMenu")} →
         </Link>

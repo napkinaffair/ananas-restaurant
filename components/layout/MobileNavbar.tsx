@@ -75,7 +75,13 @@ export default function MobileNavbar() {
               <Link
                 href="/menu"
                 onClick={() => setOpen(false)}
-                className="mt-4 rounded-lg bg-[#F69234] py-4 text-center font-semibold text-white"
+                style={{
+                  fontFamily: '"Manrope", "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: 500,
+                  backgroundColor: '#F69234',
+                  color: '#FFFFFF',
+                }}
+                className="view-menu-button mt-4 rounded-lg bg-[#F69234] py-4 text-center text-white transition-colors"
               >
                 {t("viewMenu")}
               </Link>
