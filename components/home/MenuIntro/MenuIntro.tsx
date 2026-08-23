@@ -38,7 +38,7 @@ export default function MenuIntro({
         className={`muted-ground-dark relative overflow-hidden text-[#F8F4EC] py-12 lg:py-16 ${
           isArabic ? "menuintro-el-messiri" : ""
         }`}
-        style={{ backgroundColor: "#435334" }}
+        style={{ backgroundColor: "#3B471B" }}
         dir={isArabic ? "rtl" : "ltr"}
       >
         <div className="relative z-10 mx-auto max-w-[1500px] px-6 sm:px-8 lg:px-16">
@@ -208,11 +208,12 @@ export default function MenuIntro({
                         </div>
 
                         <span
-                          className={`text-sm font-mono transition-all duration-300 ${
-                            isCurrentActive
-                              ? "text-white opacity-100 translate-x-1"
-                              : "text-white/30 opacity-40 group-hover:opacity-80 group-hover:text-white"
-                          }`}
+                          className="text-sm font-mono transition-all duration-300"
+                          style={{
+                            color: isCurrentActive ? dotColor : undefined,
+                            opacity: isCurrentActive ? 1 : undefined,
+                            transform: isCurrentActive ? "translateX(4px)" : undefined,
+                          }}
                         >
                           →
                         </span>
@@ -229,7 +230,7 @@ export default function MenuIntro({
               >
                 <Link
                   href="/menu"
-                  className="inline-flex w-full sm:w-auto justify-center items-center border border-[#C7D442] px-6 py-3 text-[10px] uppercase tracking-[4px] text-[#C7D442] transition-all duration-300 hover:bg-[#C7D442] hover:text-black"
+                  className="inline-flex w-full sm:w-auto justify-center items-center border border-transparent rounded-md px-6 py-3 text-[10px] uppercase tracking-[4px] bg-[#E3E27F] text-[#000000] transition-all duration-300 hover:bg-[#F18F37] hover:text-[#FFFFFF]"
                 >
                   {isArabic ? data.buttonAr : data.buttonEn}
                 </Link>

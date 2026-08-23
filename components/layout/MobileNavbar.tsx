@@ -36,7 +36,7 @@ export default function MobileNavbar() {
 
         <button
           onClick={() => setOpen(true)}
-          className="text-black flex items-center justify-center p-1"
+          className="flex h-10 w-10 items-center justify-center rounded-md border border-[#2F3B1C]/60 bg-transparent p-0 text-black"
           aria-label="Open Menu"
         >
           <Menu size={28} className="stroke-current" />

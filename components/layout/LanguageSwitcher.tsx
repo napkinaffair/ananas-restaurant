@@ -40,6 +40,12 @@ export default function LanguageSwitcher() {
               ? "bg-[#31451B] text-white"
               : "text-[#31451B]"
           }`}
+          style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            fontWeight: 400,
+            fontSize: "13px",
+            color: locale === "en" ? "#E3E27E" : "#31451B",
+          }}
         >
           EN
         </span>
@@ -50,6 +56,12 @@ export default function LanguageSwitcher() {
               ? "bg-[#31451B] text-white"
               : "text-[#31451B]"
           }`}
+          style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            fontWeight: 400,
+            fontSize: "13px",
+            color: locale === "ar" ? "#E3E27E" : "#31451B",
+          }}
         >
           ع
         </span>

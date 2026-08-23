@@ -195,7 +195,7 @@ export default function Branches({ data }: BranchesProps) {
               className="
                 inline-flex items-center gap-3 bg-[#1F1F1F] text-[#F3ECD8] 
                 px-5 py-3 text-[10px] uppercase tracking-[3px] font-sans rounded-[2px]
-                transition-all duration-300 hover:bg-[#D99844] hover:text-[#1F1F1F] shadow-md
+                transition-all duration-300 hover:bg-[#7F9333] hover:text-[#FFFFFF] shadow-md
               "
             >
               <span>{isArabic ? "كل الفروع" : "All Branches"}</span>
