@@ -2,6 +2,19 @@
 
 import Image from "next/image";
 import { useLocale } from "next-intl";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
+
+const elMessiri = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
 
 interface HeroProps {
   hero: {
@@ -37,10 +50,27 @@ interface HeroProps {
 
 export default function Hero({ hero }: HeroProps) {
   const locale = useLocale();
-  const isArabic = locale === "ar";
+  const isArabic = locale?.startsWith("ar");
 
   return (
-    <section className="relative w-full overflow-hidden font-sans">
+    <section className="relative w-full overflow-hidden font-sans" dir={isArabic ? "rtl" : "ltr"}>
+      {isArabic && (
+        <style>{`
+          .el-messiri-force,
+          .el-messiri-force * {
+            font-family: ${elMessiri.style.fontFamily}, "El Messiri", serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+          .ibm-arabic-force,
+          .ibm-arabic-force * {
+            font-family: ${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+        `}</style>
+      )}
+
       {/* ================= HERO ================= */}
       <div className="rich-ground relative overflow-hidden bg-[#3F4B26] text-[#F8F3E7]">
         {/* Background Image */}
@@ -73,12 +103,22 @@ export default function Hero({ hero }: HeroProps) {
             }`}
           >
             {/* Heading */}
-            <h1 className="font-serif text-2xl italic leading-[1.12] tracking-tight text-[#F8F3E7] sm:text-4xl md:text-5xl lg:text-[72px] lg:leading-[1.05]">
+            <h1
+              className={`text-2xl leading-[1.12] tracking-tight text-[#F8F3E7] sm:text-4xl md:text-5xl lg:text-[72px] lg:leading-[1.05] ${
+                isArabic
+                  ? "el-messiri-force"
+                  : "font-serif italic"
+              }`}
+            >
               {isArabic ? hero.titleAr : hero.titleEn}
             </h1>
 
             {/* Description */}
-            <p className="mx-auto mt-3 max-w-lg text-xs leading-relaxed text-[#F8F3E7]/90 sm:mt-5 sm:text-sm md:mx-0 md:text-base md:leading-7">
+            <p
+              className={`mx-auto mt-3 max-w-lg text-xs leading-relaxed text-[#F8F3E7]/90 sm:mt-5 sm:text-sm md:mx-0 md:text-base md:leading-7 ${
+                isArabic ? "ibm-arabic-force" : ""
+              }`}
+            >
               {isArabic ? hero.subtitleAr : hero.subtitleEn}
             </p>
           </div>
@@ -123,7 +163,7 @@ export default function Hero({ hero }: HeroProps) {
               >
                 {/* Small label */}
                 <p
-                  className="
+                  className={`
                     text-[9px]
                     font-medium
                     uppercase
@@ -131,23 +171,23 @@ export default function Hero({ hero }: HeroProps) {
                     text-[#3F4B26]/65
                     sm:text-[10px]
                     sm:tracking-[0.22em]
-                  "
+                    ${isArabic ? "ibm-arabic-force" : ""}
+                  `}
                 >
                   {isArabic ? stat.labelAr : stat.labelEn}
                 </p>
 
                 {/* Main stat */}
                 <h3
-                  className="
-                    font-serif
+                  className={`
                     text-[28px]
-                    italic
                     leading-none
                     text-[#C68A4C]
                     sm:text-[30px]
                     md:text-[34px]
                     lg:text-[38px]
-                  "
+                    ${isArabic ? "el-messiri-force" : "font-serif italic"}
+                  `}
                 >
                   {isArabic ? stat.valueAr : stat.valueEn}
                 </h3>

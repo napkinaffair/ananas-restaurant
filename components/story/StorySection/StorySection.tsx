@@ -2,8 +2,21 @@
 
 import Image from "next/image";
 import { useLocale } from "next-intl";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 
 import { StorySectionData } from "./storySection.types";
+
+const elMessiri = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
 
 interface StorySectionProps {
   section: StorySectionData;
@@ -13,7 +26,7 @@ export default function StorySection({
   section,
 }: StorySectionProps) {
   const locale = useLocale();
-  const isArabic = locale === "ar";
+  const isArabic = locale?.startsWith("ar");
 
   // Normalize color format for robust matching
   const bgColor = section.backgroundColor?.toUpperCase();
@@ -37,7 +50,25 @@ export default function StorySection({
         backgroundColor: section.backgroundColor,
       }}
       className={`${surfaceTextureClass} relative overflow-hidden py-12 sm:py-16 md:py-28`}
+      dir={isArabic ? "rtl" : "ltr"}
     >
+      {isArabic && (
+        <style>{`
+          .el-messiri-force,
+          .el-messiri-force * {
+            font-family: ${elMessiri.style.fontFamily}, "El Messiri", serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+          .ibm-arabic-force,
+          .ibm-arabic-force * {
+            font-family: ${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+        `}</style>
+      )}
+
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 md:px-10">
         <div
           className={`grid items-center gap-10 lg:gap-16 lg:grid-cols-2 ${
@@ -73,7 +104,9 @@ export default function StorySection({
           >
             {/* Chapter */}
             <p
-              className="mb-3 sm:mb-6 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.35em]"
+              className={`mb-3 sm:mb-6 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.35em] ${
+                isArabic ? "ibm-arabic-force" : ""
+              }`}
               style={{
                 color:
                   section.titleColor === "#F8F4E9" || section.titleColor === "#F7F3E8"
@@ -86,7 +119,9 @@ export default function StorySection({
 
             {/* Title */}
             <h2
-              className="font-serif text-3xl sm:text-5xl lg:text-7xl italic leading-[1.05] sm:leading-[0.95]"
+              className={`text-3xl sm:text-5xl lg:text-7xl leading-[1.05] sm:leading-[0.95] ${
+                isArabic ? "el-messiri-force" : "font-serif italic"
+              }`}
               style={{
                 color: section.titleColor,
               }}
@@ -98,7 +133,9 @@ export default function StorySection({
 
             {/* Description */}
             <p
-              className="mt-6 sm:mt-10 text-sm sm:text-base leading-7 sm:leading-9"
+              className={`mt-6 sm:mt-10 text-sm sm:text-base leading-7 sm:leading-9 ${
+                isArabic ? "ibm-arabic-force" : ""
+              }`}
               style={{
                 color:
                   section.titleColor === "#F8F4E9" || section.titleColor === "#F7F3E8"
