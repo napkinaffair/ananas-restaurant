@@ -2,8 +2,15 @@
 
 import Image from "next/image";
 import { useLocale } from "next-intl";
+import { El_Messiri } from "next/font/google";
 
 import { HeroData } from "./hero.types";
+
+const elMessiri = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
 
 interface Props {
   hero: HeroData;
@@ -14,10 +21,21 @@ export default function Hero({
 }: Props) {
   const locale = useLocale();
 
-  const isArabic = locale === "ar";
+  const isArabic = locale?.startsWith("ar");
 
   return (
-    <section className="relative w-full h-[380px] sm:h-[460px] md:h-[520px] lg:h-[580px] overflow-hidden">
+    <section className="relative w-full h-[380px] sm:h-[460px] md:h-[520px] lg:h-[580px] overflow-hidden" dir={isArabic ? "rtl" : "ltr"}>
+      {isArabic && (
+        <style>{`
+          .el-messiri-force,
+          .el-messiri-force * {
+            font-family: ${elMessiri.style.fontFamily}, "El Messiri", serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+        `}</style>
+      )}
+
       {/* Background Image */}
       <Image
         src={hero.backgroundImage}
@@ -45,11 +63,18 @@ export default function Hero({
               : hero.sectionLabelEn}
           </p>
 
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[90px] italic leading-[0.92] tracking-tight text-white">
+          <h1
+            className={`text-4xl sm:text-6xl md:text-7xl lg:text-[90px] leading-[0.92] tracking-tight text-white ${
+              isArabic
+                ? "el-messiri-force"
+                : "font-serif italic"
+            }`}
+          >
             {isArabic ? (
               <>
-                {hero.titleAr}{" "}
-                <span className="text-[#E5E56D]">
+                {hero.titleAr}
+                <br />
+                <span className="text-[#E5E56D] block">
                   {hero.titleHighlightAr}
                 </span>
               </>
@@ -57,7 +82,7 @@ export default function Hero({
               <>
                 {hero.titleEn}
                 <br />
-                <span className="text-[#E5E56D]">
+                <span className="text-[#E5E56D] block">
                   {hero.titleHighlightEn}
                 </span>
               </>
