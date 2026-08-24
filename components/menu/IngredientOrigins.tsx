@@ -25,9 +25,11 @@ export default function IngredientOrigins({
     <section
       id="ingredient-origins"
       dir={isArabic ? "rtl" : "ltr"}
-      className="muted-ground relative text-[#1E1D1B] py-14 px-6 sm:px-10 lg:px-16 overflow-hidden select-none"
+      className="muted-ground relative w-full text-[#1E1D1B] py-14 px-6 sm:px-10 lg:px-16 overflow-hidden select-none"
       style={{
         backgroundColor: "#EBE8DB",
+        backgroundRepeat: "repeat",
+        backgroundSize: "auto",
       }}
     >
       <div className="mx-auto max-w-7xl relative z-10">
@@ -109,9 +111,15 @@ export default function IngredientOrigins({
           })}
         </div>
 
-        {/* Dynamic Footer Note from Supabase */}
+        {/* Dynamic Footer Note */}
         {disclaimerText && (
-          <p className="font-mono text-[7px] tracking-[0.22em] text-[#76746A] uppercase">
+          <p
+            className={`font-mono uppercase text-[#76746A] ${
+              isArabic
+                ? "text-[11px] tracking-[0.08em]"
+                : "text-[7px] tracking-[0.22em]"
+            }`}
+          >
             {disclaimerText}
           </p>
         )}
