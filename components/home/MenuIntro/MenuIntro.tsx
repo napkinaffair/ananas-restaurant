@@ -42,10 +42,10 @@ export default function MenuIntro({
         dir={isArabic ? "rtl" : "ltr"}
       >
         <div className="relative z-10 mx-auto max-w-[1500px] px-6 sm:px-8 lg:px-16">
-          <div className="flex flex-col lg:grid lg:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:h-[75vh] lg:max-h-[700px] items-stretch gap-8">
+          <div className="flex flex-col lg:grid lg:gap-12 lg:grid-cols-[1.1fr_0.9fr] items-start gap-8">
 
             {/* Mobile Header */}
-            <div className="lg:hidden flex-shrink-0">
+            <div className="lg:hidden flex-shrink-0 w-full">
               <div
                 className={`flex items-center gap-4 mb-3 text-[10px] uppercase tracking-[3px] opacity-75 ${
                   isArabic ? "text-right" : "text-left"
@@ -73,14 +73,14 @@ export default function MenuIntro({
               </h2>
             </div>
 
-            {/* Image */}
-            <div className="w-full lg:h-full lg:max-h-[420px] flex flex-col justify-center items-center lg:items-stretch lg:order-2">
+            {/* Image (3:4 Ratio + Pinned Sticky Container) */}
+            <div className="w-full flex justify-center items-start lg:order-2 lg:sticky lg:top-24 self-start">
               <motion.div
                 key={active.id}
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4 }}
-                className="relative w-full aspect-[1.2] sm:aspect-[1.5] lg:aspect-auto lg:h-full overflow-hidden shadow-xl rounded-sm"
+                className="relative w-full max-w-[420px] aspect-[3/4] overflow-hidden shadow-2xl rounded-sm bg-[#1F2021]"
               >
                 <Image
                   src={active.image}
@@ -90,30 +90,34 @@ export default function MenuIntro({
                   className="object-cover"
                   priority
                 />
+
+                {/* Dark Vignette / Gradient Overlay */}
+                <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#1F2021]/85 via-[#1F2021]/30 to-transparent pointer-events-none" />
+
+                {/* Overlay Caption */}
+                <div
+                  className={`absolute left-6 bottom-6 right-6 z-[2] text-[#FDFAF2] ${
+                    isArabic ? "text-right" : "text-left"
+                  }`}
+                >
+                  <div className="text-[10px] tracking-[0.22em] text-[#C7D442] font-mono uppercase mb-2">
+                    {isArabic ? `طبق ${active.number}` : `PLATE ${active.number}`}
+                  </div>
+
+                  <div className="font-serif italic text-2xl sm:text-[24px] leading-[1.1] drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+                    {isArabic ? active.captionAr : active.captionEn}
+                  </div>
+                </div>
               </motion.div>
-
-              <div
-                className={`mt-3 text-[10px] tracking-wide w-full ${
-                  isArabic ? "text-right" : "text-left"
-                }`}
-              >
-                <span className="text-[#C7D442] font-mono uppercase block text-[9px] opacity-75">
-                  {isArabic ? `طبق ${active.number}` : `PLATE ${active.number}`}
-                </span>
-
-                <span className="text-white/80 font-serif italic text-sm mt-0.5 block">
-                  {isArabic ? active.captionAr : active.captionEn}
-                </span>
-              </div>
             </div>
 
-            {/* Left Side */}
+            {/* Left Side (Scrollable Independent Menu Items) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="flex flex-col h-full min-h-0 lg:order-1"
+              className="flex flex-col h-full min-h-0 lg:order-1 w-full"
             >
               <div className="hidden lg:block flex-shrink-0">
                 <div
@@ -145,7 +149,8 @@ export default function MenuIntro({
                 </h2>
               </div>
 
-              <div className="flex-1 min-h-0 mt-2 lg:mt-8 overflow-y-auto max-h-[320px] lg:max-h-none pr-1 pl-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+              {/* Independent scroll container for items */}
+              <div className="flex-1 min-h-0 mt-4 lg:mt-6 overflow-y-auto max-h-[350px] lg:max-h-[380px] pr-2 pl-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
                 <div className="divide-y divide-white/10 border-t border-b border-white/10">
                   {data.items.map((item, index) => {
                     const isCurrentActive = active.id === item.id;

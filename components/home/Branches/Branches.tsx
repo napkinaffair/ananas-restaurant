@@ -31,17 +31,21 @@ export default function Branches({ data }: BranchesProps) {
   const checkScrollBounds = () => {
     if (sliderRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-      
+
       const absoluteScroll = Math.abs(scrollLeft);
-      const tolerance = 10; 
+      const tolerance = 10;
 
       // 1. Check Arrow Controls Bounds
       if (isArabic) {
         setCanScrollRight(absoluteScroll > tolerance);
-        setCanScrollLeft(absoluteScroll + clientWidth < scrollWidth - tolerance);
+        setCanScrollLeft(
+          absoluteScroll + clientWidth < scrollWidth - tolerance
+        );
       } else {
         setCanScrollLeft(absoluteScroll > tolerance);
-        setCanScrollRight(absoluteScroll + clientWidth < scrollWidth - tolerance);
+        setCanScrollRight(
+          absoluteScroll + clientWidth < scrollWidth - tolerance
+        );
       }
 
       // 2. Compute Mobile Active Dot Pagination Index Matcher
@@ -52,11 +56,13 @@ export default function Branches({ data }: BranchesProps) {
 
   useEffect(() => {
     const slider = sliderRef.current;
+
     if (slider) {
       slider.addEventListener("scroll", checkScrollBounds);
       checkScrollBounds();
       window.addEventListener("resize", checkScrollBounds);
     }
+
     return () => {
       slider?.removeEventListener("scroll", checkScrollBounds);
       window.removeEventListener("resize", checkScrollBounds);
@@ -74,7 +80,9 @@ export default function Branches({ data }: BranchesProps) {
       .replace(/-+/g, "-")
       .replace(/^-|-$/g, "") ?? "";
 
-  const getBranchLocationHref = (branch: (typeof data.branches)[number]) => {
+  const getBranchLocationHref = (
+    branch: (typeof data.branches)[number]
+  ) => {
     const branchIdentifier = [
       branch.titleEn,
       branch.titleAr,
@@ -94,8 +102,9 @@ export default function Branches({ data }: BranchesProps) {
   const handleScroll = (direction: "left" | "right") => {
     if (sliderRef.current) {
       const { clientWidth } = sliderRef.current;
-      const scrollAmount = direction === "left" ? -clientWidth / 2 : clientWidth / 2;
-      
+      const scrollAmount =
+        direction === "left" ? -clientWidth / 2 : clientWidth / 2;
+
       sliderRef.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
@@ -106,7 +115,10 @@ export default function Branches({ data }: BranchesProps) {
   const scrollToDot = (index: number) => {
     if (sliderRef.current) {
       const { clientWidth } = sliderRef.current;
-      const targetPos = isArabic ? -index * clientWidth : index * clientWidth;
+      const targetPos = isArabic
+        ? -index * clientWidth
+        : index * clientWidth;
+
       sliderRef.current.scrollTo({
         left: targetPos,
         behavior: "smooth",
@@ -115,13 +127,12 @@ export default function Branches({ data }: BranchesProps) {
   };
 
   return (
-    <section 
+    <section
       className="muted-ground relative overflow-hidden py-16 lg:py-24"
       style={{ backgroundColor: "#F3ECD8" }}
       dir={isArabic ? "rtl" : "ltr"}
     >
-      <div className="relative z-10 mx-auto max-w-[1600px] px-6 lg:px-12">
-        
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 lg:px-4">
         {/* Header Block Split Container */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -131,7 +142,11 @@ export default function Branches({ data }: BranchesProps) {
           className="mb-12 lg:mb-16 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
         >
           {/* Typography Header Group */}
-          <div className={`flex flex-col ${isArabic ? "text-right" : "text-left"}`}>
+          <div
+            className={`flex flex-col ${
+              isArabic ? "text-right" : "text-left"
+            }`}
+          >
             <div className="flex items-center gap-3 mb-3 text-[10px] uppercase tracking-[4px] font-mono text-[#D99844]">
               <span>{data.sectionNumber}</span>
               <span className="opacity-40">/</span>
@@ -141,14 +156,32 @@ export default function Branches({ data }: BranchesProps) {
             </div>
 
             <h2
-              className={`font-serif text-[#1F1F1F] leading-[1.1] text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-[750px] ${isArabic ? headingArabic.className : ""}`}
-              style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400 } : undefined}
+              className={`font-serif text-[#1F1F1F] leading-[1.1] text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-[750px] ${
+                isArabic ? headingArabic.className : ""
+              }`}
+              style={
+                isArabic
+                  ? {
+                      fontFamily: '"El Messiri", serif',
+                      fontWeight: 400,
+                    }
+                  : undefined
+              }
             >
-              {isArabic ? data.headingLine1Ar : data.headingLine1En}
-              {" "}
+              {isArabic ? data.headingLine1Ar : data.headingLine1En}{" "}
               <span
-                className={`italic text-[#D99844] block ${isArabic ? headingArabic.className : ""}`}
-                style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400, display: 'block' } : undefined}
+                className={`italic text-[#D99844] block ${
+                  isArabic ? headingArabic.className : ""
+                }`}
+                style={
+                  isArabic
+                    ? {
+                        fontFamily: '"El Messiri", serif',
+                        fontWeight: 400,
+                        display: "block",
+                      }
+                    : undefined
+                }
               >
                 {isArabic ? data.headingLine2Ar : data.headingLine2En}
               </span>
@@ -157,13 +190,16 @@ export default function Branches({ data }: BranchesProps) {
 
           {/* Controls & Call to Action Container Wrapper */}
           <div className="flex items-center gap-4 flex-shrink-0">
-            
             {/* Conditional Desktop Navigation Arrows */}
             {data.branches.length > 4 && (
               <div className="hidden lg:flex items-center gap-2">
                 <button
-                  onClick={() => handleScroll(isArabic ? "right" : "left")}
-                  disabled={isArabic ? !canScrollRight : !canScrollLeft}
+                  onClick={() =>
+                    handleScroll(isArabic ? "right" : "left")
+                  }
+                  disabled={
+                    isArabic ? !canScrollRight : !canScrollLeft
+                  }
                   className="
                     w-10 h-10 border border-[#1F1F1F]/20 rounded-full flex items-center justify-center 
                     text-[#1F1F1F] transition-all duration-300 hover:bg-[#1F1F1F] hover:text-[#F3ECD8]
@@ -175,8 +211,12 @@ export default function Branches({ data }: BranchesProps) {
                 </button>
 
                 <button
-                  onClick={() => handleScroll(isArabic ? "left" : "right")}
-                  disabled={isArabic ? !canScrollLeft : !canScrollRight}
+                  onClick={() =>
+                    handleScroll(isArabic ? "left" : "right")
+                  }
+                  disabled={
+                    isArabic ? !canScrollLeft : !canScrollRight
+                  }
                   className="
                     w-10 h-10 border border-[#1F1F1F]/20 rounded-full flex items-center justify-center 
                     text-[#1F1F1F] transition-all duration-300 hover:bg-[#1F1F1F] hover:text-[#F3ECD8]
@@ -206,18 +246,14 @@ export default function Branches({ data }: BranchesProps) {
           </div>
         </motion.div>
 
-        {/* 
-          Horizontal Scroll Viewport Matrix Rail
-          Mobile: Force full width w-full (1 card layout inline), mandatory paging mechanics
-          Desktop: Auto multi-column grid matrix
-        */}
-        <div 
+        {/* Horizontal Scroll Viewport Matrix Rail */}
+        <div
           ref={sliderRef}
           className="
             flex overflow-x-auto gap-0 pb-6 pt-2 snap-x snap-mandatory scrollbar-none w-full
-            lg:grid lg:grid-flow-col lg:auto-cols-[calc((100%-4.5rem)/4)] lg:overflow-x-auto lg:gap-6
+            lg:grid lg:grid-flow-col lg:auto-cols-[calc((100%-4.5rem)/4)] lg:overflow-x-auto lg:gap-4
           "
-          style={{ WebkitOverflowScrolling: 'touch' }}
+          style={{ WebkitOverflowScrolling: "touch" }}
         >
           {data.branches.map((branch, index) => (
             <motion.div
@@ -225,20 +261,25 @@ export default function Branches({ data }: BranchesProps) {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: Math.min(index * 0.08, 0.4), duration: 0.5 }}
+              transition={{
+                delay: Math.min(index * 0.08, 0.4),
+                duration: 0.5,
+              }}
               className="w-full lg:w-auto flex-shrink-0 snap-center lg:snap-start px-2 lg:px-0"
             >
               <Link
                 href={getBranchLocationHref(branch)}
                 className="group block relative overflow-hidden bg-[#e9dfc6] rounded-sm transition-transform duration-300"
               >
-                {/* Image Container with Portrait Aspect Box */}
-                <div className="relative h-[420px] sm:h-[480px] md:h-[450px] lg:h-[390px] xl:h-[440px] w-full overflow-hidden">
+                {/* Image Container — Fixed 4:5 Aspect Ratio */}
+                <div className="relative aspect-[4/5] w-full overflow-hidden">
                   <Image
                     src={branch.image}
-                    alt={isArabic ? branch.titleAr : branch.titleEn}
+                    alt={
+                      isArabic ? branch.titleAr : branch.titleEn
+                    }
                     fill
-                    sizes="(max-w: 1024px) 100vw, 400px"
+                    sizes="(max-width: 1024px) 100vw, 400px"
                     className="object-cover transition duration-700 ease-out group-hover:scale-105"
                     priority={index === 0}
                   />
@@ -247,32 +288,62 @@ export default function Branches({ data }: BranchesProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
 
                   {/* Dynamic Badge Info Indicator from Supabase */}
-                  <div className={`absolute top-4 ${isArabic ? "left-4" : "right-4"} bg-black/20 backdrop-blur-[2px] px-2.5 py-1 rounded-[2px]`}>
+                  <div
+                    className={`absolute top-4 ${
+                      isArabic ? "left-4" : "right-4"
+                    } bg-black/20 backdrop-blur-[2px] px-2.5 py-1 rounded-[2px]`}
+                  >
                     <span className="text-[9px] text-white/70 font-sans tracking-widest uppercase block">
-                      {isArabic ? branch.badgeLabelAr : branch.badgeLabelEn}
+                      {isArabic
+                        ? branch.badgeLabelAr
+                        : branch.badgeLabelEn}
                     </span>
                   </div>
 
                   {/* Absolute Card Content Footer Metadata Wrapper */}
                   <div className="absolute bottom-6 left-5 right-5 flex flex-col justify-end h-1/2">
                     <h3
-                      className={`font-serif text-3xl text-white italic leading-tight tracking-wide transition-colors group-hover:text-[#F3ECD8] ${isArabic ? headingArabic.className : ""}`}
-                      style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400 } : undefined}
+                      className={`font-serif text-3xl text-white italic leading-tight tracking-wide transition-colors group-hover:text-[#F3ECD8] ${
+                        isArabic ? headingArabic.className : ""
+                      }`}
+                      style={
+                        isArabic
+                          ? {
+                              fontFamily: '"El Messiri", serif',
+                              fontWeight: 400,
+                            }
+                          : undefined
+                      }
                     >
-                      {isArabic ? branch.titleAr : branch.titleEn}
+                      {isArabic
+                        ? branch.titleAr
+                        : branch.titleEn}
                     </h3>
 
                     <p
-                      className={`mt-2 text-[10px] uppercase tracking-[3px] text-white/70 ${isArabic ? headingArabic.className : ""} line-clamp-1`}
-                      style={isArabic ? { fontFamily: '"El Messiri", serif', fontWeight: 400 } : undefined}
+                      className={`mt-2 text-[10px] uppercase tracking-[3px] text-white/70 ${
+                        isArabic ? headingArabic.className : ""
+                      } line-clamp-1`}
+                      style={
+                        isArabic
+                          ? {
+                              fontFamily: '"El Messiri", serif',
+                              fontWeight: 400,
+                            }
+                          : undefined
+                      }
                     >
-                      {isArabic ? branch.locationAr : branch.locationEn}
+                      {isArabic
+                        ? branch.locationAr
+                        : branch.locationEn}
                     </p>
 
                     {/* Bottom Dynamic Inline Border Reveal State line on hover */}
                     <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:opacity-100">
                       <span className="text-[9px] font-mono tracking-[3px] text-[#F3ECD8] uppercase">
-                        {isArabic ? "إكتشف الفرع ←" : "EXPLORE BRANCH →"}
+                        {isArabic
+                          ? "إكتشف الفرع ←"
+                          : "EXPLORE BRANCH →"}
                       </span>
                     </div>
                   </div>
@@ -282,10 +353,7 @@ export default function Branches({ data }: BranchesProps) {
           ))}
         </div>
 
-        {/* 
-          Red Dot Pagination Container
-          Only visible on Mobile viewports (hidden lg:flex)
-        */}
+        {/* Red Dot Pagination Container */}
         <div className="flex lg:hidden items-center justify-center gap-2.5 mt-4">
           {data.branches.map((_, index) => (
             <button
@@ -293,13 +361,16 @@ export default function Branches({ data }: BranchesProps) {
               onClick={() => scrollToDot(index)}
               className={`
                 h-2 rounded-full transition-all duration-300
-                ${activeIndex === index ? "w-6 bg-[#D94444]" : "w-2 bg-[#1F1F1F]/20"}
+                ${
+                  activeIndex === index
+                    ? "w-6 bg-[#D94444]"
+                    : "w-2 bg-[#1F1F1F]/20"
+                }
               `}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
-
       </div>
     </section>
   );

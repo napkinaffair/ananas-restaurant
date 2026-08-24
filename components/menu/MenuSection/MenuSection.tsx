@@ -1,6 +1,6 @@
 "use client";
 
-import { El_Messiri, IBM_Plex_Sans_Arabic, Playfair_Display, Inter } from "next/font/google";
+import { El_Messiri, IBM_Plex_Sans_Arabic, Playfair_Display, Inter, Instrument_Serif } from "next/font/google";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 
@@ -10,6 +10,12 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   style: ["italic"],
   weight: ["400", "500", "600"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  style: ["italic"],
+  weight: ["400"],
 });
 
 const headingArabic = El_Messiri({
@@ -49,6 +55,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
   const accentColor = section.accentColor || "#1B3622";
 
   const headingFont = isArabic ? headingArabic.className : playfair.className;
+  const sectionTitleFont = isArabic ? headingArabic.className : instrumentSerif.className;
   const bodyFont = isArabic ? bodyArabic.className : inter.className;
   const bodyArabicFontFamily = '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif';
   const headingArabicFontFamily = '"El Messiri", serif';
@@ -73,8 +80,8 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
         <div className="grid items-start gap-14 lg:grid-cols-2">
 
           {/* Image Container */}
-          <div className={isEven ? "order-2 lg:order-2" : "order-2 lg:order-1"}>
-            <div className="relative aspect-square overflow-hidden rounded-3xl shadow-sm">
+          <div className={isEven ? "order-1 lg:order-2" : "order-1 lg:order-1"}>
+            <div className="relative aspect-[4/5] overflow-hidden shadow-sm">
               <Image
                 src={section.image}
                 alt={section.titleEn}
@@ -85,7 +92,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
           </div>
 
           {/* Content Container */}
-          <div className={`space-y-8 ${isEven ? "order-1 lg:order-1" : "order-1 lg:order-2"}`}>
+          <div className={`space-y-8 ${isEven ? "order-2 lg:order-1" : "order-2 lg:order-2"}`}>
             <div className="flex items-baseline gap-4 border-b border-current opacity-90 pb-6">
               <span
                 className={`${isArabic ? headingFont : playfair.className} text-4xl font-normal ${
@@ -104,16 +111,20 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                         transform: "translate(18px, -12px)",
                         marginLeft: "-8px",
                       }
-                    : undefined
+                    : {
+                        fontFamily: sectionNumberFontFamily,
+                        fontSize: "76px",
+                        lineHeight: "73px",
+                      }
                 }
               >
                 {section.number}
               </span>
 
               <h2
-                className={`${headingFont} text-4xl font-normal ${
-                  isArabic ? "" : "italic"
-                } md:text-5xl`}
+                className={`${sectionTitleFont} font-normal ${
+                  isArabic ? "text-4xl md:text-5xl" : "italic"
+                }`}
                 style={
                   isArabic
                     ? {
@@ -124,7 +135,10 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                         fontSize: "76px",
                         color: accentColor,
                       }
-                    : undefined
+                    : {
+                        fontSize: "76px",
+                        lineHeight: "73px",
+                      }
                 }
               >
                 {isArabic ? section.titleAr : section.titleEn}

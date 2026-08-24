@@ -118,7 +118,7 @@ export default function ItemModal({
 
             {/* Image */}
 
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#3E4A23] shadow-inner flex items-end">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#3E4A23] shadow-inner flex items-end">
               {item.image ? (
                 <Image
                   src={item.image}

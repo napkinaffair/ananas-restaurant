@@ -10,19 +10,20 @@ export default function DesktopNavbar() {
   const locale = useLocale();
   const t = useTranslations("Navbar");
   const brandName = locale === "ar" ? t("brand") : "Ananas";
-  const logoSrc = locale === "ar" ? "/icons/ananas_arabic.png" : "/icons/ananas_english.png";
+  const logoSrc = locale === "ar" ? "/icons/arabic.png" : "/icons/english.png";
 
   return (
-    <div className="hidden lg:flex mx-auto h-[84px] max-w-[1400px] items-center justify-between px-8">
+    <div className="hidden lg:flex mx-auto h-[105px] max-w-[1400px] items-center justify-between px-8">
 
       {/* Logo */}
-      <Link href="/" className="shrink-0">
+      <Link href="/" className="flex shrink-0 items-center justify-center">
         <Image
           src={logoSrc}
           alt={brandName}
-          width={210}
-          height={60}
+          width={locale === "ar" ? 165 : 185}
+          height={locale === "ar" ? 46 : 52}
           priority
+          className="object-contain"
         />
       </Link>
 

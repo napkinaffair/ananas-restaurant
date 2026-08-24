@@ -4,8 +4,19 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 
 import { Location } from "./locations.types";
+
+const elMessiri = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400"],
+});
 
 interface Props {
   locations: Location[];
@@ -70,11 +81,17 @@ export default function Locations({ locations }: Props) {
   const isArabic = locale === "ar";
   const branchQuery = searchParams.get("branch");
 
-  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
-    locations[0]?.id || null
-  );
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
 
   const [cardsPerRow, setCardsPerRow] = useState(2);
+
+  const arabicHeadingStyle = isArabic
+    ? { fontFamily: `${elMessiri.style.fontFamily}, "El Messiri", serif`, fontStyle: "normal", fontWeight: 400 }
+    : undefined;
+
+  const arabicBodyStyle = isArabic
+    ? { fontFamily: `${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif`, fontWeight: 400 }
+    : undefined;
 
   useEffect(() => {
     const handleResize = () => {
@@ -94,7 +111,6 @@ export default function Locations({ locations }: Props) {
 
   useEffect(() => {
     if (!branchQuery) {
-      setSelectedLocationId(locations[0]?.id || null);
       return;
     }
 
@@ -148,7 +164,7 @@ export default function Locations({ locations }: Props) {
   );
 
   return (
-    <section className="muted-ground relative bg-[#EFE7D6] py-10 md:py-20">
+    <section className="muted-ground relative bg-[#EFE7D6] py-10 md:py-20" dir={isArabic ? "rtl" : "ltr"}>
       <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-6 space-y-4 md:space-y-6">
         {rows.map((row, rowIndex) => {
           const isSelectedInThisRow = row.some(
@@ -171,8 +187,8 @@ export default function Locations({ locations }: Props) {
                         )
                       }
                       className={`group relative overflow-hidden text-left transition-all duration-200 ${
-                        isSelected ? "ring-2 ring-[#3D4723]" : ""
-                      }`}
+                        isArabic ? "text-right" : "text-left"
+                      } ${isSelected ? "ring-2 ring-[#3D4723]" : ""}`}
                     >
                       <div className="relative aspect-[4/5] w-full overflow-hidden">
                         <Image
@@ -185,20 +201,39 @@ export default function Locations({ locations }: Props) {
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
 
-                        <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-black/40 px-1.5 py-0.5 text-[8px] sm:text-[9px] font-semibold uppercase tracking-widest text-white backdrop-blur-sm">
+                        <span
+                          className={`absolute top-2 sm:top-3 ${
+                            isArabic ? "right-2 sm:right-3" : "left-2 sm:left-3"
+                          } bg-black/40 px-1.5 py-0.5 text-[8px] sm:text-[9px] font-semibold uppercase tracking-widest text-white backdrop-blur-sm ${
+                            isArabic ? ibmPlexSansArabic.className : ""
+                          }`}
+                          style={arabicBodyStyle}
+                        >
                           {isArabic
                             ? location.tag.ar
                             : location.tag.en}
                         </span>
 
-                        <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 text-white">
-                          <h3 className="font-serif text-lg sm:text-2xl italic leading-tight">
+                        <div className={`absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 text-white ${
+                          isArabic ? "text-right" : "text-left"
+                        }`}>
+                          <h3
+                            className={`text-lg sm:text-2xl leading-tight ${
+                              isArabic ? `${elMessiri.className} not-italic` : "font-serif italic"
+                            }`}
+                            style={arabicHeadingStyle}
+                          >
                             {isArabic
                               ? location.name_ar
                               : location.name}
                           </h3>
 
-                          <div className="mt-0.5 text-[9px] sm:text-xs opacity-75 line-clamp-2 leading-tight">
+                          <div
+                            className={`mt-0.5 text-[9px] sm:text-xs opacity-75 line-clamp-2 leading-tight ${
+                              isArabic ? ibmPlexSansArabic.className : ""
+                            }`}
+                            style={arabicBodyStyle}
+                          >
                             {renderFormattedText(
                               isArabic ? location.hours_ar : location.hours
                             )}
@@ -218,7 +253,9 @@ export default function Locations({ locations }: Props) {
                 >
                   <button
                     onClick={() => setSelectedLocationId(null)}
-                    className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-xs text-white hover:bg-white/20 transition-colors"
+                    className={`absolute top-3 sm:top-4 ${
+                      isArabic ? "left-3 sm:left-4" : "right-3 sm:right-4"
+                    } z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-xs text-white hover:bg-white/20 transition-colors`}
                   >
                     ✕
                   </button>
@@ -241,13 +278,23 @@ export default function Locations({ locations }: Props) {
 
                     {/* Details */}
                     <div>
-                      <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-[#D8D17A]">
+                      <span
+                        className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-[#D8D17A] ${
+                          isArabic ? ibmPlexSansArabic.className : ""
+                        }`}
+                        style={arabicBodyStyle}
+                      >
                         {isArabic
                           ? selectedLocation.tag.ar
                           : selectedLocation.tag.en}
                       </span>
 
-                      <h2 className="mt-1 font-serif text-2xl sm:text-4xl md:text-5xl italic">
+                      <h2
+                        className={`mt-1 text-2xl sm:text-4xl md:text-5xl ${
+                          isArabic ? `${elMessiri.className} not-italic` : "font-serif italic"
+                        }`}
+                        style={arabicHeadingStyle}
+                      >
                         {isArabic
                           ? selectedLocation.name_ar
                           : selectedLocation.name}
@@ -259,7 +306,12 @@ export default function Locations({ locations }: Props) {
                         {selectedLocation.deliveryPlatforms &&
                           selectedLocation.deliveryPlatforms.length > 0 && (
                             <div>
-                              <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                              <span
+                                className={`block text-[9px] sm:text-[10px] uppercase tracking-widest text-white/50 mb-1.5 ${
+                                  isArabic ? ibmPlexSansArabic.className : ""
+                                }`}
+                                style={arabicBodyStyle}
+                              >
                                 {isArabic ? "متوفر على" : "Available On"}
                               </span>
                               <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -275,7 +327,10 @@ export default function Locations({ locations }: Props) {
                                     return (
                                       <span
                                         key={index}
-                                        className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/90"
+                                        className={`inline-flex items-center rounded-full border border-white/20 bg-white/5 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/90 ${
+                                          isArabic ? ibmPlexSansArabic.className : ""
+                                        }`}
+                                        style={arabicBodyStyle}
                                       >
                                         {text.replace("-", " ")}
                                       </span>
@@ -290,7 +345,12 @@ export default function Locations({ locations }: Props) {
                         {selectedLocation.features &&
                           selectedLocation.features.length > 0 && (
                             <div>
-                              <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                              <span
+                                className={`block text-[9px] sm:text-[10px] uppercase tracking-widest text-white/50 mb-1.5 ${
+                                  isArabic ? ibmPlexSansArabic.className : ""
+                                }`}
+                                style={arabicBodyStyle}
+                              >
                                 {isArabic ? "المميزات" : "Features"}
                               </span>
                               <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -306,7 +366,10 @@ export default function Locations({ locations }: Props) {
                                     return (
                                       <span
                                         key={index}
-                                        className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/90"
+                                        className={`inline-flex items-center rounded-full border border-white/20 bg-white/5 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/90 ${
+                                          isArabic ? ibmPlexSansArabic.className : ""
+                                        }`}
+                                        style={arabicBodyStyle}
                                       >
                                         {text.replace("-", " ")}
                                       </span>
@@ -318,7 +381,12 @@ export default function Locations({ locations }: Props) {
                           )}
                       </div>
 
-                      <div className="mt-5 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-white/80">
+                      <div
+                        className={`mt-5 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-white/80 ${
+                          isArabic ? ibmPlexSansArabic.className : ""
+                        }`}
+                        style={arabicBodyStyle}
+                      >
                         <div>
                           <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-white/50">
                             {isArabic ? "العنوان" : "Address"}
@@ -348,7 +416,12 @@ export default function Locations({ locations }: Props) {
                         </div>
                       </div>
 
-                      <div className="mt-4 sm:mt-5 text-xs sm:text-sm leading-relaxed text-white/70 font-light">
+                      <div
+                        className={`mt-4 sm:mt-5 text-xs sm:text-sm leading-relaxed text-white/70 font-light ${
+                          isArabic ? ibmPlexSansArabic.className : ""
+                        }`}
+                        style={arabicBodyStyle}
+                      >
                         {renderFormattedText(
                           isArabic
                             ? selectedLocation.note.ar
@@ -368,7 +441,10 @@ export default function Locations({ locations }: Props) {
                           }
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 bg-[#D8D17A] px-4 py-2 sm:px-5 sm:py-2.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#3D4723] transition-colors hover:bg-white hover:text-black"
+                          className={`inline-flex items-center gap-2 bg-[#D8D17A] px-4 py-2 sm:px-5 sm:py-2.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#3D4723] transition-colors hover:bg-white hover:text-black ${
+                            isArabic ? ibmPlexSansArabic.className : ""
+                          }`}
+                          style={arabicBodyStyle}
                         >
                           {isArabic ? "خرائط جوجل" : "Google Maps"} →
                         </a>
@@ -386,7 +462,10 @@ export default function Locations({ locations }: Props) {
                           }
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 border border-white/20 bg-white/10 px-4 py-2 sm:px-5 sm:py-2.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-black"
+                          className={`inline-flex items-center gap-2 border border-white/20 bg-white/10 px-4 py-2 sm:px-5 sm:py-2.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-black ${
+                            isArabic ? ibmPlexSansArabic.className : ""
+                          }`}
+                          style={arabicBodyStyle}
                         >
                           {isArabic ? "خرائط أبل" : "Apple Maps"} →
                         </a>
