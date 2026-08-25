@@ -10,7 +10,7 @@ export default function DesktopNavbar() {
   const locale = useLocale();
   const t = useTranslations("Navbar");
   const brandName = locale === "ar" ? t("brand") : "Ananas";
-  const logoSrc = locale === "ar" ? "/icons/ananas-ar.png" : "/icons/ananas-en.png";
+  const logoSrc = locale === "ar" ? "/icons/ananasarabic.png" : "/icons/ananasenglish.png";
 
   return (
     <div className="hidden lg:flex mx-auto h-[105px] max-w-[1400px] items-center justify-between px-8">
