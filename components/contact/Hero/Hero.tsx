@@ -58,13 +58,13 @@ export default function Hero() {
 
           {/* Title */}
           <h1
-            className={`text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] sm:leading-[1.05] tracking-tight text-[#1A2E12] ${
+            className={`text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] leading-[1.08] sm:leading-[1.05] tracking-tight text-black ${
               isArabic
                 ? "el-messiri-force"
                 : "font-serif italic"
             }`}
           >
-            {isArabic ? heroData.titleAr : heroData.titleEn}
+            {isArabic ? "نحب نسمع منكم" : heroData.titleEn}
           </h1>
 
           {/* Subtitle */}

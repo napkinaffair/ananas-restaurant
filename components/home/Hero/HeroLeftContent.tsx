@@ -15,7 +15,7 @@ export default function HeroLeftContent({
 
   return (
     <div
-      className={`relative z-30 max-w-full pb-1 lg:absolute lg:bottom-4 lg:pb-0 lg:max-w-[620px] ${
+      className={`relative z-30 max-w-full pb-1 lg:absolute lg:bottom-4 lg:pb-0 lg:max-w-[930px] ${
         isArabic
           ? "lg:right-6 xl:right-10 text-right"
           : "lg:left-6 xl:left-10 text-left"
@@ -38,12 +38,12 @@ export default function HeroLeftContent({
           whitespace-normal
           sm:whitespace-nowrap
           text-white
-          text-[1.45rem]
-          xs:text-[1.8rem]
-          sm:text-[2.3rem]
-          md:text-[2.8rem]
-          lg:text-[3.2rem]
-          xl:text-[3.7rem]
+          text-[2.175rem]
+          xs:text-[2.7rem]
+          sm:text-[3.45rem]
+          md:text-[4.2rem]
+          lg:text-[4.8rem]
+          xl:text-[5.55rem]
           drop-shadow-md
         "
       >
@@ -67,12 +67,12 @@ export default function HeroLeftContent({
           whitespace-normal
           sm:whitespace-nowrap
           text-[#DCE56C]
-          text-[1.45rem]
-          xs:text-[1.8rem]
-          sm:text-[2.3rem]
-          md:text-[2.8rem]
-          lg:text-[3.2rem]
-          xl:text-[3.7rem]
+          text-[2.175rem]
+          xs:text-[2.7rem]
+          sm:text-[3.45rem]
+          md:text-[4.2rem]
+          lg:text-[4.8rem]
+          xl:text-[5.55rem]
           drop-shadow-md
         "
       >

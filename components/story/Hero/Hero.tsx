@@ -73,13 +73,13 @@ export default function Hero({ hero }: HeroProps) {
 
       {/* ================= HERO ================= */}
       <div className="rich-ground relative overflow-hidden bg-[#3F4B26] text-[#F8F3E7]">
-        {/* Background Image */}
+        {/* Background Image - 100% full stretch without gaps */}
         <Image
           src={hero.backgroundImage}
           alt="Our Story"
           fill
           priority
-          className="object-cover object-center"
+          className="w-full h-full object-fill object-center"
         />
 
         {/* Dynamic Dark Overlay */}
