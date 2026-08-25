@@ -134,7 +134,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                 className={`${sectionTitleFont} min-w-0 flex-1 break-words font-normal ${
                   isArabic
                     ? "text-[38px] leading-[1.15] sm:text-5xl lg:text-[76px] lg:leading-[95px] [text-wrap:balance]"
-                    : "whitespace-nowrap italic"
+                    : "whitespace-normal sm:whitespace-nowrap italic"
                 }`}
                 style={
                   isArabic
@@ -166,7 +166,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                     <div className="min-w-0 flex-1">
                       <h3
                         className={`${headingFont} break-words text-lg sm:text-xl font-normal ${
-                          isArabic ? "[text-wrap:balance]" : "whitespace-nowrap italic"
+                          isArabic ? "[text-wrap:balance]" : "whitespace-normal sm:whitespace-nowrap italic"
                         } md:text-2xl`}
                         style={
                           isArabic

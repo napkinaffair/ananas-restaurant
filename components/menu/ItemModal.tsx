@@ -128,15 +128,15 @@ export default function ItemModal({
 
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-14 items-center">
 
-            {/* Image */}
-
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#3E4A23] shadow-inner flex items-end">
+            {/* Image — Optimized 4:3 on mobile with height containment, keeping original 4:5 on desktop */}
+            <div className="relative aspect-[4/3] sm:aspect-[4/5] w-full max-h-[320px] sm:max-h-none overflow-hidden rounded-2xl sm:rounded-sm bg-[#3E4A23] shadow-inner flex items-end">
               {item.image ? (
                 <Image
                   src={item.image}
                   alt={itemTitle}
                   fill
-                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 500px"
+                  className="object-cover object-center"
                 />
               ) : (
                 <span
@@ -149,7 +149,6 @@ export default function ItemModal({
             </div>
 
             {/* Content */}
-
             <div
               className={`space-y-6 ${
                 isArabic ? "text-right" : "text-left"
@@ -226,7 +225,6 @@ export default function ItemModal({
               <hr className="border-current opacity-20 my-6" />
 
               {/* Nutrition */}
-
               <div>
                 <p
                   className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-60 mb-3"
@@ -329,7 +327,6 @@ export default function ItemModal({
               <hr className="border-current opacity-20 my-6" />
 
               {/* Dynamic Origin & Allergens */}
-
               <div className="space-y-4">
 
                 {itemOrigin && (
