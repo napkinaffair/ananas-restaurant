@@ -53,10 +53,8 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
     return isArabic ? toArabicNumerals(val) : String(val);
   };
 
-  // Parse section.number in case index is not passed
   const parsedNumber = parseInt(String(section.number).replace(/\D/g, ""), 10);
   
-  // Checks either index (0-based) OR parsed section.number (1-based)
   const isEven = typeof index === "number" 
     ? index % 2 === 1 
     : !isNaN(parsedNumber) && parsedNumber % 2 === 0;
@@ -89,15 +87,9 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6">
         <div className="grid items-start gap-8 sm:gap-14 lg:grid-cols-2">
 
-          {/* Image Container */}
-          <div className={isEven ? "order-1 lg:order-2" : "order-1 lg:order-1"}>
-            <div
-              className={`relative overflow-hidden shadow-sm w-full ${
-                isArabic
-                  ? "aspect-[4/3] sm:aspect-[4/5] rounded-sm max-h-[380px] sm:max-h-none"
-                  : "aspect-[4/5]"
-              }`}
-            >
+          {/* Image Container — Identical mobile aspect ratio & containment for EN and AR */}
+          <div className="order-1 lg:order-1">
+            <div className="relative aspect-[4/3] sm:aspect-[4/5] w-full max-h-[380px] sm:max-h-none overflow-hidden rounded-sm shadow-sm">
               <Image
                 src={section.image}
                 alt={section.titleEn}
