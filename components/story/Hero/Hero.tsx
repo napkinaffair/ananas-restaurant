@@ -72,14 +72,19 @@ export default function Hero({ hero }: HeroProps) {
       )}
 
       {/* ================= HERO ================= */}
-      <div className="rich-ground relative overflow-hidden bg-[#3F4B26] text-[#F8F3E7]">
-        {/* Background Image - 100% full stretch without gaps */}
+      {/* 
+        Using aspect-video ([aspect-ratio:16/9]) so the container height scales 
+        proportionally with screen width, ensuring the 16:9 image is 100% visible with zero cropping.
+      */}
+      <div className="rich-ground relative w-full aspect-video min-h-[360px] sm:min-h-[460px] md:min-h-[560px] overflow-hidden bg-[#3F4B26] text-[#F8F3E7]">
+        {/* Background Image */}
         <Image
           src={hero.backgroundImage}
           alt="Our Story"
           fill
           priority
-          className="w-full h-full object-fill object-center"
+          sizes="100vw"
+          className="object-cover object-center"
         />
 
         {/* Dynamic Dark Overlay */}
@@ -94,7 +99,7 @@ export default function Hero({ hero }: HeroProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#3F4B26]/40" />
 
         {/* Content Container */}
-        <div className="relative z-10 mx-auto flex min-h-[55vh] max-w-7xl items-center px-4 py-10 sm:px-6 sm:py-14 md:min-h-[80vh] md:px-12 lg:px-16">
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 py-8 sm:px-6 md:px-12 lg:px-16">
           <div
             className={`w-full max-w-3xl ${
               isArabic
