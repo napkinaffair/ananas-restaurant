@@ -1,7 +1,20 @@
 "use client";
 
 import { useLocale } from "next-intl";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { IngredientOrigin } from "@/lib/menu/ingredientOrigins";
+
+const elMessiri = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500"],
+  display: "swap",
+});
 
 interface Props {
   items: IngredientOrigin[];
@@ -15,7 +28,7 @@ export default function IngredientOrigins({
   disclaimerAr,
 }: Props) {
   const locale = useLocale();
-  const isArabic = locale === "ar";
+  const isArabic = locale?.startsWith("ar");
 
   const disclaimerText = isArabic
     ? disclaimerAr || disclaimerEn
@@ -32,20 +45,49 @@ export default function IngredientOrigins({
         backgroundSize: "auto",
       }}
     >
+      {isArabic && (
+        <style>{`
+          .el-messiri-force,
+          .el-messiri-force * {
+            font-family: ${elMessiri.style.fontFamily}, "El Messiri", serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+          .ibm-arabic-force,
+          .ibm-arabic-force * {
+            font-family: ${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+        `}</style>
+      )}
+
       <div className="mx-auto max-w-7xl relative z-10">
         {/* Category Tag */}
         <div className="mb-4">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-[#76746A] uppercase">
+          <span
+            className={`text-[10px] tracking-[0.25em] text-[#76746A] uppercase ${
+              isArabic ? "ibm-arabic-force" : "font-mono"
+            }`}
+          >
             {isArabic ? "التوريد والمصادر" : "SOURCING"}
           </span>
         </div>
 
         {/* Hero Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12">
-          <h1 className="font-serif italic text-5xl sm:text-6xl lg:text-7xl font-light text-[#191817] tracking-tight leading-none">
+          <h1
+            className={`text-5xl sm:text-6xl lg:text-7xl font-light text-[#191817] tracking-tight leading-none ${
+              isArabic ? "el-messiri-force" : "font-serif italic"
+            }`}
+          >
             {isArabic ? "مصدر المكونات." : "Ingredient origins."}
           </h1>
-          <p className="font-sans text-xs sm:text-sm text-[#5C5B53] font-normal leading-relaxed max-w-xs">
+          <p
+            className={`text-xs sm:text-sm text-[#5C5B53] font-normal leading-relaxed max-w-xs ${
+              isArabic ? "ibm-arabic-force" : "font-sans"
+            }`}
+          >
             {isArabic
               ? "تفاصيل المنشأ وشهادة الحلال للمكونات المذكورة أدناه."
               : "Origin and halal certification details for the ingredients listed below."}
@@ -74,18 +116,30 @@ export default function IngredientOrigins({
             return (
               <div key={item.id} className="flex flex-col">
                 {/* Category Title */}
-                <h3 className="font-serif italic text-2xl font-light text-[#191817] mb-1.5">
+                <h3
+                  className={`text-2xl font-light text-[#191817] mb-1.5 ${
+                    isArabic ? "el-messiri-force" : "font-serif italic"
+                  }`}
+                >
                   {title}
                 </h3>
 
                 {/* Subtitle */}
-                <p className="font-sans text-xs text-[#5C5B53] font-normal leading-relaxed mb-6 min-h-[2.5rem]">
+                <p
+                  className={`text-xs text-[#5C5B53] font-normal leading-relaxed mb-6 min-h-[2.5rem] ${
+                    isArabic ? "ibm-arabic-force" : "font-sans"
+                  }`}
+                >
                   {subtitle}
                 </p>
 
-                {/* Monospace Row: Origin */}
+                {/* Row: Origin */}
                 <div className="border-t border-[#CFCAC0] py-2">
-                  <p className="font-mono text-[10px] tracking-[0.15em] text-[#191817] flex items-center gap-1.5">
+                  <p
+                    className={`text-[10px] tracking-[0.15em] text-[#191817] flex items-center gap-1.5 ${
+                      isArabic ? "ibm-arabic-force" : "font-mono"
+                    }`}
+                  >
                     <span className="text-[#878479]">
                       {isArabic ? "البلد الأصلي" : "ORIGIN"}
                     </span>
@@ -94,10 +148,14 @@ export default function IngredientOrigins({
                   </p>
                 </div>
 
-                {/* Monospace Row: Halal Certification */}
+                {/* Row: Halal Certification */}
                 {halal && (
                   <div className="border-t border-[#CFCAC0] py-2">
-                    <p className="font-mono text-[10px] tracking-[0.15em] text-[#191817] flex items-center gap-1.5">
+                    <p
+                      className={`text-[10px] tracking-[0.15em] text-[#191817] flex items-center gap-1.5 ${
+                        isArabic ? "ibm-arabic-force" : "font-mono"
+                      }`}
+                    >
                       <span className="text-[#878479]">
                         {isArabic ? "شهادة الحلال" : "HALAL CERTIFICATION"}
                       </span>
@@ -114,10 +172,10 @@ export default function IngredientOrigins({
         {/* Dynamic Footer Note */}
         {disclaimerText && (
           <p
-            className={`font-mono uppercase text-[#76746A] ${
+            className={`uppercase text-[#76746A] ${
               isArabic
-                ? "text-[11px] tracking-[0.08em]"
-                : "text-[7px] tracking-[0.22em]"
+                ? "ibm-arabic-force text-[11px] tracking-[0.08em]"
+                : "font-mono text-[7px] tracking-[0.22em]"
             }`}
           >
             {disclaimerText}

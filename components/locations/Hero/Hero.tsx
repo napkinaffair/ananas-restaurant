@@ -2,11 +2,17 @@
 
 import Image from "next/image";
 import { useLocale } from "next-intl";
-import { El_Messiri } from "next/font/google";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 
 import { HeroData } from "./hero.types";
 
 const elMessiri = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["400"],
   display: "swap",
@@ -30,6 +36,12 @@ export default function Hero({
           .el-messiri-force,
           .el-messiri-force * {
             font-family: ${elMessiri.style.fontFamily}, "El Messiri", serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+          .ibm-arabic-force,
+          .ibm-arabic-force * {
+            font-family: ${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif !important;
             font-style: normal !important;
             font-weight: 400 !important;
           }
@@ -57,7 +69,9 @@ export default function Hero({
       <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-6 md:px-12">
         <div className="max-w-4xl">
 
-          <p className="mb-3 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-[#E5E56D]">
+          <p className={`mb-3 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-[#E5E56D] ${
+            isArabic ? "ibm-arabic-force" : ""
+          }`}>
             {isArabic
               ? hero.sectionLabelAr
               : hero.sectionLabelEn}
@@ -89,7 +103,9 @@ export default function Hero({
             )}
           </h1>
 
-          <p className="mt-4 sm:mt-6 text-xs sm:text-sm font-light text-white/80">
+          <p className={`mt-4 sm:mt-6 text-xs sm:text-sm font-light text-white/80 ${
+            isArabic ? "ibm-arabic-force" : ""
+          }`}>
             {isArabic
               ? hero.subtitleAr
               : hero.subtitleEn}

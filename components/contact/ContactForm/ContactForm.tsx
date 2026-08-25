@@ -2,8 +2,21 @@
 
 import { useState } from "react";
 import { useLocale } from "next-intl";
+import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 
 import { ContactFormValues, ContactTopic } from "./contact.types";
+
+const elMessiri = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
 
 interface FormErrors {
   name?: string;
@@ -17,7 +30,7 @@ interface ContactFormProps {
 
 export default function ContactForm({ contactTopics }: ContactFormProps) {
   const locale = useLocale();
-  const isArabic = locale === "ar";
+  const isArabic = locale?.startsWith("ar");
 
   const defaultTopic = contactTopics[0]?.id || "general";
 
@@ -31,7 +44,7 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [showWebmailFallback, setShowWebmailFallback] = useState(false);
 
   const selectedTopic =
     contactTopics.find((t) => t.id === form.topic) || contactTopics[0];
@@ -88,7 +101,6 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
     return { recipient, subject, rawBody };
   };
 
-  // --- Open native mail client ---
   const openMailClient = () => {
     const { recipient, subject, rawBody } = getEmailContent();
     const encodedSubject = encodeURIComponent(subject);
@@ -97,7 +109,6 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
     window.location.href = `mailto:${recipient}?subject=${encodedSubject}&body=${encodedBody}`;
   };
 
-  // --- Open Webmail directly in browser tab ---
   const openWebmail = (provider: "gmail" | "outlook" | "yahoo") => {
     const { recipient, subject, rawBody } = getEmailContent();
     const encRecipient = encodeURIComponent(recipient);
@@ -125,20 +136,8 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // First attempt native client
     openMailClient();
     setSubmitted(true);
-  };
-
-  const handleCopyEmail = () => {
-    if (!validateForm()) return;
-
-    const { recipient, subject, rawBody } = getEmailContent();
-    const fullDraft = `To: ${recipient}\nSubject: ${subject}\n\n${rawBody}`;
-
-    navigator.clipboard.writeText(fullDraft);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
   };
 
   const handleReset = () => {
@@ -150,62 +149,110 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
       message: "",
     });
     setErrors({});
+    setShowWebmailFallback(false);
     setSubmitted(false);
   };
 
   return (
-    <section className="muted-ground relative w-full bg-[#EBE5CD] py-10 sm:py-16 md:py-20 text-[#292723]">
+    <section
+      dir={isArabic ? "rtl" : "ltr"}
+      className="muted-ground relative w-full bg-[#EEE7C5] py-10 sm:py-16 md:py-20 text-[#1E2021]"
+    >
+      {isArabic && (
+        <style>{`
+          .el-messiri-force,
+          .el-messiri-force * {
+            font-family: ${elMessiri.style.fontFamily}, "El Messiri", serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+          .ibm-arabic-force,
+          .ibm-arabic-force * {
+            font-family: ${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+          }
+        `}</style>
+      )}
+
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 md:px-8 w-full z-10">
         {submitted ? (
-          /* --- SUCCESS / WEBMAIL CHOICE SCREEN --- */
-          <div className="py-12 text-center">
-            <h2 className="font-serif text-3xl sm:text-4xl italic text-[#334121]">
-              {isArabic ? "اختر طريقة الإرسال" : "Choose how to send your message"}
-            </h2>
-            <p className="mt-4 font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-[#292723]/70">
+          /* --- CONFIRMATION SCREEN --- */
+          <div className="py-12 text-center max-w-xl mx-auto space-y-6">
+            <h2
+              className={`text-3xl sm:text-5xl text-[#1E2021] leading-tight ${
+                isArabic ? "el-messiri-force" : "font-serif italic"
+              }`}
+            >
               {isArabic
-                ? "إذا لم يفتح تطبيق البريد الإلكتروني، يمكنك فتح الخدمة في المتصفح مباشرة:"
-                : "If a desktop mail app didn't open, send via browser:"}
+                ? "وصلَتنا. نقرأ كل شيء."
+                : "Received. We read everything."}
+            </h2>
+
+            <p
+              className={`text-sm sm:text-base leading-relaxed text-[#1E2021]/80 ${
+                isArabic ? "ibm-arabic-force" : "font-sans"
+              }`}
+            >
+              {isArabic
+                ? "نردّ خلال يومَي عمل."
+                : "We reply within two working days."}
             </p>
 
-            {/* Webmail Quick Links */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => openWebmail("gmail")}
-                className="rounded-[4px] bg-[#EA4335] px-5 py-2.5 font-mono text-xs text-white uppercase tracking-wider hover:opacity-90"
+            <div className="pt-4 flex flex-col items-center gap-3">
+              <a
+                href="#fallback"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowWebmailFallback((prev) => !prev);
+                }}
+                className={`text-xs text-[#1E2021]/70 hover:text-[#1E2021] underline cursor-pointer ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
               >
-                {isArabic ? "فتح في Gmail" : "Open in Gmail"}
-              </button>
-              <button
-                type="button"
-                onClick={() => openWebmail("outlook")}
-                className="rounded-[4px] bg-[#0078D4] px-5 py-2.5 font-mono text-xs text-white uppercase tracking-wider hover:opacity-90"
-              >
-                {isArabic ? "فتح في Outlook" : "Open in Outlook Web"}
-              </button>
-              <button
-                type="button"
-                onClick={() => openWebmail("yahoo")}
-                className="rounded-[4px] bg-[#6001D2] px-5 py-2.5 font-mono text-xs text-white uppercase tracking-wider hover:opacity-90"
-              >
-                {isArabic ? "فتح في Yahoo" : "Open in Yahoo"}
-              </button>
-            </div>
+                {isArabic
+                  ? "لم يفتح تطبيق البريد الإلكتروني؟ افتح عبر المتصفح"
+                  : "didn't open mail app? Open in browser"}
+              </a>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 border-t border-[#292723]/10 pt-6">
-              <button
-                type="button"
-                onClick={openMailClient}
-                className="font-mono text-xs uppercase tracking-[0.15em] text-[#292723]/80 underline hover:text-[#292723]"
-              >
-                {isArabic ? "إعادة محاولة فتح تطبيق البريد" : "Re-try Default Mail App"}
-              </button>
+              {showWebmailFallback && (
+                <div
+                  className={`flex items-center justify-center gap-2 pt-1 text-xs text-[#1E2021]/70 ${
+                    isArabic ? "ibm-arabic-force" : "font-mono"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => openWebmail("gmail")}
+                    className="underline hover:text-[#1E2021]"
+                  >
+                    Gmail
+                  </button>
+                  <span>•</span>
+                  <button
+                    type="button"
+                    onClick={() => openWebmail("outlook")}
+                    className="underline hover:text-[#1E2021]"
+                  >
+                    Outlook
+                  </button>
+                  <span>•</span>
+                  <button
+                    type="button"
+                    onClick={() => openWebmail("yahoo")}
+                    className="underline hover:text-[#1E2021]"
+                  >
+                    Yahoo
+                  </button>
+                </div>
+              )}
 
               <button
                 type="button"
                 onClick={handleReset}
-                className="rounded-[4px] border border-[#292723]/30 px-6 py-2.5 font-mono text-xs uppercase tracking-[0.18em] transition hover:border-[#292723]/70"
+                className={`mt-6 rounded-[4px] border border-[#1E2021]/30 px-6 py-2.5 text-xs uppercase tracking-[0.18em] transition hover:border-[#1E2021]/70 ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
               >
                 {isArabic ? "إرسال رسالة أخرى" : "SEND ANOTHER MESSAGE"}
               </button>
@@ -216,7 +263,11 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8" noValidate>
             {/* Name */}
             <div>
-              <label className="mb-2 block font-mono text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#292723]/70">
+              <label
+                className={`mb-2 block text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#1E2021]/70 ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
+              >
                 {isArabic ? "الاسم" : "NAME"}
               </label>
               <input
@@ -224,14 +275,20 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                className={`w-full rounded-[4px] border bg-transparent px-3.5 py-2.5 sm:py-3 font-mono text-xs sm:text-sm outline-none transition ${
+                className={`w-full rounded-[4px] border bg-transparent px-3.5 py-2.5 sm:py-3 text-xs sm:text-sm outline-none transition ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                } ${
                   errors.name
                     ? "border-red-600 focus:border-red-600"
-                    : "border-[#292723]/20 focus:border-[#292723]/50"
+                    : "border-[#1E2021]/20 focus:border-[#1E2021]/50"
                 }`}
               />
               {errors.name && (
-                <p className="mt-1 font-mono text-[10px] text-red-600">
+                <p
+                  className={`mt-1 text-[10px] text-red-600 ${
+                    isArabic ? "ibm-arabic-force" : "font-mono"
+                  }`}
+                >
                   {errors.name}
                 </p>
               )}
@@ -239,7 +296,11 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
 
             {/* Email */}
             <div>
-              <label className="mb-2 block font-mono text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#292723]/70">
+              <label
+                className={`mb-2 block text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#1E2021]/70 ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
+              >
                 {isArabic ? "البريد الإلكتروني" : "EMAIL"}
               </label>
               <input
@@ -247,14 +308,20 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                className={`w-full rounded-[4px] border bg-transparent px-3.5 py-2.5 sm:py-3 font-mono text-xs sm:text-sm outline-none transition ${
+                className={`w-full rounded-[4px] border bg-transparent px-3.5 py-2.5 sm:py-3 text-xs sm:text-sm outline-none transition ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                } ${
                   errors.email
                     ? "border-red-600 focus:border-red-600"
-                    : "border-[#292723]/20 focus:border-[#292723]/50"
+                    : "border-[#1E2021]/20 focus:border-[#1E2021]/50"
                 }`}
               />
               {errors.email && (
-                <p className="mt-1 font-mono text-[10px] text-red-600">
+                <p
+                  className={`mt-1 text-[10px] text-red-600 ${
+                    isArabic ? "ibm-arabic-force" : "font-mono"
+                  }`}
+                >
                   {errors.email}
                 </p>
               )}
@@ -262,7 +329,11 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
 
             {/* Phone */}
             <div>
-              <label className="mb-2 block font-mono text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#292723]/70">
+              <label
+                className={`mb-2 block text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#1E2021]/70 ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
+              >
                 {isArabic ? "الهاتف — اختياري" : "PHONE — OPTIONAL"}
               </label>
               <input
@@ -270,13 +341,19 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full rounded-[4px] border border-[#292723]/20 bg-transparent px-3.5 py-2.5 sm:py-3 font-mono text-xs sm:text-sm outline-none transition focus:border-[#292723]/50"
+                className={`w-full rounded-[4px] border border-[#1E2021]/20 bg-transparent px-3.5 py-2.5 sm:py-3 text-xs sm:text-sm outline-none transition focus:border-[#1E2021]/50 ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
               />
             </div>
 
             {/* Topic Selection */}
             <div>
-              <label className="mb-3 block font-mono text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#292723]/70">
+              <label
+                className={`mb-3 block text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#1E2021]/70 ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
+              >
                 {isArabic ? "الموضوع" : "TOPIC"}
               </label>
 
@@ -290,10 +367,12 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
                       onClick={() =>
                         setForm((prev) => ({ ...prev, topic: topic.id }))
                       }
-                      className={`rounded-full border px-4 sm:px-5 py-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.15em] transition-all ${
+                      className={`rounded-full border px-4 sm:px-5 py-2 text-[10px] sm:text-xs uppercase tracking-[0.15em] transition-all ${
+                        isArabic ? "ibm-arabic-force" : "font-mono"
+                      } ${
                         isActive
-                          ? "border-[#1F2710] bg-[#334121] text-[#E7F19E] font-semibold shadow-sm"
-                          : "border-[#292723]/30 bg-transparent text-[#292723] hover:border-[#292723]/60"
+                          ? "border-[#1E2021] bg-[#1E2021] text-[#EEE7C5] font-semibold shadow-sm"
+                          : "border-[#1E2021]/30 bg-transparent text-[#1E2021] hover:border-[#1E2021]/60"
                       }`}
                     >
                       {isArabic ? topic.labelAr : topic.labelEn}
@@ -305,7 +384,11 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
 
             {/* Message */}
             <div>
-              <label className="mb-2 block font-mono text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#292723]/70">
+              <label
+                className={`mb-2 block text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#1E2021]/70 ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
+              >
                 {isArabic ? "الرسالة" : "MESSAGE"}
               </label>
               <textarea
@@ -313,78 +396,36 @@ export default function ContactForm({ contactTopics }: ContactFormProps) {
                 name="message"
                 value={form.message}
                 onChange={handleChange}
-                className={`w-full rounded-[4px] border bg-transparent p-3.5 font-mono text-xs sm:text-sm outline-none transition resize-y ${
+                className={`w-full rounded-[4px] border bg-transparent p-3.5 text-xs sm:text-sm outline-none transition resize-y ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                } ${
                   errors.message
                     ? "border-red-600 focus:border-red-600"
-                    : "border-[#292723]/20 focus:border-[#292723]/50"
+                    : "border-[#1E2021]/20 focus:border-[#1E2021]/50"
                 }`}
               />
               {errors.message && (
-                <p className="mt-1 font-mono text-[10px] text-red-600">
+                <p
+                  className={`mt-1 text-[10px] text-red-600 ${
+                    isArabic ? "ibm-arabic-force" : "font-mono"
+                  }`}
+                >
                   {errors.message}
                 </p>
               )}
             </div>
 
-            {/* Direct Open Options */}
-            <div className="space-y-3">
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-[4px] bg-[#334121] px-6 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-[#E7F19E] transition hover:bg-[#1F2710] active:scale-[0.99]"
-                >
-                  <span>{isArabic ? "إرسال الرسالة" : "SEND MESSAGE"}</span>
-                  <span className="text-sm font-normal">→</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleCopyEmail}
-                  className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#292723]/60 hover:text-[#292723] text-center underline"
-                >
-                  {copied
-                    ? isArabic
-                      ? "تم نسخ مسودة البريد!"
-                      : "EMAIL DRAFT COPIED!"
-                    : isArabic
-                    ? "نسخ مسودة البريد الكاملة"
-                    : "COPY COMPLETE DRAFT"}
-                </button>
-              </div>
-
-              {/* Direct Webmail Links under main button */}
-              <div className="flex items-center gap-2 pt-2 text-[11px] font-mono text-[#292723]/60">
-                <span>{isArabic ? "أو افتح في المتصفح:" : "Or open in browser:"}</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (validateForm()) openWebmail("gmail");
-                  }}
-                  className="underline hover:text-[#292723]"
-                >
-                  Gmail
-                </button>
-                <span>•</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (validateForm()) openWebmail("outlook");
-                  }}
-                  className="underline hover:text-[#292723]"
-                >
-                  Outlook
-                </button>
-                <span>•</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (validateForm()) openWebmail("yahoo");
-                  }}
-                  className="underline hover:text-[#292723]"
-                >
-                  Yahoo
-                </button>
-              </div>
+            {/* Submit Action */}
+            <div className="pt-2">
+              <button
+                type="submit"
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-[4px] bg-[#F18F36] text-white hover:bg-black hover:text-[#E5AE00] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-200 active:scale-[0.99] ${
+                  isArabic ? "ibm-arabic-force" : "font-mono"
+                }`}
+              >
+                <span>{isArabic ? "إرسال الرسالة" : "SEND MESSAGE"}</span>
+                <span className="text-sm font-normal">→</span>
+              </button>
             </div>
           </form>
         )}
