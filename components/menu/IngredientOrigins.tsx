@@ -172,13 +172,18 @@ export default function IngredientOrigins({
         {/* Dynamic Footer Note */}
         {disclaimerText && (
           <p
-            className={`uppercase text-[#76746A] ${
+            className={`uppercase text-[#76746A] leading-relaxed ${
               isArabic
                 ? "ibm-arabic-force text-[11px] tracking-[0.08em]"
                 : "font-mono text-[7px] tracking-[0.22em]"
             }`}
           >
-            {disclaimerText}
+            {disclaimerText.split(/<br\s*\/?>|\n/gi).map((line, index, arr) => (
+              <span key={index}>
+                {line}
+                {index < arr.length - 1 && <br />}
+              </span>
+            ))}
           </p>
         )}
       </div>

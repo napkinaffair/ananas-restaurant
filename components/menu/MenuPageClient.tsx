@@ -105,11 +105,41 @@ export default function MenuPageClient({
 }: Props) {
   const searchParams = useSearchParams();
   const productName = searchParams.get("product");
+  const categoryName = searchParams.get("category");
 
   const matchedProductTarget = useMemo(
     () => findMenuTarget(sections, productName),
     [sections, productName]
   );
+
+  const matchedCategoryTarget = useMemo(() => {
+    if (!categoryName) {
+      return null;
+    }
+
+    const normalizedTarget = normalizeText(categoryName);
+
+    for (const section of sections) {
+      const sectionNames = [
+        ...getComparableNames(section.titleEn),
+        ...getComparableNames(section.titleAr),
+        ...getComparableNames(section.id),
+      ];
+
+      if (
+        sectionNames.some(
+          (value) =>
+            value === normalizedTarget ||
+            value.includes(normalizedTarget) ||
+            normalizedTarget.includes(value)
+        )
+      ) {
+        return section;
+      }
+    }
+
+    return null;
+  }, [categoryName, sections]);
 
   const [activeCategory, setActiveCategory] = useState("all");
 
@@ -117,6 +147,14 @@ export default function MenuPageClient({
 
   const [selectedSection, setSelectedSection] =
     useState<MenuSectionData | null>(null);
+
+  useEffect(() => {
+    if (!categoryName || !matchedCategoryTarget) {
+      return;
+    }
+
+    setActiveCategory(matchedCategoryTarget.id);
+  }, [categoryName, matchedCategoryTarget]);
 
   useEffect(() => {
     if (!productName || !matchedProductTarget.selectedSection) {
@@ -143,10 +181,37 @@ export default function MenuPageClient({
     return () => cancelAnimationFrame(frame);
   }, [productName, matchedProductTarget.selectedSection]);
 
+  useEffect(() => {
+    if (!categoryName || !matchedCategoryTarget) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      const section = document.getElementById(matchedCategoryTarget.id);
+
+      if (!section) {
+        return;
+      }
+
+      const stickyOffset = 96;
+      const top =
+        window.scrollY + section.getBoundingClientRect().top - stickyOffset;
+
+      window.scrollTo({
+        top: Math.max(0, top),
+        behavior: "smooth",
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [categoryName, matchedCategoryTarget]);
+
   const resolvedActiveCategory =
     productName && matchedProductTarget.activeCategory !== "all"
       ? matchedProductTarget.activeCategory
-      : activeCategory;
+      : matchedCategoryTarget
+        ? matchedCategoryTarget.id
+        : activeCategory;
 
   const resolvedSelectedItem =
     productName && matchedProductTarget.selectedItem

@@ -43,6 +43,16 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
   const locale = useLocale();
   const isArabic = locale === "ar";
 
+  const toArabicNumerals = (val: string | number) => {
+    const arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(val).replace(/[0-9]/g, (digit) => arabicDigits[parseInt(digit, 10)]);
+  };
+
+  const formatNumber = (val: string | number | undefined | null) => {
+    if (val === undefined || val === null) return "";
+    return isArabic ? toArabicNumerals(val) : String(val);
+  };
+
   // Parse section.number in case index is not passed
   const parsedNumber = parseInt(String(section.number).replace(/\D/g, ""), 10);
   
@@ -65,7 +75,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
   const proteinLabel = isArabic ? "ب" : "P";
   const fatLabel = isArabic ? "د" : "F";
   const kcalLabel = isArabic ? "س.ح" : "KCAL";
-  const gramUnit = isArabic ? "غ" : "";
+  const gramUnit = isArabic ? "ج" : "g";
 
   return (
     <section
@@ -95,21 +105,19 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
           <div className={`space-y-8 ${isEven ? "order-2 lg:order-1" : "order-2 lg:order-2"}`}>
             <div className="flex items-baseline gap-4 border-b border-current opacity-90 pb-6">
               <span
-                className={`${isArabic ? headingFont : playfair.className} text-4xl font-normal ${
+                className={`${isArabic ? headingFont : playfair.className} shrink-0 whitespace-nowrap text-4xl font-normal ${
                   isArabic ? "" : "italic"
                 } md:text-5xl`}
                 style={
                   isArabic
                     ? {
-                        fontFamily: sectionNumberFontFamily,
+                        fontFamily: headingArabicFontFamily,
                         fontStyle: "normal",
                         fontWeight: 400,
                         fontSize: "76px",
                         lineHeight: "95px",
                         color: accentColor,
                         display: "inline-block",
-                        transform: "translate(18px, -12px)",
-                        marginLeft: "-8px",
                       }
                     : {
                         fontFamily: sectionNumberFontFamily,
@@ -118,11 +126,11 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                       }
                 }
               >
-                {section.number}
+                <bdi dir="ltr">{formatNumber(section.number)}</bdi>
               </span>
 
               <h2
-                className={`${sectionTitleFont} font-normal ${
+                className={`${sectionTitleFont} min-w-0 flex-1 whitespace-nowrap font-normal ${
                   isArabic ? "text-4xl md:text-5xl" : "italic"
                 }`}
                 style={
@@ -153,9 +161,9 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                   className="cursor-pointer border-b border-current/20 pb-6 transition-opacity hover:opacity-80"
                 >
                   <div className="flex items-start justify-between gap-6">
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <h3
-                        className={`${headingFont} text-xl font-normal ${
+                        className={`${headingFont} whitespace-nowrap text-xl font-normal ${
                           isArabic ? "" : "italic"
                         } md:text-2xl`}
                         style={
@@ -179,38 +187,71 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                         {isArabic ? item.descriptionAr : item.descriptionEn}
                       </p>
 
-                      <div
-                        className={`${
-                          isArabic ? bodyFont : "font-mono"
-                        } mt-4 flex gap-5 text-[10px] uppercase tracking-[0.2em] opacity-60 md:text-xs`}
-                        style={isArabic ? { fontFamily: bodyArabicFontFamily } : undefined}
-                      >
-                        <span style={isArabic ? { fontFamily: bodyArabicFontFamily } : undefined}>
-                          {carbsLabel} {item.carbs}
-                          {gramUnit}
-                        </span>
+                      {/* English: Keep Macros below description */}
+                      {!isArabic && (
+                        <div className="mt-4 flex gap-5 font-mono text-[10px] uppercase tracking-[0.2em] opacity-60 md:text-xs">
+                          <span className="inline-flex items-center gap-1">
+                            <span>{carbsLabel}</span>
+                            <bdi dir="ltr">{formatNumber(item.carbs)}</bdi>
+                            {gramUnit && <span>{gramUnit}</span>}
+                          </span>
 
-                        <span style={isArabic ? { fontFamily: bodyArabicFontFamily } : undefined}>
-                          {proteinLabel} {item.protein}
-                          {gramUnit}
-                        </span>
+                          <span className="inline-flex items-center gap-1">
+                            <span>{proteinLabel}</span>
+                            <bdi dir="ltr">{formatNumber(item.protein)}</bdi>
+                            {gramUnit && <span>{gramUnit}</span>}
+                          </span>
 
-                        <span style={isArabic ? { fontFamily: bodyArabicFontFamily } : undefined}>
-                          {fatLabel} {item.fat}
-                          {gramUnit}
-                        </span>
-                      </div>
+                          <span className="inline-flex items-center gap-1">
+                            <span>{fatLabel}</span>
+                            <bdi dir="ltr">{formatNumber(item.fat)}</bdi>
+                            {gramUnit && <span>{gramUnit}</span>}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="text-right">
+                    <div className="shrink-0 whitespace-nowrap text-right">
+                      {/* Calories */}
                       <span
                         className={`${
                           isArabic ? bodyFont : "font-mono"
-                        } text-[10px] uppercase tracking-[0.2em] opacity-60 md:text-xs`}
+                        } inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.2em] opacity-60 md:text-xs`}
                         style={isArabic ? { fontFamily: bodyArabicFontFamily } : undefined}
                       >
-                        {item.kcal} {kcalLabel}
+                        <bdi dir="ltr">{formatNumber(item.kcal)}</bdi>
+                        <span>{kcalLabel}</span>
                       </span>
+
+                      {/* Arabic: Macros placed directly below calories */}
+                      {isArabic && (
+                        <div
+                          className={`${bodyFont} mt-4 flex items-center justify-end gap-2 text-[10px] uppercase tracking-[0.2em] opacity-60 md:text-xs`}
+                          style={{ fontFamily: bodyArabicFontFamily }}
+                        >
+                          <span className="inline-flex items-center gap-1" style={{ fontFamily: bodyArabicFontFamily }}>
+                            <span>{proteinLabel}</span>
+                            <bdi dir="ltr">{formatNumber(item.protein)}</bdi>
+                            {gramUnit && <span>{gramUnit}</span>}
+                          </span>
+
+                          <span className="opacity-40">·</span>
+
+                          <span className="inline-flex items-center gap-1" style={{ fontFamily: bodyArabicFontFamily }}>
+                            <span>{carbsLabel}</span>
+                            <bdi dir="ltr">{formatNumber(item.carbs)}</bdi>
+                            {gramUnit && <span>{gramUnit}</span>}
+                          </span>
+
+                          <span className="opacity-40">·</span>
+
+                          <span className="inline-flex items-center gap-1" style={{ fontFamily: bodyArabicFontFamily }}>
+                            <span>{fatLabel}</span>
+                            <bdi dir="ltr">{formatNumber(item.fat)}</bdi>
+                            {gramUnit && <span>{gramUnit}</span>}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </article>

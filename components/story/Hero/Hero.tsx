@@ -107,9 +107,9 @@ export default function Hero({ hero }: HeroProps) {
                 : "text-center md:text-left"
             }`}
           >
-            {/* Heading */}
+            {/* Heading (1.25x scale) */}
             <h1
-              className={`text-2xl leading-[1.12] tracking-tight text-[#F8F3E7] sm:text-4xl md:text-5xl lg:text-[72px] lg:leading-[1.05] ${
+              className={`text-[30px] leading-[1.12] tracking-tight text-[#F8F3E7] sm:text-[45px] md:text-[60px] lg:text-[90px] lg:leading-[1.05] ${
                 isArabic
                   ? "el-messiri-force"
                   : "font-serif italic"
@@ -118,9 +118,9 @@ export default function Hero({ hero }: HeroProps) {
               {isArabic ? hero.titleAr : hero.titleEn}
             </h1>
 
-            {/* Description */}
+            {/* Description (1.25x scale) */}
             <p
-              className={`mx-auto mt-3 max-w-lg text-xs leading-relaxed text-[#F8F3E7]/90 sm:mt-5 sm:text-sm md:mx-0 md:text-base md:leading-7 ${
+              className={`mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-[#F8F3E7]/90 sm:mt-5 sm:text-[17.5px] md:mx-0 md:text-[20px] md:leading-[1.75] ${
                 isArabic ? "ibm-arabic-force" : ""
               }`}
             >
@@ -166,15 +166,15 @@ export default function Hero({ hero }: HeroProps) {
                   rtl:sm:items-end
                 "
               >
-                {/* Small label */}
+                {/* Small label (1.25x scale) */}
                 <p
                   className={`
-                    text-[9px]
+                    text-[11.25px]
                     font-medium
                     uppercase
                     tracking-[0.18em]
                     text-[#3F4B26]/65
-                    sm:text-[10px]
+                    sm:text-[12.5px]
                     sm:tracking-[0.22em]
                     ${isArabic ? "ibm-arabic-force" : ""}
                   `}
@@ -182,15 +182,15 @@ export default function Hero({ hero }: HeroProps) {
                   {isArabic ? stat.labelAr : stat.labelEn}
                 </p>
 
-                {/* Main stat */}
+                {/* Main stat (1.25x scale) */}
                 <h3
                   className={`
-                    text-[28px]
+                    text-[35px]
                     leading-none
                     text-[#C68A4C]
-                    sm:text-[30px]
-                    md:text-[34px]
-                    lg:text-[38px]
+                    sm:text-[37.5px]
+                    md:text-[42.5px]
+                    lg:text-[47.5px]
                     ${isArabic ? "el-messiri-force" : "font-serif italic"}
                   `}
                 >

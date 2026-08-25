@@ -31,6 +31,18 @@ export default function ItemModal({
   const isArabic = locale === "ar";
   const previousScrollY = useRef<number | null>(null);
 
+  const toArabicNumerals = (val: string | number) => {
+    const arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(val).replace(/[0-9]/g, (digit) => arabicDigits[parseInt(digit, 10)]);
+  };
+
+  const formatNumber = (val: string | number | undefined | null) => {
+    if (val === undefined || val === null) return "";
+    return isArabic ? toArabicNumerals(val) : String(val);
+  };
+
+  const gramUnit = isArabic ? "ج" : "g";
+
   useLayoutEffect(() => {
     if (!item || !section) {
       return;
@@ -245,7 +257,7 @@ export default function ItemModal({
                           : undefined
                       }
                     >
-                      {item.kcal}
+                      <bdi dir="ltr">{formatNumber(item.kcal)}</bdi>
                       <span
                         className="text-xs font-sans not-italic opacity-70"
                         style={
@@ -279,8 +291,9 @@ export default function ItemModal({
                   </div>
 
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif italic">
-                      {item.carbs}
+                    <div className="text-2xl sm:text-3xl font-serif italic inline-flex items-baseline gap-1">
+                      <bdi dir="ltr">{formatNumber(item.carbs)}</bdi>
+                      <span className="text-xs font-sans not-italic opacity-70">{gramUnit}</span>
                     </div>
 
                     <div className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1">
@@ -289,8 +302,9 @@ export default function ItemModal({
                   </div>
 
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif italic">
-                      {item.protein}
+                    <div className="text-2xl sm:text-3xl font-serif italic inline-flex items-baseline gap-1">
+                      <bdi dir="ltr">{formatNumber(item.protein)}</bdi>
+                      <span className="text-xs font-sans not-italic opacity-70">{gramUnit}</span>
                     </div>
 
                     <div className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1">
@@ -299,8 +313,9 @@ export default function ItemModal({
                   </div>
 
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif italic">
-                      {item.fat}
+                    <div className="text-2xl sm:text-3xl font-serif italic inline-flex items-baseline gap-1">
+                      <bdi dir="ltr">{formatNumber(item.fat)}</bdi>
+                      <span className="text-xs font-sans not-italic opacity-70">{gramUnit}</span>
                     </div>
 
                     <div className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1">

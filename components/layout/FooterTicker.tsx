@@ -9,6 +9,7 @@ export default function FooterTicker() {
   const isRtl = locale === "ar";
   const t = useTranslations("Footer");
   const [time, setTime] = useState("");
+  const [temperatureText, setTemperatureText] = useState("--°C");
   const controls = useAnimation();
 
   useEffect(() => {
@@ -30,11 +31,49 @@ export default function FooterTicker() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchTemperature = async () => {
+      try {
+        const response = await fetch(
+          "https://api.open-meteo.com/v1/forecast?latitude=29.3759&longitude=47.9774&current=temperature_2m&timezone=auto&temperature_unit=celsius"
+        );
+
+        if (!response.ok) {
+          throw new Error("Weather request failed");
+        }
+
+        const data = await response.json();
+        const currentTemp = Number(data?.current?.temperature_2m);
+
+        if (!isMounted || !Number.isFinite(currentTemp)) {
+          return;
+        }
+
+        setTemperatureText(`${Math.round(currentTemp)}°C`);
+      } catch {
+        if (isMounted) {
+          setTemperatureText("--°C");
+        }
+      }
+    };
+
+    fetchTemperature();
+
+    const interval = setInterval(fetchTemperature, 15 * 60 * 1000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
   const items = [
     `${t("ticker.live")} • ${time}`,
-    `${t("ticker.location")} • 47°C`,
+    `${t("ticker.location")} • ${temperatureText}`,
     `${t("ticker.announcement")}`,
-    `${t("ticker.location")} • 47°C`,
+    `${t("ticker.location")} • ${temperatureText}`,
     `${t("ticker.announcement")}`,
   ];
 
@@ -42,7 +81,7 @@ export default function FooterTicker() {
     controls.start({
       x: isRtl ? ["-50%", "0%"] : ["0%", "-50%"],
       transition: {
-        duration: 35,
+        duration: 70,
         ease: "linear",
         repeat: Infinity,
         repeatType: "loop",
@@ -62,7 +101,7 @@ export default function FooterTicker() {
           controls.start({
             x: isRtl ? ["-50%", "0%"] : ["0%", "-50%"],
             transition: {
-              duration: 35,
+              duration: 70,
               ease: "linear",
               repeat: Infinity,
               repeatType: "loop",

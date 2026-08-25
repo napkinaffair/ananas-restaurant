@@ -106,37 +106,57 @@ export default function FeaturedProducts({ data }: Props) {
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-                <div
-                  className={`absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 text-white ${
-                    isArabic ? "text-right" : "text-left"
-                  }`}
-                >
-                  <div className="flex items-end justify-between gap-3">
-                    <div className="flex flex-col gap-1">
-                      <h3
-                        className={
-                          isArabic
-                            ? "text-2xl sm:text-3xl lg:text-[42px] leading-tight sm:leading-none"
-                            : "font-serif text-2xl sm:text-3xl lg:text-[42px] leading-tight sm:leading-none"
-                        }
-                        style={
-                          isArabic
-                            ? {
-                                fontFamily: '"Aref Ruqaa", serif',
-                                fontWeight: 400,
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                              }
-                            : undefined
-                        }
-                      >
-                        {isArabic ? product.titleAr : product.titleEn}
-                      </h3>
+                  <div
+                    className={`absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 text-white ${
+                      isArabic ? "text-right" : "text-left"
+                    }`}
+                  >
+                    <div className="flex items-end justify-between gap-2 sm:gap-3">
+                      <div className="flex min-w-0 flex-1 flex-col gap-1">
+                        <h3
+                          className={
+                            isArabic
+                              ? "whitespace-nowrap text-2xl sm:text-3xl lg:text-[42px] leading-tight sm:leading-none"
+                              : "whitespace-nowrap font-serif text-2xl sm:text-3xl lg:text-[42px] leading-tight sm:leading-none"
+                          }
+                          style={
+                            isArabic
+                              ? {
+                                  fontFamily: '"Aref Ruqaa", serif',
+                                  fontWeight: 400,
+                                  fontStyle: "normal",
+                                  letterSpacing: 0,
+                                }
+                              : undefined
+                          }
+                        >
+                          {isArabic ? product.titleAr : product.titleEn}
+                        </h3>
+
+                        <p
+                          className="truncate whitespace-nowrap opacity-80"
+                          style={
+                            isArabic
+                              ? {
+                                  fontFamily: '"IBM Plex Sans Arabic", sans-serif',
+                                  fontWeight: 400,
+                                  fontStyle: "normal",
+                                  fontSize: "11px",
+                                  lineHeight: "17px",
+                                  letterSpacing: 0,
+                                  color: "#FFFFFF",
+                                }
+                              : undefined
+                          }
+                        >
+                          {isArabic ? product.categoryAr : product.categoryEn}
+                        </p>
+                      </div>
 
                       <p
-                        className="truncate opacity-80"
+                        className="relative inline-flex h-[17px] w-[72px] shrink-0 items-center justify-end overflow-hidden whitespace-nowrap"
                         style={
                           isArabic
                             ? {
@@ -146,59 +166,39 @@ export default function FeaturedProducts({ data }: Props) {
                                 fontSize: "11px",
                                 lineHeight: "17px",
                                 letterSpacing: 0,
-                                color: "#FFFFFF",
+                                color: "#E3E27E",
                               }
                             : undefined
                         }
                       >
-                        {isArabic ? product.categoryAr : product.categoryEn}
+                        <span
+                          className="block opacity-100 transition-opacity duration-300 group-hover:opacity-0"
+                          style={{
+                            color: "#E3E27E",
+                            fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+                            fontWeight: 400,
+                            fontStyle: "normal",
+                          }}
+                        >
+                          —
+                        </span>
+
+                        <span
+                          className="absolute inset-0 flex items-center justify-end opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                          style={{
+                            color: "#E3E27E",
+                            fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
+                            fontWeight: 400,
+                            fontStyle: "normal",
+                          }}
+                        >
+                          VIEW →
+                        </span>
                       </p>
                     </div>
-
-                    <p
-                      className="relative inline-flex h-[17px] w-[72px] shrink-0 items-center justify-end overflow-hidden whitespace-nowrap"
-                      style={
-                        isArabic
-                          ? {
-                              fontFamily: '"IBM Plex Sans Arabic", sans-serif',
-                              fontWeight: 400,
-                              fontStyle: "normal",
-                              fontSize: "11px",
-                              lineHeight: "17px",
-                              letterSpacing: 0,
-                              color: "#E3E27E",
-                            }
-                          : undefined
-                      }
-                    >
-                      <span
-                        className="block opacity-100 transition-opacity duration-300 group-hover:opacity-0"
-                        style={{
-                          color: "#E3E27E",
-                          fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
-                          fontWeight: 400,
-                          fontStyle: "normal",
-                        }}
-                      >
-                        —
-                      </span>
-
-                      <span
-                        className="absolute inset-0 flex items-center justify-end opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        style={{
-                          color: "#E3E27E",
-                          fontFamily: '"JetBrains Mono", "SFMono-Regular", Consolas, monospace',
-                          fontWeight: 400,
-                          fontStyle: "normal",
-                        }}
-                      >
-                        VIEW →
-                      </span>
-                    </p>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
             );
           })}
         </motion.div>

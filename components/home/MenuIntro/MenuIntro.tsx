@@ -8,7 +8,7 @@ const headingArabic = El_Messiri({
   subsets: ["arabic"],
   weight: ["400", "500", "600"],
 });
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 
 import { MenuIntroData } from "./menuIntro.types";
@@ -25,8 +25,20 @@ export default function MenuIntro({
   data,
 }: MenuIntroProps) {
   const isArabic = locale === "ar";
+  const router = useRouter();
 
   const [active, setActive] = useState(data.items[0]);
+
+  const navigateToCategory = (item: (typeof data.items)[number]) => {
+    setActive(item);
+
+    const categoryKey = item.titleEn || item.titleAr;
+
+    router.push({
+      pathname: "/menu",
+      query: { category: categoryKey },
+    });
+  };
 
   return (
     <>
@@ -60,7 +72,7 @@ export default function MenuIntro({
               </div>
 
               <h2
-                className={`font-serif italic text-3xl sm:text-4xl leading-[1.15] tracking-[-0.01em] text-white ${
+                className={`font-serif italic text-[45px] sm:text-[54px] leading-[1.15] tracking-[-0.01em] text-white ${
                   isArabic ? "text-right" : "text-left"
                 } ${isArabic ? headingArabic.className : ""}`}
                 style={isArabic ? { fontFamily: '"El Messiri", serif' } : undefined}
@@ -135,7 +147,7 @@ export default function MenuIntro({
                 </div>
 
                 <h2
-                  className={`font-serif italic lg:text-[46px] leading-[1.15] tracking-[-0.01em] text-white ${
+                  className={`font-serif italic lg:text-[69px] leading-[1.15] tracking-[-0.01em] text-white ${
                     isArabic ? "text-right" : "text-left"
                   } ${isArabic ? headingArabic.className : ""}`}
                   style={isArabic ? { fontFamily: '"El Messiri", serif' } : undefined}
@@ -159,8 +171,9 @@ export default function MenuIntro({
                     return (
                       <button
                         key={item.id}
+                        type="button"
                         onMouseEnter={() => setActive(item)}
-                        onClick={() => setActive(item)}
+                        onClick={() => navigateToCategory(item)}
                         className={`flex w-full items-center justify-between py-4 px-4 sm:px-5 transition-all duration-300 group rounded-none ${
                           isCurrentActive
                             ? "bg-white/[0.08] backdrop-blur-[2px]"
@@ -237,7 +250,7 @@ export default function MenuIntro({
                   href="/menu"
                   className="inline-flex w-full sm:w-auto justify-center items-center border border-transparent rounded-md px-6 py-3 text-[10px] uppercase tracking-[4px] bg-[#E3E27F] text-[#000000] transition-all duration-300 hover:bg-[#F18F37] hover:text-[#FFFFFF]"
                 >
-                  {isArabic ? data.buttonAr : data.buttonEn}
+                  {isArabic ? "القائمة" : data.buttonEn}
                 </Link>
               </div>
             </motion.div>

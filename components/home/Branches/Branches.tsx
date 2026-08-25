@@ -191,7 +191,7 @@ export default function Branches({ data }: BranchesProps) {
           {/* Controls & Call to Action Container Wrapper */}
           <div className="flex items-center gap-4 flex-shrink-0">
             {/* Conditional Desktop Navigation Arrows */}
-            {data.branches.length > 4 && (
+            {data.branches.length > 5 && (
               <div className="hidden lg:flex items-center gap-2">
                 <button
                   onClick={() =>
@@ -251,7 +251,7 @@ export default function Branches({ data }: BranchesProps) {
           ref={sliderRef}
           className="
             flex overflow-x-auto gap-0 pb-6 pt-2 snap-x snap-mandatory scrollbar-none w-full
-            lg:grid lg:grid-flow-col lg:auto-cols-[calc((100%-4.5rem)/4)] lg:overflow-x-auto lg:gap-4
+            lg:grid lg:grid-flow-col lg:auto-cols-[calc((100%-4rem)/5)] lg:overflow-x-auto lg:gap-4
           "
           style={{ WebkitOverflowScrolling: "touch" }}
         >
@@ -279,7 +279,7 @@ export default function Branches({ data }: BranchesProps) {
                       isArabic ? branch.titleAr : branch.titleEn
                     }
                     fill
-                    sizes="(max-width: 1024px) 100vw, 400px"
+                    sizes="(max-width: 1024px) 100vw, 320px"
                     className="object-cover transition duration-700 ease-out group-hover:scale-105"
                     priority={index === 0}
                   />

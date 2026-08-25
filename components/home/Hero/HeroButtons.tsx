@@ -23,7 +23,7 @@ export default function HeroButtons({
 
   return (
     <div
-      className={`flex w-full flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center lg:w-auto ${
+      className={`flex w-full flex-row items-center gap-2 sm:flex-wrap lg:w-auto ${
         isArabic ? "justify-start lg:justify-start" : "justify-start lg:justify-end"
       }`}
     >
@@ -33,7 +33,7 @@ export default function HeroButtons({
             <Link
               href={data.primaryButton.href}
               style={buttonTextStyle}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2.5 text-xs font-medium text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:w-auto"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2.5 text-xs font-medium text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:flex-none sm:w-auto"
             >
               <span>{data.primaryButton.labelAr}</span>
               <span
@@ -50,7 +50,7 @@ export default function HeroButtons({
             <Link
               href={data.secondaryButton.href}
               style={buttonTextStyle}
-              className="inline-flex w-full items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2.5 text-xs font-medium text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:w-auto"
+              className="inline-flex flex-1 items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2.5 text-xs font-medium text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:flex-none sm:w-auto"
             >
               {data.secondaryButton.labelAr}
             </Link>
@@ -62,7 +62,7 @@ export default function HeroButtons({
             <Link
               href={data.primaryButton.href}
               style={buttonTextStyle}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2 text-[0.68rem] font-medium text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:w-auto"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2 text-[0.68rem] font-medium text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:flex-none sm:w-auto"
             >
               <span>{data.primaryButton.labelEn}</span>
               <span className="inline-block text-xs transition-colors duration-300 hover:text-[#E3E27E]" aria-hidden="true">
@@ -75,7 +75,7 @@ export default function HeroButtons({
             <Link
               href={data.secondaryButton.href}
               style={buttonTextStyle}
-              className="inline-flex w-full items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2 text-[0.68rem] font-medium text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:w-auto"
+              className="inline-flex flex-1 items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2 text-[0.68rem] font-medium text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:flex-none sm:w-auto"
             >
               {data.secondaryButton.labelEn}
             </Link>
