@@ -36,7 +36,7 @@ export default function FooterColumns() {
     "py-0.5 text-[14px] leading-6 text-[#EFE4D0] transition-colors duration-200 hover:text-[#E6DE69]";
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+    <div className="footer-arabic-copy grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
       {/* Visit */}
       <div className={locale === "ar" ? "text-right" : "text-left"}>
         <h3 className={heading}>{t("visit")}</h3>

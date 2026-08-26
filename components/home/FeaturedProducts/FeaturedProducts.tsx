@@ -4,8 +4,15 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
+import { El_Messiri } from "next/font/google";
 
 import { FeaturedProductsData } from "./featured.types";
+
+const headingArabic = El_Messiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
+});
 
 interface Props {
   data: FeaturedProductsData;
@@ -14,6 +21,13 @@ interface Props {
 export default function FeaturedProducts({ data }: Props) {
   const locale = useLocale();
   const isArabic = locale === "ar";
+
+  const formatHeadingWithBreaks = (text?: string) => {
+    if (!text) return "";
+    return text
+      .replace(/&lt;br\s*\/?&gt;/gi, "<br />")
+      .replace(/\n/g, "<br />");
+  };
 
   return (
     <section
@@ -54,22 +68,25 @@ export default function FeaturedProducts({ data }: Props) {
           <h2
             className={
               isArabic
-                ? "max-w-[720px] leading-[0.95] text-[#202020] text-3xl sm:text-5xl lg:text-7xl"
-                : "max-w-[720px] font-serif leading-[0.95] text-[#202020] text-3xl sm:text-5xl lg:text-7xl"
+                ? `max-w-[720px] leading-[1.05] text-[#202020] text-[37.5px] sm:text-[60px] lg:text-[90px] ${headingArabic.className}`
+                : "max-w-[720px] font-serif leading-[0.95] text-[#202020] text-[37.5px] sm:text-[60px] lg:text-[90px]"
             }
             style={
               isArabic
                 ? {
-                    fontFamily: '"El Messiri", serif',
+                    fontFamily: `${headingArabic.style.fontFamily}, "El Messiri", serif`,
                     fontWeight: 400,
                     fontStyle: "normal",
                     letterSpacing: "-0.04em",
                   }
                 : undefined
             }
-          >
-            {isArabic ? data.headingAr : data.headingEn}
-          </h2>
+            dangerouslySetInnerHTML={{
+              __html: formatHeadingWithBreaks(
+                isArabic ? data.headingAr : data.headingEn
+              ),
+            }}
+          />
         </motion.div>
 
         {/* Product Cards Grid */}
@@ -88,8 +105,6 @@ export default function FeaturedProducts({ data }: Props) {
           "
         >
           {data.products.map((product) => {
-            // Use the English title as the canonical product query value so
-            // the menu page can reliably match items across locales.
             const targetTitle = product.titleEn || product.titleAr;
 
             return (
@@ -103,6 +118,7 @@ export default function FeaturedProducts({ data }: Props) {
                     src={product.imageUrl}
                     alt={isArabic ? product.titleAr : product.titleEn}
                     fill
+                    sizes="(max-width: 1024px) 100vw, 400px"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 

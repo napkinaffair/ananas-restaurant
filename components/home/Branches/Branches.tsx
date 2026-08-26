@@ -186,7 +186,7 @@ export default function Branches({ data }: BranchesProps) {
               </div>
 
               <h2
-                className={`font-serif text-[#1F1F1F] leading-[1.1] text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-[750px] ${
+                className={`font-serif text-[#1F1F1F] leading-[1.08] text-4xl sm:text-5xl lg:text-[90px] tracking-tight max-w-[750px] lg:max-w-[1100px] ${
                   isArabic ? headingArabic.className : ""
                 }`}
                 style={
