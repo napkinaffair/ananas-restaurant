@@ -49,6 +49,8 @@ export type MenuSectionData = {
 
   accentColor: string;
 
+  numberColor?: string; // <-- Added number color support
+
   image: string;
 
   items: MenuItem[];

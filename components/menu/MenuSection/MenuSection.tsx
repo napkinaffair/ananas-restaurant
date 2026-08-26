@@ -61,6 +61,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
 
   const textureClass = section.isDark ? "muted-ground-dark" : "muted-ground";
   const accentColor = section.accentColor || "#1B3622";
+  const numberColor = section.numberColor || "#000000";
 
   const headingFont = isArabic ? headingArabic.className : playfair.className;
   const sectionTitleFont = isArabic ? headingArabic.className : instrumentSerif.className;
@@ -87,7 +88,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6">
         <div className="grid items-start gap-8 sm:gap-14 lg:grid-cols-2">
 
-          {/* Image Container — Identical mobile aspect ratio & containment for EN and AR */}
+          {/* Image Container */}
           <div className="order-1 lg:order-1">
             <div className="relative aspect-[4/3] sm:aspect-[4/5] w-full max-h-[380px] sm:max-h-none overflow-hidden rounded-sm shadow-sm">
               <Image
@@ -106,10 +107,10 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
             {/* Header / Number Group */}
             <div className="flex items-baseline gap-3 sm:gap-4 border-b border-current opacity-90 pb-4 sm:pb-6">
               <span
-                className={`${isArabic ? headingFont : playfair.className} shrink-0 whitespace-nowrap font-normal ${
+                className={`${isArabic ? headingFont : playfair.className} relative -top-1 sm:-top-2 shrink-0 whitespace-nowrap font-normal ${
                   isArabic
-                    ? "text-[42px] leading-[1.15] lg:text-[76px] lg:leading-[95px]"
-                    : "text-4xl italic md:text-5xl"
+                    ? "text-[48px] leading-[1.1] lg:text-[88px] lg:leading-[95px]"
+                    : "text-5xl italic md:text-6xl"
                 }`}
                 style={
                   isArabic
@@ -117,13 +118,14 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                         fontFamily: headingArabicFontFamily,
                         fontStyle: "normal",
                         fontWeight: 400,
-                        color: accentColor,
+                        color: numberColor,
                         display: "inline-block",
                       }
                     : {
                         fontFamily: sectionNumberFontFamily,
-                        fontSize: "76px",
-                        lineHeight: "73px",
+                        fontSize: "88px",
+                        lineHeight: "75px",
+                        color: numberColor,
                       }
                 }
               >
@@ -131,10 +133,10 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
               </span>
 
               <h2
-                className={`${sectionTitleFont} min-w-0 flex-1 break-words font-normal ${
+                className={`${sectionTitleFont} min-w-0 flex-1 break-words whitespace-normal font-normal ${
                   isArabic
                     ? "text-[38px] leading-[1.15] sm:text-5xl lg:text-[76px] lg:leading-[95px] [text-wrap:balance]"
-                    : "whitespace-normal sm:whitespace-nowrap italic"
+                    : "text-[38px] leading-[1.1] sm:text-5xl sm:leading-[1.15] lg:text-[76px] lg:leading-[1.05] italic"
                 }`}
                 style={
                   isArabic
@@ -145,8 +147,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                         color: accentColor,
                       }
                     : {
-                        fontSize: "76px",
-                        lineHeight: "73px",
+                        color: accentColor,
                       }
                 }
               >
@@ -160,7 +161,9 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                 <article
                   key={item.id}
                   onClick={() => onSelectItem(item, section)}
-                  className="cursor-pointer border-b border-current/20 pb-5 sm:pb-6 transition-opacity hover:opacity-80"
+                  className={`cursor-pointer transition-[padding] duration-300 ease-out ${
+                    isArabic ? "hover:pr-3.5" : "hover:pl-3.5"
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-4 sm:gap-6">
                     <div className="min-w-0 flex-1">

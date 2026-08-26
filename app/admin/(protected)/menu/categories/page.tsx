@@ -41,6 +41,8 @@ export default async function MenuCategoriesPage() {
 
       accentColor: category.accent_color,
 
+      numberColor: category.number_color || "#000000",
+
       heroImage: category.hero_image,
       imageUrl,
 

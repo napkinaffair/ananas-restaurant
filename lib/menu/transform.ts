@@ -16,6 +16,8 @@ interface Category {
 
   accentColor: string;
 
+  numberColor?: string;
+
   image: string;
 }
 
@@ -38,6 +40,8 @@ export function transformMenuSections(
     backgroundColor: category.backgroundColor,
 
     accentColor: category.accentColor,
+
+    numberColor: category.numberColor || "#000000",
 
     image: category.image,
 

@@ -274,6 +274,14 @@ export default function CategoryCard({
           />
 
           <Input
+            label="Number Color"
+            value={form.numberColor ?? "#000000"}
+            onChange={(e) =>
+              update("numberColor", e.target.value)
+            }
+          />
+
+          <Input
             label="Display Order"
             type="number"
             value={form.displayOrder}

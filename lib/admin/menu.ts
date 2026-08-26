@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 
 // ============================================
 // MENU HERO
@@ -101,6 +102,8 @@ export interface MenuCategoryFormData {
 
   accentColor: string;
 
+  numberColor?: string;
+
   heroImage: string;
 
   displayOrder: number;
@@ -126,6 +129,8 @@ export async function createCategory() {
       background_color: "#435334",
 
       accent_color: "#C7D442",
+
+      number_color: "#000000",
 
       hero_image: "",
 
@@ -178,6 +183,8 @@ export async function updateCategory(
 
       accent_color: category.accentColor,
 
+      number_color: category.numberColor || "#000000",
+
       hero_image: heroImage,
 
       display_order: category.displayOrder,
@@ -198,7 +205,6 @@ export async function updateCategory(
 export async function deleteCategory(id: number) {
   const supabase = await createClient();
 
-  // Check if any items belong to this category first
   const { count, error: countError } = await supabase
     .from("menu_items")
     .select("*", { count: "exact", head: true })
@@ -530,12 +536,9 @@ export async function deleteAllergen(id: number) {
   }
 }
 
-
 // ============================================
 // MENU SETTINGS
 // ============================================
-
-import { revalidatePath } from "next/cache";
 
 export interface MenuSettingsFormData {
   allergenDisclaimerEn: string;
@@ -559,7 +562,6 @@ export async function updateMenuSettings(settings: MenuSettingsFormData) {
     return { success: false, error: error.message };
   }
 
-  // Purge cache so public pages reflect updated disclaimers immediately
   revalidatePath("/menu");
   revalidatePath("/", "layout");
 
