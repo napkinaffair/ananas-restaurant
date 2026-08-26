@@ -147,7 +147,7 @@ export default function MenuIntro({
                 </div>
 
                 <h2
-                  className={`font-serif italic lg:text-[69px] leading-[1.15] tracking-[-0.01em] text-white ${
+                  className={`font-serif italic lg:text-[80px] xl:text-[88px] leading-[1.08] tracking-[-0.01em] text-white ${
                     isArabic ? "text-right" : "text-left"
                   } ${isArabic ? headingArabic.className : ""}`}
                   style={isArabic ? { fontFamily: '"El Messiri", serif' } : undefined}

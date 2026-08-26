@@ -81,7 +81,7 @@ export default function FooterTicker() {
     controls.start({
       x: isRtl ? ["-50%", "0%"] : ["0%", "-50%"],
       transition: {
-        duration: 70,
+        duration: 140,
         ease: "linear",
         repeat: Infinity,
         repeatType: "loop",
@@ -101,7 +101,7 @@ export default function FooterTicker() {
           controls.start({
             x: isRtl ? ["-50%", "0%"] : ["0%", "-50%"],
             transition: {
-              duration: 70,
+              duration: 140,
               ease: "linear",
               repeat: Infinity,
               repeatType: "loop",

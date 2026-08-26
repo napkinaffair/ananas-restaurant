@@ -23,7 +23,7 @@ export default function ProductTicker({ data }: Props) {
     controls.start({
       x: isArabic ? ["0%", "50%"] : ["0%", "-50%"],
       transition: {
-        duration: 25,
+        duration: 50,
         repeat: Infinity,
         ease: "linear",
       },
@@ -41,7 +41,7 @@ export default function ProductTicker({ data }: Props) {
             controls.start({
               x: isArabic ? ["0%", "50%"] : ["0%", "-50%"],
               transition: {
-                duration: 25,
+                duration: 50,
                 repeat: Infinity,
                 ease: "linear",
               },

@@ -133,7 +133,7 @@ export default function CategoryNavigation({
               hover:opacity-95
             "
           >
-            {isArabic ? "التوريد ↓" : "SOURCING ↓"}
+            {isArabic ? "المصادر ↓" : "SOURCING ↓"}
           </button>
         </div>
       </div>

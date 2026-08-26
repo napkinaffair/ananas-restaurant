@@ -5,11 +5,23 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
-import { El_Messiri } from "next/font/google";
+import { El_Messiri, Manrope, IBM_Plex_Sans_Arabic } from "next/font/google";
 
 const headingArabic = El_Messiri({
   subsets: ["arabic"],
   weight: ["400"],
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["500"],
+  display: "swap",
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400"],
+  display: "swap",
 });
 
 import { BranchesData } from "./branches.types";
@@ -127,50 +139,54 @@ export default function Branches({ data }: BranchesProps) {
   };
 
   return (
-    <section
-      className="muted-ground relative overflow-hidden py-16 lg:py-24"
-      style={{ backgroundColor: "#F3ECD8" }}
-      dir={isArabic ? "rtl" : "ltr"}
-    >
-      <div className="relative z-10 mx-auto max-w-[1600px] px-6 lg:px-4">
-        {/* Header Block Split Container */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 lg:mb-16 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
-        >
-          {/* Typography Header Group */}
-          <div
-            className={`flex flex-col ${
-              isArabic ? "text-right" : "text-left"
-            }`}
-          >
-            <div className="flex items-center gap-3 mb-3 text-[10px] uppercase tracking-[4px] font-mono text-[#D99844]">
-              <span>{data.sectionNumber}</span>
-              <span className="opacity-40">/</span>
-              <span className="text-[#444] opacity-80">
-                {isArabic ? data.sectionTitleAr : data.sectionTitleEn}
-              </span>
-            </div>
+    <>
+      <style>{`
+        .branches-manrope-btn,
+        .branches-manrope-btn * {
+          font-family: ${manrope.style.fontFamily}, sans-serif !important;
+          font-weight: 500 !important;
+        }
+        .branches-ibm-arabic,
+        .branches-ibm-arabic * {
+          font-family: ${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif !important;
+          font-weight: 400 !important;
+        }
+      `}</style>
 
-            <h2
-              className={`font-serif text-[#1F1F1F] leading-[1.1] text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-[750px] ${
-                isArabic ? headingArabic.className : ""
+      <section
+        className="muted-ground relative overflow-hidden py-16 lg:py-24"
+        style={{ backgroundColor: "#F3ECD8" }}
+        dir={isArabic ? "rtl" : "ltr"}
+      >
+        <div className="relative z-10 mx-auto max-w-[1600px] px-6 lg:px-4">
+          {/* Header Block Split Container */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-12 lg:mb-16 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
+          >
+            {/* Typography Header Group */}
+            <div
+              className={`flex flex-col ${
+                isArabic ? "text-right" : "text-left"
               }`}
-              style={
-                isArabic
-                  ? {
-                      fontFamily: '"El Messiri", serif',
-                      fontWeight: 400,
-                    }
-                  : undefined
-              }
             >
-              {isArabic ? data.headingLine1Ar : data.headingLine1En}{" "}
-              <span
-                className={`italic text-[#D99844] block ${
+              <div
+                className={`flex items-center gap-3 mb-3 text-[10px] uppercase tracking-[4px] text-[#D99844] ${
+                  isArabic ? "branches-ibm-arabic" : "font-mono"
+                }`}
+              >
+                <span className="font-mono">{data.sectionNumber}</span>
+                <span className="opacity-40">/</span>
+                <span className="text-[#444] opacity-80">
+                  {isArabic ? data.sectionTitleAr : data.sectionTitleEn}
+                </span>
+              </div>
+
+              <h2
+                className={`font-serif text-[#1F1F1F] leading-[1.1] text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-[750px] ${
                   isArabic ? headingArabic.className : ""
                 }`}
                 style={
@@ -178,200 +194,217 @@ export default function Branches({ data }: BranchesProps) {
                     ? {
                         fontFamily: '"El Messiri", serif',
                         fontWeight: 400,
-                        display: "block",
                       }
                     : undefined
                 }
               >
-                {isArabic ? data.headingLine2Ar : data.headingLine2En}
-              </span>
-            </h2>
-          </div>
-
-          {/* Controls & Call to Action Container Wrapper */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            {/* Conditional Desktop Navigation Arrows */}
-            {data.branches.length > 5 && (
-              <div className="hidden lg:flex items-center gap-2">
-                <button
-                  onClick={() =>
-                    handleScroll(isArabic ? "right" : "left")
+                {isArabic ? data.headingLine1Ar : data.headingLine1En}{" "}
+                <span
+                  className={`italic text-[#D99844] block ${
+                    isArabic ? headingArabic.className : ""
+                  }`}
+                  style={
+                    isArabic
+                      ? {
+                          fontFamily: '"El Messiri", serif',
+                          fontWeight: 400,
+                          display: "block",
+                        }
+                      : undefined
                   }
-                  disabled={
-                    isArabic ? !canScrollRight : !canScrollLeft
-                  }
-                  className="
-                    w-10 h-10 border border-[#1F1F1F]/20 rounded-full flex items-center justify-center 
-                    text-[#1F1F1F] transition-all duration-300 hover:bg-[#1F1F1F] hover:text-[#F3ECD8]
-                    disabled:opacity-20 disabled:pointer-events-none
-                  "
-                  aria-label="Previous Slide"
                 >
-                  <span className="text-xs font-mono">←</span>
-                </button>
+                  {isArabic ? data.headingLine2Ar : data.headingLine2En}
+                </span>
+              </h2>
+            </div>
 
-                <button
-                  onClick={() =>
-                    handleScroll(isArabic ? "left" : "right")
-                  }
-                  disabled={
-                    isArabic ? !canScrollLeft : !canScrollRight
-                  }
-                  className="
-                    w-10 h-10 border border-[#1F1F1F]/20 rounded-full flex items-center justify-center 
-                    text-[#1F1F1F] transition-all duration-300 hover:bg-[#1F1F1F] hover:text-[#F3ECD8]
-                    disabled:opacity-20 disabled:pointer-events-none
-                  "
-                  aria-label="Next Slide"
-                >
-                  <span className="text-xs font-mono">→</span>
-                </button>
-              </div>
-            )}
-
-            {/* Black Action View All Button */}
-            <Link
-              href="/locations"
-              className="
-                inline-flex items-center gap-3 bg-[#1F1F1F] text-[#F3ECD8] 
-                px-5 py-3 text-[10px] uppercase tracking-[3px] font-sans rounded-[2px]
-                transition-all duration-300 hover:bg-[#7F9333] hover:text-[#FFFFFF] shadow-md
-              "
-            >
-              <span>{isArabic ? "كل الفروع" : "All Branches"}</span>
-              <span className="text-[11px] font-mono opacity-80">
-                {isArabic ? "←" : "→"}
-              </span>
-            </Link>
-          </div>
-        </motion.div>
-
-        {/* Horizontal Scroll Viewport Matrix Rail */}
-        <div
-          ref={sliderRef}
-          className="
-            flex overflow-x-auto gap-0 pb-6 pt-2 snap-x snap-mandatory scrollbar-none w-full
-            lg:grid lg:grid-flow-col lg:auto-cols-[calc((100%-4rem)/5)] lg:overflow-x-auto lg:gap-4
-          "
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
-          {data.branches.map((branch, index) => (
-            <motion.div
-              key={branch.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                delay: Math.min(index * 0.08, 0.4),
-                duration: 0.5,
-              }}
-              className="w-full lg:w-auto flex-shrink-0 snap-center lg:snap-start px-2 lg:px-0"
-            >
-              <Link
-                href={getBranchLocationHref(branch)}
-                className="group block relative overflow-hidden bg-[#e9dfc6] rounded-sm transition-transform duration-300"
-              >
-                {/* Image Container — Fixed 4:5 Aspect Ratio */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden">
-                  <Image
-                    src={branch.image}
-                    alt={
-                      isArabic ? branch.titleAr : branch.titleEn
+            {/* Controls & Call to Action Container Wrapper */}
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {/* Conditional Desktop Navigation Arrows */}
+              {data.branches.length > 5 && (
+                <div className="hidden lg:flex items-center gap-2">
+                  <button
+                    onClick={() =>
+                      handleScroll(isArabic ? "right" : "left")
                     }
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 320px"
-                    className="object-cover transition duration-700 ease-out group-hover:scale-105"
-                    priority={index === 0}
-                  />
-
-                  {/* Dark Vignette Overlay Blend Mode */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
-
-                  {/* Dynamic Badge Info Indicator from Supabase */}
-                  <div
-                    className={`absolute top-4 ${
-                      isArabic ? "left-4" : "right-4"
-                    } bg-black/20 backdrop-blur-[2px] px-2.5 py-1 rounded-[2px]`}
+                    disabled={
+                      isArabic ? !canScrollRight : !canScrollLeft
+                    }
+                    className="
+                      w-10 h-10 border border-[#1F1F1F]/20 rounded-full flex items-center justify-center 
+                      text-[#1F1F1F] transition-all duration-300 hover:bg-[#1F1F1F] hover:text-[#F3ECD8]
+                      disabled:opacity-20 disabled:pointer-events-none
+                    "
+                    aria-label="Previous Slide"
                   >
-                    <span className="text-[9px] text-white/70 font-sans tracking-widest uppercase block">
-                      {isArabic
-                        ? branch.badgeLabelAr
-                        : branch.badgeLabelEn}
-                    </span>
-                  </div>
+                    <span className="text-xs font-mono">←</span>
+                  </button>
 
-                  {/* Absolute Card Content Footer Metadata Wrapper */}
-                  <div className="absolute bottom-6 left-5 right-5 flex flex-col justify-end h-1/2">
-                    <h3
-                      className={`font-serif text-3xl text-white italic leading-tight tracking-wide transition-colors group-hover:text-[#F3ECD8] ${
-                        isArabic ? headingArabic.className : ""
-                      }`}
-                      style={
-                        isArabic
-                          ? {
-                              fontFamily: '"El Messiri", serif',
-                              fontWeight: 400,
-                            }
-                          : undefined
+                  <button
+                    onClick={() =>
+                      handleScroll(isArabic ? "left" : "right")
+                    }
+                    disabled={
+                      isArabic ? !canScrollLeft : !canScrollRight
+                    }
+                    className="
+                      w-10 h-10 border border-[#1F1F1F]/20 rounded-full flex items-center justify-center 
+                      text-[#1F1F1F] transition-all duration-300 hover:bg-[#1F1F1F] hover:text-[#F3ECD8]
+                      disabled:opacity-20 disabled:pointer-events-none
+                    "
+                    aria-label="Next Slide"
+                  >
+                    <span className="text-xs font-mono">→</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Black Action View All Button */}
+              <Link
+                href="/locations"
+                className="
+                  branches-manrope-btn inline-flex items-center gap-3 bg-[#1F1F1F] text-[#F3ECD8] 
+                  px-5 py-3 text-[10px] uppercase tracking-[3px] rounded-[2px]
+                  transition-all duration-300 hover:bg-[#7F9333] hover:text-[#FFFFFF] shadow-md
+                "
+              >
+                <span>{isArabic ? "كل الفروع" : "All Branches"}</span>
+                <span className="text-[11px] font-mono opacity-80">
+                  {isArabic ? "←" : "→"}
+                </span>
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Horizontal Scroll Viewport Matrix Rail */}
+          <div
+            ref={sliderRef}
+            className="
+              flex overflow-x-auto gap-0 pb-6 pt-2 snap-x snap-mandatory scrollbar-none w-full
+              lg:grid lg:grid-flow-col lg:auto-cols-[calc((100%-4rem)/5)] lg:overflow-x-auto lg:gap-4
+            "
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
+            {data.branches.map((branch, index) => (
+              <motion.div
+                key={branch.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: Math.min(index * 0.08, 0.4),
+                  duration: 0.5,
+                }}
+                className="w-full lg:w-auto flex-shrink-0 snap-center lg:snap-start px-2 lg:px-0"
+              >
+                <Link
+                  href={getBranchLocationHref(branch)}
+                  className="group block relative overflow-hidden bg-[#e9dfc6] rounded-sm transition-transform duration-300"
+                >
+                  {/* Image Container — Fixed 4:5 Aspect Ratio */}
+                  <div className="relative aspect-[4/5] w-full overflow-hidden">
+                    <Image
+                      src={branch.image}
+                      alt={
+                        isArabic ? branch.titleAr : branch.titleEn
                       }
-                    >
-                      {isArabic
-                        ? branch.titleAr
-                        : branch.titleEn}
-                    </h3>
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 320px"
+                      className="object-cover transition duration-700 ease-out group-hover:scale-105"
+                      priority={index === 0}
+                    />
 
-                    <p
-                      className={`mt-2 text-[10px] uppercase tracking-[3px] text-white/70 ${
-                        isArabic ? headingArabic.className : ""
-                      } line-clamp-1`}
-                      style={
-                        isArabic
-                          ? {
-                              fontFamily: '"El Messiri", serif',
-                              fontWeight: 400,
-                            }
-                          : undefined
-                      }
-                    >
-                      {isArabic
-                        ? branch.locationAr
-                        : branch.locationEn}
-                    </p>
+                    {/* Dark Vignette Overlay Blend Mode */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
 
-                    {/* Bottom Dynamic Inline Border Reveal State line on hover */}
-                    <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:opacity-100">
-                      <span className="text-[9px] font-mono tracking-[3px] text-[#F3ECD8] uppercase">
+                    {/* Dynamic Badge Info Indicator from Supabase */}
+                    <div
+                      className={`absolute top-4 ${
+                        isArabic ? "left-4" : "right-4"
+                      } bg-black/20 backdrop-blur-[2px] px-2.5 py-1 rounded-[2px]`}
+                    >
+                      <span
+                        className={`text-[9px] text-white/70 tracking-widest uppercase block ${
+                          isArabic ? "branches-ibm-arabic" : "font-sans"
+                        }`}
+                      >
                         {isArabic
-                          ? "إكتشف الفرع ←"
-                          : "EXPLORE BRANCH →"}
+                          ? branch.badgeLabelAr
+                          : branch.badgeLabelEn}
                       </span>
                     </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
 
-        {/* Red Dot Pagination Container */}
-        <div className="flex lg:hidden items-center justify-center gap-2.5 mt-4">
-          {data.branches.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToDot(index)}
-              className={`
-                h-2 rounded-full transition-all duration-300
-                ${
-                  activeIndex === index
-                    ? "w-6 bg-[#D94444]"
-                    : "w-2 bg-[#1F1F1F]/20"
-                }
-              `}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+                    {/* Absolute Card Content Footer Metadata Wrapper */}
+                    <div className="absolute bottom-6 left-5 right-5 flex flex-col justify-end h-1/2">
+                      <h3
+                        className={`font-serif text-3xl text-white italic leading-tight tracking-wide transition-colors group-hover:text-[#F3ECD8] ${
+                          isArabic ? headingArabic.className : ""
+                        }`}
+                        style={
+                          isArabic
+                            ? {
+                                fontFamily: '"El Messiri", serif',
+                                fontWeight: 400,
+                              }
+                            : undefined
+                        }
+                      >
+                        {isArabic
+                          ? branch.titleAr
+                          : branch.titleEn}
+                      </h3>
+
+                      <p
+                        className={`mt-2 text-[10px] uppercase tracking-[3px] text-white/70 line-clamp-1 ${
+                          isArabic ? "branches-ibm-arabic" : "font-sans"
+                        }`}
+                      >
+                        {isArabic
+                          ? branch.locationAr
+                          : branch.locationEn}
+                      </p>
+
+                      {/* Bottom Dynamic Inline Border Reveal State line on hover */}
+                      <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:opacity-100">
+                        <span
+                          className={`text-[9px] text-[#F3ECD8] uppercase ${
+                            isArabic
+                              ? "branches-ibm-arabic tracking-[1.5px]"
+                              : "font-mono tracking-[3px]"
+                          }`}
+                        >
+                          {isArabic
+                            ? "إكتشف الفرع ←"
+                            : "EXPLORE BRANCH →"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Red Dot Pagination Container */}
+          <div className="flex lg:hidden items-center justify-center gap-2.5 mt-4">
+            {data.branches.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToDot(index)}
+                className={`
+                  h-2 rounded-full transition-all duration-300
+                  ${
+                    activeIndex === index
+                      ? "w-6 bg-[#D94444]"
+                      : "w-2 bg-[#1F1F1F]/20"
+                  }
+                `}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
