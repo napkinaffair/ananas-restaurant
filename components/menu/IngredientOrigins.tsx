@@ -34,6 +34,32 @@ export default function IngredientOrigins({
     ? disclaimerAr || disclaimerEn
     : disclaimerEn || disclaimerAr;
 
+  const renderFormattedText = (text: string) => {
+    const parts = text.split(/(<\/?(?:b|strong)>)/gi);
+    let isBold = false;
+
+    return parts.map((part, i) => {
+      const lower = part.toLowerCase();
+      if (lower === "<b>" || lower === "<strong>") {
+        isBold = true;
+        return null;
+      }
+      if (lower === "</b>" || lower === "</strong>") {
+        isBold = false;
+        return null;
+      }
+      if (!part) return null;
+
+      return isBold ? (
+        <strong key={i} className="font-bold text-[#191817]">
+          {part}
+        </strong>
+      ) : (
+        part
+      );
+    });
+  };
+
   return (
     <section
       id="ingredient-origins"
@@ -180,7 +206,7 @@ export default function IngredientOrigins({
           >
             {disclaimerText.split(/<br\s*\/?>|\n/gi).map((line, index, arr) => (
               <span key={index}>
-                {line}
+                {renderFormattedText(line)}
                 {index < arr.length - 1 && <br />}
               </span>
             ))}
