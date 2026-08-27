@@ -43,14 +43,9 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
   const locale = useLocale();
   const isArabic = locale === "ar";
 
-  const toArabicNumerals = (val: string | number) => {
-    const arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
-    return String(val).replace(/[0-9]/g, (digit) => arabicDigits[parseInt(digit, 10)]);
-  };
-
   const formatNumber = (val: string | number | undefined | null) => {
     if (val === undefined || val === null) return "";
-    return isArabic ? toArabicNumerals(val) : String(val);
+    return String(val);
   };
 
   const parsedNumber = parseInt(String(section.number).replace(/\D/g, ""), 10);
@@ -75,6 +70,8 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
   const fatLabel = isArabic ? "د" : "F";
   const kcalLabel = isArabic ? "س.ح" : "KCAL";
   const gramUnit = isArabic ? "ج" : "g";
+
+  const rawNumber = String(section.number ?? "").replace(/\.+$/, "").trim();
 
   return (
     <section
@@ -129,7 +126,7 @@ export default function MenuSection({ section, index, onSelectItem }: Props) {
                       }
                 }
               >
-                <bdi dir="ltr">{formatNumber(section.number)}</bdi>
+                <bdi dir="ltr">{rawNumber}</bdi>
               </span>
 
               <h2

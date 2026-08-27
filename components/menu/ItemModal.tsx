@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
-import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { El_Messiri, IBM_Plex_Sans_Arabic, Instrument_Serif } from "next/font/google";
 import { useLocale } from "next-intl";
 import { MenuItem, MenuSectionData } from "./MenuSection/menuSection.types";
 
@@ -14,6 +14,12 @@ const headingArabic = El_Messiri({
 const bodyArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["400", "500", "600"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  style: ["italic"],
+  weight: ["400"],
 });
 
 type ItemModalProps = {
@@ -31,14 +37,9 @@ export default function ItemModal({
   const isArabic = locale === "ar";
   const previousScrollY = useRef<number | null>(null);
 
-  const toArabicNumerals = (val: string | number) => {
-    const arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
-    return String(val).replace(/[0-9]/g, (digit) => arabicDigits[parseInt(digit, 10)]);
-  };
-
   const formatNumber = (val: string | number | undefined | null) => {
     if (val === undefined || val === null) return "";
-    return isArabic ? toArabicNumerals(val) : String(val);
+    return String(val);
   };
 
   const gramUnit = isArabic ? "ج" : "g";
@@ -69,6 +70,7 @@ export default function ItemModal({
 
   // Rule of thumb from spec: dark fills take muted-ground-dark, light/default takes muted-ground
   const textureClass = section.isDark ? "muted-ground-dark" : "muted-ground";
+  const numberColor = section.numberColor || section.accentColor;
 
   const categoryLabel = (
     isArabic ? section.titleAr : section.titleEn
@@ -91,6 +93,13 @@ export default function ItemModal({
   const itemDisclaimer = isArabic
     ? item.disclaimerAr ?? ""
     : item.disclaimerEn ?? "";
+
+  const numberDigitStyle = {
+    fontFamily: '"Instrument Serif", serif',
+    fontStyle: "italic",
+    fontWeight: 400,
+    color: numberColor,
+  };
 
   return (
     <div
@@ -244,18 +253,10 @@ export default function ItemModal({
                 <div className="grid grid-cols-4 gap-2">
 
                   <div>
-                    <div
-                      className="text-2xl sm:text-3xl font-serif italic"
-                      style={
-                        isArabic
-                          ? {
-                              fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
-                              fontWeight: 400,
-                            }
-                          : undefined
-                      }
-                    >
-                      <bdi dir="ltr">{formatNumber(item.kcal)}</bdi>
+                    <div className="text-2xl sm:text-3xl inline-flex items-baseline gap-1">
+                      <span className={instrumentSerif.className} style={numberDigitStyle}>
+                        <bdi dir="ltr">{formatNumber(item.kcal)}</bdi>
+                      </span>
                       <span
                         className="text-xs font-sans not-italic opacity-70"
                         style={
@@ -267,7 +268,6 @@ export default function ItemModal({
                             : undefined
                         }
                       >
-                        {" "}
                         {isArabic ? "سعرة" : "kcal"}
                       </span>
                     </div>
@@ -289,34 +289,109 @@ export default function ItemModal({
                   </div>
 
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif italic inline-flex items-baseline gap-1">
-                      <bdi dir="ltr">{formatNumber(item.carbs)}</bdi>
-                      <span className="text-xs font-sans not-italic opacity-70">{gramUnit}</span>
+                    <div className="text-2xl sm:text-3xl inline-flex items-baseline gap-1">
+                      <span className={instrumentSerif.className} style={numberDigitStyle}>
+                        <bdi dir="ltr">{formatNumber(item.carbs)}</bdi>
+                      </span>
+                      <span
+                        className="text-xs font-sans not-italic opacity-70"
+                        style={
+                          isArabic
+                            ? {
+                                fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                                fontWeight: 400,
+                              }
+                            : undefined
+                        }
+                      >
+                        {gramUnit}
+                      </span>
                     </div>
 
-                    <div className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1">
+                    <div
+                      className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1"
+                      style={
+                        isArabic
+                          ? {
+                              fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                              fontWeight: 400,
+                              letterSpacing: "0.08em",
+                            }
+                          : undefined
+                      }
+                    >
                       {isArabic ? "كربوهيدرات" : "CARBS"}
                     </div>
                   </div>
 
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif italic inline-flex items-baseline gap-1">
-                      <bdi dir="ltr">{formatNumber(item.protein)}</bdi>
-                      <span className="text-xs font-sans not-italic opacity-70">{gramUnit}</span>
+                    <div className="text-2xl sm:text-3xl inline-flex items-baseline gap-1">
+                      <span className={instrumentSerif.className} style={numberDigitStyle}>
+                        <bdi dir="ltr">{formatNumber(item.protein)}</bdi>
+                      </span>
+                      <span
+                        className="text-xs font-sans not-italic opacity-70"
+                        style={
+                          isArabic
+                            ? {
+                                fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                                fontWeight: 400,
+                              }
+                            : undefined
+                        }
+                      >
+                        {gramUnit}
+                      </span>
                     </div>
 
-                    <div className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1">
+                    <div
+                      className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1"
+                      style={
+                        isArabic
+                          ? {
+                              fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                              fontWeight: 400,
+                              letterSpacing: "0.08em",
+                            }
+                          : undefined
+                      }
+                    >
                       {isArabic ? "بروتين" : "PROTEIN"}
                     </div>
                   </div>
 
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif italic inline-flex items-baseline gap-1">
-                      <bdi dir="ltr">{formatNumber(item.fat)}</bdi>
-                      <span className="text-xs font-sans not-italic opacity-70">{gramUnit}</span>
+                    <div className="text-2xl sm:text-3xl inline-flex items-baseline gap-1">
+                      <span className={instrumentSerif.className} style={numberDigitStyle}>
+                        <bdi dir="ltr">{formatNumber(item.fat)}</bdi>
+                      </span>
+                      <span
+                        className="text-xs font-sans not-italic opacity-70"
+                        style={
+                          isArabic
+                            ? {
+                                fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                                fontWeight: 400,
+                              }
+                            : undefined
+                        }
+                      >
+                        {gramUnit}
+                      </span>
                     </div>
 
-                    <div className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1">
+                    <div
+                      className="text-[9px] font-mono uppercase tracking-wider opacity-60 mt-1"
+                      style={
+                        isArabic
+                          ? {
+                              fontFamily: '"IBM Plex Sans Arabic", Tajawal, system-ui, sans-serif',
+                              fontWeight: 400,
+                              letterSpacing: "0.08em",
+                            }
+                          : undefined
+                      }
+                    >
                       {isArabic ? "دهون" : "FAT"}
                     </div>
                   </div>
@@ -373,7 +448,7 @@ export default function ItemModal({
                             letterSpacing: "0.08em",
                           }
                         : undefined
-                    }
+                      }
                   >
                     {isArabic ? "مسببات الحساسية" : "ALLERGENS"}
                   </p>

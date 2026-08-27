@@ -74,6 +74,22 @@ const findMatchingLocationId = (
   return null;
 };
 
+// Distinct accent colors cycled per card (used for the selected ring, the
+// top tag pill, and the selected title). Same pattern/style as before —
+// each card just gets its own color instead of everyone sharing #D8D17A.
+const LOCATION_ACCENT_COLORS = [
+  "#F69233",
+  "#E4E56D",
+  "#F9D0CA",
+  "#E5C6C0",
+];
+
+const getAccentColor = (list: Location[], locationId: string) => {
+  const index = list.findIndex((loc) => loc.id === locationId);
+  const safeIndex = index === -1 ? 0 : index;
+  return LOCATION_ACCENT_COLORS[safeIndex % LOCATION_ACCENT_COLORS.length];
+};
+
 export default function Locations({ locations }: Props) {
   const locale = useLocale();
   const searchParams = useSearchParams();
@@ -90,7 +106,7 @@ export default function Locations({ locations }: Props) {
     : undefined;
 
   const arabicBodyStyle = isArabic
-    ? { fontFamily: `${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif`, fontWeight: 400 }
+    ? { fontFamily: `${ibmPlexSansArabic.style.fontFamily}, "IBM Plex Sans Arabic", Tajawal, sans-serif`, fontWeight: 400, fontStyle: "normal" }
     : undefined;
 
   useEffect(() => {
@@ -119,8 +135,11 @@ export default function Locations({ locations }: Props) {
     setSelectedLocationId(matchedLocationId ?? null);
   }, [branchQuery, locations]);
 
+  // Scrolls the selected location's details panel into the center of the
+  // viewport. Fires for BOTH paths: a location selected via the ?branch=
+  // URL param, and a location selected by manually clicking a card.
   useEffect(() => {
-    if (!branchQuery || !selectedLocationId) {
+    if (!selectedLocationId) {
       return;
     }
 
@@ -131,10 +150,10 @@ export default function Locations({ locations }: Props) {
     if (detailsPanel) {
       detailsPanel.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
     }
-  }, [branchQuery, selectedLocationId]);
+  }, [selectedLocationId]);
 
   /**
    * Helper function to safely parse text containing literal "<br>" or "<br/>" strings
@@ -147,7 +166,7 @@ export default function Locations({ locations }: Props) {
 
     return parts.map((part, index) => (
       <React.Fragment key={index}>
-        {part}
+        <span style={arabicBodyStyle}>{part}</span>
         {index < parts.length - 1 && <br />}
       </React.Fragment>
     ));
@@ -177,6 +196,7 @@ export default function Locations({ locations }: Props) {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                 {row.map((location) => {
                   const isSelected = selectedLocationId === location.id;
+                  const accentColor = getAccentColor(locations, location.id);
 
                   return (
                     <button
@@ -188,7 +208,12 @@ export default function Locations({ locations }: Props) {
                       }
                       className={`group relative overflow-hidden text-left transition-all duration-200 ${
                         isArabic ? "text-right" : "text-left"
-                      } ${isSelected ? "ring-2 ring-[#3D4723]" : ""}`}
+                      }`}
+                      style={
+                        isSelected
+                          ? { boxShadow: `0 0 0 2px ${accentColor}` }
+                          : undefined
+                      }
                     >
                       <div className="relative aspect-[4/5] w-full overflow-hidden">
                         <Image
@@ -196,7 +221,7 @@ export default function Locations({ locations }: Props) {
                           alt={isArabic ? location.name_ar : location.name}
                           fill
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          className={`object-cover transition-transform duration-500 group-hover:scale-105`}
                         />
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
@@ -204,10 +229,19 @@ export default function Locations({ locations }: Props) {
                         <span
                           className={`absolute top-2 sm:top-3 ${
                             isArabic ? "right-2 sm:right-3" : "left-2 sm:left-3"
-                          } bg-black/40 px-1.5 py-0.5 text-[8px] sm:text-[9px] font-semibold uppercase tracking-widest text-white backdrop-blur-sm ${
+                          } px-1.5 py-0.5 text-[8px] sm:text-[9px] font-semibold uppercase tracking-widest backdrop-blur-sm transition-colors duration-200 ${
+                            isSelected
+                              ? "text-[#3D4723]"
+                              : "bg-black/40 text-white"
+                          } ${
                             isArabic ? ibmPlexSansArabic.className : ""
                           }`}
-                          style={arabicBodyStyle}
+                          style={{
+                            ...arabicBodyStyle,
+                            ...(isSelected
+                              ? { backgroundColor: accentColor }
+                              : {}),
+                          }}
                         >
                           {isArabic
                             ? location.tag.ar
@@ -218,7 +252,7 @@ export default function Locations({ locations }: Props) {
                           isArabic ? "text-right" : "text-left"
                         }`}>
                           <h3
-                            className={`text-lg sm:text-2xl leading-tight ${
+                            className={`text-lg sm:text-2xl leading-tight text-white transition-colors duration-200 ${
                               isArabic ? `${elMessiri.className} not-italic` : "font-serif italic"
                             }`}
                             style={arabicHeadingStyle}
@@ -327,7 +361,7 @@ export default function Locations({ locations }: Props) {
                                     return (
                                       <span
                                         key={index}
-                                        className={`inline-flex items-center rounded-full border border-white/20 bg-white/5 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/90 ${
+                                        className={`inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3.5 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider text-white/90 ${
                                           isArabic ? ibmPlexSansArabic.className : ""
                                         }`}
                                         style={arabicBodyStyle}
@@ -366,7 +400,7 @@ export default function Locations({ locations }: Props) {
                                     return (
                                       <span
                                         key={index}
-                                        className={`inline-flex items-center rounded-full border border-white/20 bg-white/5 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/90 ${
+                                        className={`inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3.5 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider text-white/90 ${
                                           isArabic ? ibmPlexSansArabic.className : ""
                                         }`}
                                         style={arabicBodyStyle}
@@ -387,32 +421,40 @@ export default function Locations({ locations }: Props) {
                         }`}
                         style={arabicBodyStyle}
                       >
-                        <div>
-                          <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-white/50">
-                            {isArabic ? "العنوان" : "Address"}
+                        <div className="font-light leading-relaxed" style={arabicBodyStyle}>
+                          <span
+                            className={`uppercase tracking-widest text-white/50 inline mr-1.5 ${
+                              isArabic ? ibmPlexSansArabic.className : ""
+                            }`}
+                            style={arabicBodyStyle}
+                          >
+                            {isArabic ? "العنوان:" : "Address:"}
                           </span>
-
-                          <div className="mt-0.5 font-light leading-relaxed">
+                          <span style={arabicBodyStyle}>
                             {renderFormattedText(
                               isArabic
                                 ? selectedLocation.addr_ar
                                 : selectedLocation.addr
                             )}
-                          </div>
+                          </span>
                         </div>
 
-                        <div>
-                          <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-white/50">
-                            {isArabic ? "أوقات العمل" : "Hours"}
+                        <div className="font-light leading-relaxed" style={arabicBodyStyle}>
+                          <span
+                            className={`uppercase tracking-widest text-white/50 inline mr-1.5 ${
+                              isArabic ? ibmPlexSansArabic.className : ""
+                            }`}
+                            style={arabicBodyStyle}
+                          >
+                            {isArabic ? "أوقات العمل:" : "Hours:"}
                           </span>
-
-                          <div className="mt-0.5 font-light leading-relaxed">
+                          <span style={arabicBodyStyle}>
                             {renderFormattedText(
                               isArabic
                                 ? selectedLocation.hours_ar
                                 : selectedLocation.hours
                             )}
-                          </div>
+                          </span>
                         </div>
                       </div>
 
