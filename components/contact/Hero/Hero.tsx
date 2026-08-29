@@ -77,6 +77,40 @@ export default function Hero() {
               {isArabic ? heroData.subtitleAr : heroData.subtitleEn}
             </p>
           )}
+
+          {/* Customer Service Info */}
+          <p
+            className={`mt-3 sm:mt-4 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed sm:leading-7 text-black/70 ${
+              isArabic ? "ibm-arabic-force" : ""
+            }`}
+          >
+            {isArabic ? (
+              <>
+                ويمكنكم التواصل مع خدمة العملاء من الساعة ٧ صباحاً إلى الساعة ١٢ منتصف الليل
+                <br />
+                على رقم{" "}
+                <a
+                  href="tel:22280144"
+                  dir="ltr"
+                  className="font-medium text-black underline underline-offset-4 hover:opacity-80 transition-opacity"
+                >
+                  22280144
+                </a>
+              </>
+            ) : (
+              <>
+                You can contact our customer service from 7 AM Till 12 Midnight
+                <br />
+                On phone number:{" "}
+                <a
+                  href="tel:22280144"
+                  className="font-medium text-black underline underline-offset-4 hover:opacity-80 transition-opacity"
+                >
+                  22280144
+                </a>
+              </>
+            )}
+          </p>
         </div>
       </div>
     </section>

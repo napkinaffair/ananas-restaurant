@@ -16,17 +16,17 @@ export default function FooterColumns() {
   ];
 
   const branches = [
-    t("branches.kuwaitCity"),
-    t("branches.jabriya"),
-    t("branches.alQurain"),
-    t("branches.aswaqQurain"),
-    t("branches.adailiya"),
+    { label: t("branches.kuwaitCity"), href: "/locations?branch=kuwait-city" },
+    { label: t("branches.jabriya"), href: "/locations?branch=jabriya" },
+    { label: t("branches.alQurain"), href: "/locations?branch=al-qurain" },
+    { label: t("branches.aswaqQurain"), href: "/locations?branch=aswaq-qurain" },
+    { label: t("branches.adailiya"), href: "/locations?branch=adailiya" },
   ];
 
   const socials = [
-    t("social.instagram"),
-    t("social.tiktok"),
-    t("social.whatsapp"),
+    { label: t("social.instagram"), href: "https://www.instagram.com/ananas.kw?igsi=aXJueWJ5a3VseTl0" },
+    { label: t("social.tiktok"), href: "https://www.tiktok.com/@ananaskw?_r=1&_t=ZS-99Hu02QvMo8" },
+    { label: t("social.whatsapp"), href: "https://wa.me/96522280144" },
   ];
 
   const heading =
@@ -56,9 +56,9 @@ export default function FooterColumns() {
 
         <div className="flex flex-col">
           {branches.map((branch) => (
-            <p key={branch} className={item}>
-              {branch}
-            </p>
+            <Link key={branch.label} href={branch.href} className={item}>
+              {branch.label}
+            </Link>
           ))}
 
           <Link
@@ -77,11 +77,13 @@ export default function FooterColumns() {
         <div className="flex flex-col">
           {socials.map((social) => (
             <a
-              key={social}
-              href="#"
+              key={social.label}
+              href={social.href}
+              target={social.href.startsWith("http") ? "_blank" : undefined}
+              rel={social.href.startsWith("http") ? "noreferrer" : undefined}
               className={item}
             >
-              {social}
+              {social.label}
             </a>
           ))}
         </div>
