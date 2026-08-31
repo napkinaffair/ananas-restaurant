@@ -33,7 +33,7 @@ export default function HeroButtons({
       `}</style>
 
       <div
-        className={`flex w-full flex-row items-center gap-2 sm:flex-wrap lg:w-auto ${
+        className={`flex w-full flex-row items-center gap-2 sm:flex-wrap lg:gap-2.5 lg:w-auto ${
           isArabic ? "justify-start lg:justify-start" : "justify-start lg:justify-end"
         }`}
       >
@@ -42,11 +42,11 @@ export default function HeroButtons({
             {data.primaryButton.isVisible && (
               <Link
                 href={data.primaryButton.href}
-                className="hero-manrope-btn inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2.5 text-xs text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:flex-none sm:w-auto"
+                className="hero-manrope-btn inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2.5 text-xs text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:flex-none sm:w-auto lg:px-5 lg:py-3 lg:text-[0.9375rem] lg:gap-2.5"
               >
                 <span>{data.primaryButton.labelAr}</span>
                 <span
-                  className="inline-block text-xs transition-colors duration-300 hover:text-[#E3E27E]"
+                  className="inline-block text-xs transition-colors duration-300 hover:text-[#E3E27E] lg:text-[0.9375rem]"
                   style={{ transform: "scaleX(-1)" }}
                   aria-hidden="true"
                 >
@@ -58,7 +58,7 @@ export default function HeroButtons({
             {data.secondaryButton.isVisible && (
               <Link
                 href={data.secondaryButton.href}
-                className="hero-manrope-btn inline-flex flex-1 items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2.5 text-xs text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:flex-none sm:w-auto"
+                className="hero-manrope-btn inline-flex flex-1 items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2.5 text-xs text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:flex-none sm:w-auto lg:px-5 lg:py-3 lg:text-[0.9375rem]"
               >
                 {data.secondaryButton.labelAr}
               </Link>
@@ -69,10 +69,10 @@ export default function HeroButtons({
             {data.primaryButton.isVisible && (
               <Link
                 href={data.primaryButton.href}
-                className="hero-manrope-btn tracking-[0.14em] uppercase inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2 text-[0.68rem] text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:flex-none sm:w-auto"
+                className="hero-manrope-btn tracking-[0.14em] uppercase inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-[#D89A43] px-4 py-2 text-[0.68rem] text-white transition-colors duration-300 hover:bg-[#1F2021] hover:text-[#E3E27E] sm:flex-none sm:w-auto lg:px-5 lg:py-2.5 lg:text-[0.85rem] lg:gap-2.5"
               >
                 <span>{data.primaryButton.labelEn}</span>
-                <span className="inline-block text-xs transition-colors duration-300 hover:text-[#E3E27E]" aria-hidden="true">
+                <span className="inline-block text-xs transition-colors duration-300 hover:text-[#E3E27E] lg:text-[0.85rem]" aria-hidden="true">
                   →
                 </span>
               </Link>
@@ -81,7 +81,7 @@ export default function HeroButtons({
             {data.secondaryButton.isVisible && (
               <Link
                 href={data.secondaryButton.href}
-                className="hero-manrope-btn tracking-[0.14em] uppercase inline-flex flex-1 items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2 text-[0.68rem] text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:flex-none sm:w-auto"
+                className="hero-manrope-btn tracking-[0.14em] uppercase inline-flex flex-1 items-center justify-center rounded-sm border border-white/30 bg-black/20 px-4 py-2 text-[0.68rem] text-white backdrop-blur-sm transition-colors duration-300 hover:bg-[#FFFFFF] hover:text-[#1F2021] sm:flex-none sm:w-auto lg:px-5 lg:py-2.5 lg:text-[0.85rem]"
               >
                 {data.secondaryButton.labelEn}
               </Link>

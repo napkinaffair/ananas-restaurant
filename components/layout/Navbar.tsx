@@ -70,7 +70,10 @@ export default function Navbar() {
       </header>
 
       {/* Spacer to offset fixed header + announcement so page content isn't hidden */}
-      <div className="h-[128px] lg:h-[116px]" aria-hidden="true" />
+      <div
+        className={`${isArabic ? "h-[120px]" : "h-[128px]"} lg:h-[116px]`}
+        aria-hidden="true"
+      />
     </>
   );
 }

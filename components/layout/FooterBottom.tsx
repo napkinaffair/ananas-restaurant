@@ -13,7 +13,7 @@ export default function FooterBottom() {
 
         <p className={isArabic ? "footer-arabic-text" : ""}>{t("copyright")}</p>
 
-        <p className={isArabic ? "footer-arabic-text" : ""}>{t("slogan")}</p>
+        {/* <p className={isArabic ? "footer-arabic-text" : ""}>{t("slogan")}</p> */}
 
       </div>
     </div>

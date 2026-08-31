@@ -14,7 +14,7 @@ export default function MobileNavbar() {
   const locale = useLocale();
   const t = useTranslations("Navbar");
   const brandName = locale === "ar" ? t("brand") : "Ananas";
-  const logoSrc = locale === "ar" ? "/icons/arabic.png" : "/icons/english.png";
+  const logoSrc = locale === "ar" ? "/icons/newarabic.png" : "/icons/newenglish.png";
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -42,8 +42,20 @@ export default function MobileNavbar() {
           <Menu size={28} className="stroke-current" />
         </button>
 
-        <Link href="/" className="flex items-center justify-center">
-          <Image src={logoSrc} alt={brandName} width={locale === "ar" ? 110 : 128} height={locale === "ar" ? 30 : 34} className="object-contain" />
+        <Link href="/" className="flex shrink-0 items-center justify-center">
+          <Image
+            src={logoSrc}
+            alt={brandName}
+            width={locale === "ar" ? 110 : 128}
+            height={locale === "ar" ? 30 : 34}
+            priority
+            sizes="(max-width: 1024px) 128px, 128px"
+            className="block shrink-0 object-contain"
+            style={{
+              width: locale === "ar" ? "110px" : "128px",
+              height: "auto",
+            }}
+          />
         </Link>
 
         <LanguageSwitcher />
@@ -60,8 +72,19 @@ export default function MobileNavbar() {
             aria-hidden={!open}
           >
             <div className="flex items-center justify-between border-b p-6">
-
-              <Image src={logoSrc} alt={brandName} width={locale === "ar" ? 126 : 146} height={locale === "ar" ? 33 : 38} className="object-contain" />
+              <Image
+                src={logoSrc}
+                alt={brandName}
+                width={locale === "ar" ? 126 : 146}
+                height={locale === "ar" ? 33 : 38}
+                priority
+                sizes="(max-width: 1024px) 146px, 146px"
+                className="block shrink-0 object-contain"
+                style={{
+                  width: locale === "ar" ? "126px" : "146px",
+                  height: "auto",
+                }}
+              />
 
               <button onClick={() => setOpen(false)} className="text-black relative z-50" aria-label="Close menu">
                 <X size={30} className="stroke-current" />

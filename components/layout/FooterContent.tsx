@@ -11,9 +11,9 @@ export default function FooterContent() {
 
   return (
     <section className={`${isArabic ? "footer-arabic-override" : ""} overflow-hidden bg-[#3A461A] text-[#EFE4D0]`}>
-      <div className="mx-auto max-w-[1400px] px-5 py-5 sm:px-6 lg:px-8 lg:py-6">
+      <div className="mx-auto max-w-[1400px] px-5 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
 
-        <div className="grid items-center gap-5 lg:grid-cols-[1fr_300px] lg:gap-6">
+        <div className="grid items-center gap-8 lg:grid-cols-[1fr_300px] lg:gap-10">
 
           {/* Left */}
           <div className="order-2 lg:order-1">
@@ -51,7 +51,7 @@ export default function FooterContent() {
               )}
             </h2>
 
-            <div className="mt-4 lg:mt-5">
+            <div className="mt-8 lg:mt-10">
               <FooterColumns />
             </div>
 

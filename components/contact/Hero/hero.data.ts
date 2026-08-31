@@ -8,8 +8,8 @@ export const heroData: HeroData = {
   titleAr: "أخبرنا بكل شيء.",
 
   subtitleEn:
-    "Questions, catering requests, careers or feedback—we'd love to hear from you.",
+    "Questions,careers or feedback—we'd love to hear from you.",
 
   subtitleAr:
-    "الأسئلة، طلبات التموين، الوظائف أو الملاحظات — يسعدنا التواصل معك.",
+    "الأسئلة، الوظائف أو الملاحظات — يسعدنا التواصل معك.",
 };
