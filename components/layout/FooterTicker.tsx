@@ -1,10 +1,22 @@
 "use client";
 
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import {
+  FooterAnnouncement,
+  FooterTickerSettings,
+} from "@/lib/admin/footerTicker";
 
-export default function FooterTicker() {
+interface Props {
+  initialSettings?: FooterTickerSettings;
+  initialAnnouncements?: FooterAnnouncement[];
+}
+
+export default function FooterTicker({
+  initialSettings,
+  initialAnnouncements = [],
+}: Props) {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const t = useTranslations("Footer");
@@ -69,13 +81,44 @@ export default function FooterTicker() {
     };
   }, []);
 
-  const items = [
-    `${t("ticker.live")} • ${time}`,
-    `${t("ticker.location")} • ${temperatureText}`,
-    `${t("ticker.announcement")}`,
-    `${t("ticker.location")} • ${temperatureText}`,
-    `${t("ticker.announcement")}`,
-  ];
+  const locationText = isRtl
+    ? initialSettings?.locationAr || t("ticker.location")
+    : initialSettings?.locationEn || t("ticker.location");
+
+  const items = useMemo(() => {
+    const list: string[] = [];
+
+    if (initialSettings?.isLiveVisible !== false) {
+      list.push(`${t("ticker.live")} • ${time}`);
+    }
+
+    if (initialSettings?.isWeatherVisible !== false) {
+      list.push(`${locationText} • ${temperatureText}`);
+    }
+
+    const activeAnnouncements = initialAnnouncements
+      .filter((announcement) => announcement.isActive)
+      .map((announcement) =>
+        isRtl ? announcement.textAr : announcement.textEn
+      )
+      .filter(Boolean);
+
+    if (activeAnnouncements.length > 0) {
+      list.push(...activeAnnouncements);
+    } else {
+      list.push(t("ticker.announcement"));
+    }
+
+    return list;
+  }, [
+    initialSettings,
+    initialAnnouncements,
+    isRtl,
+    locationText,
+    temperatureText,
+    time,
+    t,
+  ]);
 
   useEffect(() => {
     controls.start({

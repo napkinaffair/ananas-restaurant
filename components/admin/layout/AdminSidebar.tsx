@@ -119,6 +119,10 @@ const sections = [
         label: "Contact",
         href: "/admin/contact",
       },
+      {
+        label: "Footer",
+        href: "/admin/footer",
+      },
     ],
   },
 ];
