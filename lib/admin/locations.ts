@@ -48,7 +48,8 @@ export async function updateLocationsHero(
       });
 
     if (uploadError) {
-      throw uploadError;
+      console.error("Hero upload error:", uploadError);
+      throw new Error(uploadError.message || "Failed to upload hero image");
     }
   }
 
@@ -76,7 +77,8 @@ export async function updateLocationsHero(
     .eq("id", hero.id);
 
   if (error) {
-    throw error;
+    console.error("Hero update error:", error);
+    throw new Error(error.message || "Failed to update locations hero");
   }
 
   return backgroundImage;
@@ -126,6 +128,8 @@ export interface BranchFormData {
 
   features: number[];
 
+  featureOrders?: Record<number, number>;
+
   deliveryPlatforms: number[];
 }
 
@@ -143,7 +147,10 @@ export async function getAdminBranches(): Promise<BranchFormData[]> {
   }
 
   const [{ data: branchFeatures }, { data: branchPlatforms }] = await Promise.all([
-    supabase.from("branch_features").select("*"),
+    supabase
+      .from("branch_features")
+      .select("location_id, feature_id, display_order")
+      .order("display_order", { ascending: true }),
     supabase.from("branch_delivery_platforms").select("*"),
   ]);
 
@@ -161,6 +168,15 @@ export async function getAdminBranches(): Promise<BranchFormData[]> {
 
       imageUrl = `${publicUrl}?v=${cacheKey}`;
     }
+
+    const locFeatures = (branchFeatures || []).filter(
+      (bf) => bf.location_id === loc.id
+    );
+
+    const featureOrders: Record<number, number> = {};
+    locFeatures.forEach((bf) => {
+      featureOrders[bf.feature_id] = bf.display_order ?? 1;
+    });
 
     return {
       id: loc.id,
@@ -196,9 +212,8 @@ export async function getAdminBranches(): Promise<BranchFormData[]> {
       displayOrder: loc.display_order ?? 0,
       isActive: loc.is_active ?? true,
 
-      features: (branchFeatures || [])
-        .filter((bf) => bf.location_id === loc.id)
-        .map((bf) => bf.feature_id),
+      features: locFeatures.map((bf) => bf.feature_id),
+      featureOrders,
 
       deliveryPlatforms: (branchPlatforms || [])
         .filter((bp) => bp.location_id === loc.id)
@@ -248,7 +263,8 @@ export async function createBranch() {
   });
 
   if (error) {
-    throw error;
+    console.error("Create branch error:", error);
+    throw new Error(error.message || "Failed to create branch");
   }
 }
 
@@ -273,7 +289,8 @@ export async function updateBranch(
       });
 
     if (uploadError) {
-      throw uploadError;
+      console.error("Branch image upload error:", uploadError);
+      throw new Error(uploadError.message || "Failed to upload branch image");
     }
   }
 
@@ -292,7 +309,6 @@ export async function updateBranch(
       working_hours_ar: branch.workingHoursAr,
 
       customer_service_hours_en: branch.customerServiceHoursEn,
-
       customer_service_hours_ar: branch.customerServiceHoursAr,
 
       tag_en: branch.tagEn,
@@ -303,30 +319,29 @@ export async function updateBranch(
 
       image,
 
-      latitude: branch.latitude,
-      longitude: branch.longitude,
+      latitude: Number(branch.latitude) || 0,
+      longitude: Number(branch.longitude) || 0,
 
-      google_maps_url: branch.googleMapsUrl,
+      google_maps_url: branch.googleMapsUrl ?? "",
+      apple_maps_url: branch.appleMapsUrl ?? "",
 
-      apple_maps_url: branch.appleMapsUrl,
-
-      display_order: branch.displayOrder,
-
-      is_active: branch.isActive,
+      display_order: Number(branch.displayOrder) || 0,
+      is_active: Boolean(branch.isActive),
 
       updated_at: new Date().toISOString(),
     })
-    .eq("id", branch.id);
+    .eq("id", Number(branch.id));
 
   if (error) {
-    throw error;
+    console.error("Locations table update error:", error);
+    throw new Error(error.message || "Failed to update locations table");
   }
 
-  if (branch.features) {
-    await saveBranchFeatures(branch.id, branch.features);
+  if (Array.isArray(branch.features)) {
+    await saveBranchFeatures(branch.id, branch.features, branch.featureOrders);
   }
 
-  if (branch.deliveryPlatforms) {
+  if (Array.isArray(branch.deliveryPlatforms)) {
     await saveBranchDeliveryPlatforms(branch.id, branch.deliveryPlatforms);
   }
 
@@ -336,10 +351,14 @@ export async function updateBranch(
 export async function deleteBranch(id: number) {
   const supabase = await createClient();
 
-  const { error } = await supabase.from("locations").delete().eq("id", id);
+  const { error } = await supabase
+    .from("locations")
+    .delete()
+    .eq("id", Number(id));
 
   if (error) {
-    throw error;
+    console.error("Delete branch error:", error);
+    throw new Error(error.message || "Failed to delete branch");
   }
 }
 
@@ -375,7 +394,8 @@ export async function createFeature() {
   });
 
   if (error) {
-    throw error;
+    console.error("Create feature error:", error);
+    throw new Error(error.message || "Failed to create feature");
   }
 }
 
@@ -395,10 +415,11 @@ export async function updateFeature(feature: FeatureFormData) {
 
       updated_at: new Date().toISOString(),
     })
-    .eq("id", feature.id);
+    .eq("id", Number(feature.id));
 
   if (error) {
-    throw error;
+    console.error("Update feature error:", error);
+    throw new Error(error.message || "Failed to update feature");
   }
 }
 
@@ -408,7 +429,7 @@ export async function deleteFeature(id: number) {
   const { count } = await supabase
     .from("branch_features")
     .select("*", { count: "exact", head: true })
-    .eq("feature_id", id);
+    .eq("feature_id", Number(id));
 
   if (count && count > 0) {
     throw new Error(
@@ -419,10 +440,11 @@ export async function deleteFeature(id: number) {
   const { error } = await supabase
     .from("location_features")
     .delete()
-    .eq("id", id);
+    .eq("id", Number(id));
 
   if (error) {
-    throw error;
+    console.error("Delete feature error:", error);
+    throw new Error(error.message || "Failed to delete feature");
   }
 }
 
@@ -458,7 +480,8 @@ export async function createDeliveryPlatform() {
   });
 
   if (error) {
-    throw error;
+    console.error("Create platform error:", error);
+    throw new Error(error.message || "Failed to create delivery platform");
   }
 }
 
@@ -480,10 +503,11 @@ export async function updateDeliveryPlatform(
 
       updated_at: new Date().toISOString(),
     })
-    .eq("id", platform.id);
+    .eq("id", Number(platform.id));
 
   if (error) {
-    throw error;
+    console.error("Update platform error:", error);
+    throw new Error(error.message || "Failed to update delivery platform");
   }
 }
 
@@ -493,7 +517,7 @@ export async function deleteDeliveryPlatform(id: number) {
   const { count } = await supabase
     .from("branch_delivery_platforms")
     .select("*", { count: "exact", head: true })
-    .eq("platform_id", id);
+    .eq("platform_id", Number(id));
 
   if (count && count > 0) {
     throw new Error(
@@ -504,10 +528,11 @@ export async function deleteDeliveryPlatform(id: number) {
   const { error } = await supabase
     .from("delivery_platforms")
     .delete()
-    .eq("id", id);
+    .eq("id", Number(id));
 
   if (error) {
-    throw error;
+    console.error("Delete platform error:", error);
+    throw new Error(error.message || "Failed to delete delivery platform");
   }
 }
 
@@ -517,34 +542,44 @@ export async function deleteDeliveryPlatform(id: number) {
 
 export async function saveBranchFeatures(
   branchId: number,
-  featureIds: number[]
+  featureIds: number[],
+  featureOrders?: Record<number, number>
 ) {
   const supabase = await createClient();
+  const numericBranchId = Number(branchId);
 
   const { error: deleteError } = await supabase
     .from("branch_features")
     .delete()
-    .eq("location_id", branchId);
+    .eq("location_id", numericBranchId);
 
   if (deleteError) {
-    throw deleteError;
+    console.error("Delete branch_features error:", deleteError);
+    throw new Error(deleteError.message || "Failed to delete old branch features");
   }
 
-  if (featureIds.length === 0) {
+  if (!featureIds || featureIds.length === 0) {
     return;
   }
 
-  const rows = featureIds.map((id) => ({
-    location_id: branchId,
-    feature_id: id,
-  }));
+  const rows = featureIds.map((id, index) => {
+    const numericId = Number(id);
+    const customOrder = featureOrders ? Number(featureOrders[numericId]) : NaN;
+
+    return {
+      location_id: numericBranchId,
+      feature_id: numericId,
+      display_order: !isNaN(customOrder) && customOrder > 0 ? customOrder : index + 1,
+    };
+  });
 
   const { error: insertError } = await supabase
     .from("branch_features")
     .insert(rows);
 
   if (insertError) {
-    throw insertError;
+    console.error("Insert branch_features error:", insertError);
+    throw new Error(insertError.message || "Failed to insert branch features");
   }
 }
 
@@ -553,23 +588,25 @@ export async function saveBranchDeliveryPlatforms(
   platformIds: number[]
 ) {
   const supabase = await createClient();
+  const numericBranchId = Number(branchId);
 
   const { error: deleteError } = await supabase
     .from("branch_delivery_platforms")
     .delete()
-    .eq("location_id", branchId);
+    .eq("location_id", numericBranchId);
 
   if (deleteError) {
-    throw deleteError;
+    console.error("Delete branch_delivery_platforms error:", deleteError);
+    throw new Error(deleteError.message || "Failed to delete old branch delivery platforms");
   }
 
-  if (platformIds.length === 0) {
+  if (!platformIds || platformIds.length === 0) {
     return;
   }
 
   const rows = platformIds.map((id) => ({
-    location_id: branchId,
-    platform_id: id,
+    location_id: numericBranchId,
+    platform_id: Number(id),
   }));
 
   const { error: insertError } = await supabase
@@ -577,6 +614,7 @@ export async function saveBranchDeliveryPlatforms(
     .insert(rows);
 
   if (insertError) {
-    throw insertError;
+    console.error("Insert branch_delivery_platforms error:", insertError);
+    throw new Error(insertError.message || "Failed to insert branch delivery platforms");
   }
 }

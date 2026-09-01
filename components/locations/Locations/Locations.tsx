@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
-import { El_Messiri, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { El_Messiri, IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
 
 import { Location } from "./locations.types";
 
@@ -15,6 +15,11 @@ const elMessiri = El_Messiri({
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
+  weight: ["400"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
   weight: ["400"],
 });
 
@@ -264,7 +269,7 @@ export default function Locations({ locations }: Props) {
 
                           <div
                             className={`mt-0.5 text-[9px] sm:text-xs opacity-75 line-clamp-2 leading-tight ${
-                              isArabic ? ibmPlexSansArabic.className : ""
+                              isArabic ? ibmPlexSansArabic.className : jetbrainsMono.className
                             }`}
                             style={arabicBodyStyle}
                           >
@@ -432,9 +437,7 @@ export default function Locations({ locations }: Props) {
                           </span>
                           <span style={arabicBodyStyle}>
                             {renderFormattedText(
-                              isArabic
-                                ? selectedLocation.addr_ar
-                                : selectedLocation.addr
+                              isArabic ? selectedLocation.addr_ar : selectedLocation.addr
                             )}
                           </span>
                         </div>
@@ -448,7 +451,7 @@ export default function Locations({ locations }: Props) {
                           >
                             {isArabic ? "أوقات العمل:" : "Hours:"}
                           </span>
-                          <span style={arabicBodyStyle}>
+                          <span className={isArabic ? "" : jetbrainsMono.className} style={arabicBodyStyle}>
                             {renderFormattedText(
                               isArabic
                                 ? selectedLocation.hours_ar

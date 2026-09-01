@@ -29,7 +29,8 @@ export default async function LocationsBranchesPage() {
 
     supabase
       .from("branch_features")
-      .select("*"),
+      .select("*")
+      .order("display_order", { ascending: true }),
 
     supabase
       .from("branch_delivery_platforms")
@@ -43,8 +44,18 @@ export default async function LocationsBranchesPage() {
     branchFeaturesResult.error ||
     branchPlatformsResult.error
   ) {
+    console.error("Failed to load branches data:", {
+      locations: locationsResult.error,
+      features: featuresResult.error,
+      platforms: platformsResult.error,
+      branchFeatures: branchFeaturesResult.error,
+      branchPlatforms: branchPlatformsResult.error,
+    });
     throw new Error("Failed to load branches.");
   }
+
+  const branchFeaturesData = branchFeaturesResult.data ?? [];
+  const branchPlatformsData = branchPlatformsResult.data ?? [];
 
   const initialBranches = (locationsResult.data ?? []).map((branch) => {
     let image = "";
@@ -58,6 +69,15 @@ export default async function LocationsBranchesPage() {
 
       image = `${publicUrl}?v=${branch.updated_at}`;
     }
+
+    const locFeatures = branchFeaturesData.filter(
+      (item) => item.location_id === branch.id
+    );
+
+    const featureOrders: Record<number, number> = {};
+    locFeatures.forEach((item) => {
+      featureOrders[item.feature_id] = item.display_order ?? 1;
+    });
 
     return {
       id: branch.id,
@@ -90,18 +110,17 @@ export default async function LocationsBranchesPage() {
 
       googleMapsUrl: branch.google_maps_url,
 
-      // 🔴 THIS WAS MISSING BEFORE:
       appleMapsUrl: branch.apple_maps_url ?? "",
 
       displayOrder: branch.display_order,
 
       isActive: branch.is_active,
 
-      features: (branchFeaturesResult.data ?? [])
-        .filter((item) => item.location_id === branch.id)
-        .map((item) => item.feature_id),
+      features: locFeatures.map((item) => item.feature_id),
 
-      deliveryPlatforms: (branchPlatformsResult.data ?? [])
+      featureOrders,
+
+      deliveryPlatforms: branchPlatformsData
         .filter((item) => item.location_id === branch.id)
         .map((item) => item.platform_id),
     };

@@ -83,11 +83,41 @@ export default function BranchForm({
 
         const exists = (branch.features ?? []).includes(featureId);
 
+        const nextFeatures = exists
+          ? (branch.features ?? []).filter((id) => id !== featureId)
+          : [...(branch.features ?? []), featureId];
+
+        const nextOrders = { ...(branch.featureOrders ?? {}) };
+        if (!exists) {
+          nextOrders[featureId] = nextFeatures.length;
+        } else {
+          delete nextOrders[featureId];
+        }
+
         return {
           ...branch,
-          features: exists
-            ? (branch.features ?? []).filter((id) => id !== featureId)
-            : [...(branch.features ?? []), featureId],
+          features: nextFeatures,
+          featureOrders: nextOrders,
+        };
+      })
+    );
+  };
+
+  const setFeaturePriority = (
+    branchId: number,
+    featureId: number,
+    priority: number
+  ) => {
+    setBranches((prev) =>
+      prev.map((branch) => {
+        if (branch.id !== branchId) return branch;
+
+        return {
+          ...branch,
+          featureOrders: {
+            ...(branch.featureOrders ?? {}),
+            [featureId]: priority,
+          },
         };
       })
     );
@@ -116,9 +146,10 @@ export default function BranchForm({
       await createBranch();
       alert("Branch created successfully.");
       window.location.reload();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to create branch.");
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      console.error(err);
+      alert(err.message || "Failed to create branch.");
     } finally {
       setCreating(false);
     }
@@ -128,7 +159,6 @@ export default function BranchForm({
     try {
       const selectedFile = files[branch.id] ?? null;
 
-      // Double check size prior to submitting
       if (selectedFile && selectedFile.size > MAX_FILE_SIZE) {
         alert("File size more than 1 MB is not allowed.");
         return;
@@ -138,11 +168,17 @@ export default function BranchForm({
       await updateBranch(branch, selectedFile);
       alert("Branch updated successfully.");
       window.location.reload();
-    } catch (error) {
-      console.error(error);
-      alert(
-        error instanceof Error ? error.message : "Failed to update branch."
-      );
+    } catch (error: unknown) {
+      const err = error as { message?: string; details?: string; hint?: string; code?: string };
+      console.error("Save branch error:", {
+        message: err.message,
+        code: err.code,
+        details: err.details,
+        hint: err.hint,
+        error: err,
+      });
+
+      alert(err.message || err.details || "Failed to update branch.");
     } finally {
       setLoadingId(null);
     }
@@ -157,11 +193,10 @@ export default function BranchForm({
       await deleteBranch(id);
       alert("Branch deleted successfully.");
       window.location.reload();
-    } catch (error) {
-      console.error(error);
-      alert(
-        error instanceof Error ? error.message : "Failed to delete branch."
-      );
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      console.error(err);
+      alert(err.message || "Failed to delete branch.");
     } finally {
       setLoadingId(null);
     }
@@ -414,47 +449,79 @@ export default function BranchForm({
                     }
                   />
 
-                  {/* Features & Delivery Platforms Checkboxes */}
+                  {/* Features & Delivery Platforms */}
                   <div className="grid gap-8 lg:grid-cols-2">
+                    {/* Features Section with Priority Numbers */}
                     <div className="space-y-3">
-                      <h3 className="font-semibold">Features</h3>
+                      <h3 className="font-semibold text-gray-900">Features</h3>
                       <div className="grid gap-2">
-                        {features.map((feature) => (
-                          <label
-                            key={feature.id}
-                            className="flex items-center gap-3"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={(branch.features ?? []).includes(feature.id)}
-                              onChange={() =>
-                                toggleFeature(branch.id, feature.id)
-                              }
-                            />
-                            <span>{feature.nameEn}</span>
-                          </label>
-                        ))}
+                        {features.map((feature) => {
+                          const isChecked = (branch.features ?? []).includes(feature.id);
+                          const priority = branch.featureOrders?.[feature.id] ?? 1;
+
+                          return (
+                            <div
+                              key={feature.id}
+                              className={`flex items-center justify-between rounded-lg border p-2 transition-colors ${
+                                isChecked ? "border-gray-300 bg-gray-50" : "border-gray-100 opacity-60"
+                              }`}
+                            >
+                              <label className="flex cursor-pointer items-center gap-3">
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={() => toggleFeature(branch.id, feature.id)}
+                                />
+                                <span className="text-sm font-medium text-gray-800">
+                                  {feature.nameEn}
+                                </span>
+                              </label>
+
+                              {isChecked && (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-gray-500">Order:</span>
+                                  <input
+                                    type="number"
+                                    min={1}
+                                    value={priority}
+                                    onChange={(e) =>
+                                      setFeaturePriority(
+                                        branch.id,
+                                        feature.id,
+                                        Math.max(1, Number(e.target.value))
+                                      )
+                                    }
+                                    className="w-14 rounded border border-gray-300 bg-white px-2 py-1 text-center text-xs font-bold outline-none focus:border-black"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
 
+                    {/* Delivery Platforms */}
                     <div className="space-y-3">
-                      <h3 className="font-semibold">Delivery Platforms</h3>
+                      <h3 className="font-semibold text-gray-900">Delivery Platforms</h3>
                       <div className="grid gap-2">
                         {deliveryPlatforms.map((platform) => (
                           <label
                             key={platform.id}
-                            className="flex items-center gap-3"
+                            className="flex items-center gap-3 rounded-lg border border-gray-100 p-2.5"
                           >
                             <input
                               type="checkbox"
-                              checked={(branch.deliveryPlatforms ?? []).includes(
-                                platform.id
-                              )}
+                              checked={(
+                                branch.deliveryPlatforms ?? []
+                              ).includes(platform.id)}
                               onChange={() =>
                                 togglePlatform(branch.id, platform.id)
                               }
                             />
-                            <span>{platform.nameEn}</span>
+                            <span className="text-sm font-medium text-gray-800">
+                              {platform.nameEn}
+                            </span>
                           </label>
                         ))}
                       </div>
@@ -468,9 +535,11 @@ export default function BranchForm({
                         label="Branch Image"
                         accept="image/*"
                         onChange={(selectedFile) => {
-                          if (selectedFile && selectedFile.size > MAX_FILE_SIZE) {
+                          if (
+                            selectedFile &&
+                            selectedFile.size > MAX_FILE_SIZE
+                          ) {
                             alert("File size more than 1 MB is not allowed.");
-                            // Clear out any previous file selection
                             setFiles((prev) => ({
                               ...prev,
                               [branch.id]: null,

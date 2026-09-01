@@ -17,7 +17,10 @@ export async function getLocations() {
       .eq("is_active", true)
       .order("display_order"),
     supabase.from("location_features").select("*"),
-    supabase.from("branch_features").select("*"),
+    supabase
+      .from("branch_features")
+      .select("*")
+      .order("display_order", { ascending: true }),
     supabase.from("delivery_platforms").select("*"),
     supabase.from("branch_delivery_platforms").select("*"),
   ]);
@@ -73,7 +76,7 @@ export async function getLocations() {
       image = `${publicUrl}?v=${cacheKey}`;
     }
 
-    // 6. Map features as { en: string; ar: string }[]
+    // 6. Map features as { en: string; ar: string }[] in the custom display order
     const features = (branchFeatures || [])
       .filter((bf) => bf.location_id === location.id)
       .map((bf) => featureMap.get(bf.feature_id))
