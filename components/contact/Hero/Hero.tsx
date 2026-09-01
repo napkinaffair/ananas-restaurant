@@ -64,53 +64,56 @@ export default function Hero() {
                 : "font-serif italic"
             }`}
           >
-            {isArabic ? "نحب نسمع منكم" : heroData.titleEn}
+            {isArabic ? "نحب نسمع منكم" : "Tell us everything"}
           </h1>
 
-          {/* Subtitle */}
-          {(heroData.subtitleEn || heroData.subtitleAr) && (
-            <p
-              className={`mt-4 sm:mt-6 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed sm:leading-7 text-black/70 ${
-                isArabic ? "ibm-arabic-force" : ""
-              }`}
-            >
-              {isArabic ? heroData.subtitleAr : heroData.subtitleEn}
-            </p>
-          )}
-
-          {/* Customer Service Info */}
-          <p
-            className={`mt-3 sm:mt-4 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed sm:leading-7 text-black/70 ${
+          {/* Main Description */}
+          <div
+            className={`mt-4 sm:mt-6 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed sm:leading-7 text-black/70 space-y-3 sm:space-y-4 ${
               isArabic ? "ibm-arabic-force" : ""
             }`}
           >
             {isArabic ? (
               <>
-                ويمكنكم التواصل مع خدمة العملاء من الساعة ٧ صباحاً إلى الساعة ١٢ منتصف الليل
-                <br />
-                على رقم{" "}
-                <a
-                  href="tel:22280144"
-                  dir="ltr"
-                  className="font-medium text-black underline underline-offset-4 hover:opacity-80 transition-opacity"
-                >
-                  22280144
-                </a>
+                <p>
+                  هل لديك سؤال، اقتراح، أو ترغب في الاستفسار عن الوظائف المتاحة؟ نحن هنا لمساعدتك.
+                </p>
+                <p>
+                  فريق خدمة العملاء جاهز للإجابة على جميع استفساراتك يومياً من الساعة 7 صباحاً حتى 12 منتصف الليل. يمكنك الاتصال بنا على الرقم:{" "}
+                  <a
+                    href="tel:22280144"
+                    dir="ltr"
+                    className="font-medium text-black underline underline-offset-4 hover:opacity-80 transition-opacity inline-block"
+                  >
+                    22280144
+                  </a>
+                  .
+                </p>
+                <p>
+                  او يمكنك ارسال رسالة لنا عن طريق نموذج الاتصال التالي.
+                </p>
               </>
             ) : (
               <>
-                You can contact our customer service from 7 AM Till 12 Midnight
-                <br />
-                On phone number:{" "}
-                <a
-                  href="tel:22280144"
-                  className="font-medium text-black underline underline-offset-4 hover:opacity-80 transition-opacity"
-                >
-                  22280144
-                </a>
+                <p>
+                  Have a question, feedback, or interest in joining our team? We are here to help and would love to connect with you.
+                </p>
+                <p>
+                  Our customer service team is available every day from 7 AM to 12 Midnight. Give us a call at{" "}
+                  <a
+                    href="tel:22280144"
+                    className="font-medium text-black underline underline-offset-4 hover:opacity-80 transition-opacity inline-block"
+                  >
+                    22280144
+                  </a>
+                  , and we’ll be happy to assist you.
+                </p>
+                <p>
+                  Or send us a letter through this contact form.
+                </p>
               </>
             )}
-          </p>
+          </div>
         </div>
       </div>
     </section>
